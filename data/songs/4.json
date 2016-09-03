@@ -1,0 +1,33 @@
+{
+  "title": "The Story of Tonight",
+  "lines": [
+    [[2], [], "I may not live to see our glory!"],
+    [[5, 6, 4], [], "I may not live to see our glory!"],
+    [[2], [], "But I will gladly join the fight!"],
+    [[5, 6, 4], [], "But I will gladly join the fight!"],
+    [[2], [], "And when our children tell our story..."],
+    [[5, 6, 4], [], "And when our children tell our story..."],
+    [[2], [], "They’ll tell the story of tonight."],
+    [[6], [], "Let’s have another round tonight."],
+    [[5], [], "Let’s have another round tonight."],
+    [[2], [], "Let’s have another round tonight."],
+    [[4], [], "Raise a glass to freedom,"],
+    [[4], [], "Something they can never take away, no matter what they tell you."],
+    [[4], [], "Raise a glass to the four of us."],
+    [[4, 6], [], "Tomorrow there’ll be more of us."],
+    [[6, 5, 4], [], "Telling the story of tonight."],
+    [[2], [], "They’ll tell the story of tonight."],
+    [[4, 6, 5], [], "Raise a glass to freedom,"],
+    [[4, 6, 5], [], "Something they can never take away."],
+    [[4, 6, 5], [], "No matter what they tell you."],
+    [[6, 5], [], "Let’s have another round tonight."],
+    [[4], [], "Raise a glass to the four of us."],
+    [[2, 4, 6, 5], [], "Tomorrow there’ll be more of us."],
+    [[2, 4], [], "Telling the story of tonight."],
+    [[6, 5], [], "Let’s have another round tonight."],
+    [[2, 4, 23], [], "They’ll tell the story of tonight."],
+    [[2, 4, 23], [], "They’ll tell the story of tonight."],
+    [[2, 4, 23], [], "They’ll tell the story of tonight."]
+    [[23], [], "Tonight."]
+  ]
+}
