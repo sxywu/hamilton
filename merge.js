@@ -14,7 +14,7 @@ var allWords = {};
 var data = []; // characters, themes
 var indices = [0, 0];
 var prepositions = [];
-var final = [];
+var final = {};
 
 function matchMetaToLyric(songNum, lineNum, type) {
   var meta = data[type];
@@ -85,7 +85,7 @@ function parseSong(songNum) {
           theme.notes
         ]
       ];
-      final.push(lineFinal);
+      final[lineFinal[0]] = lineFinal;
 
       // save lines by character
       keyByLine(allCharacters.characters, lineFinal[2][0], lineFinal[0]);
