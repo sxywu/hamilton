@@ -5,7 +5,7 @@ import re
 from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
 
-for i in range(45):
+for i in range(46):
     i += 1
     print (i)
     # get file and loop through each line
