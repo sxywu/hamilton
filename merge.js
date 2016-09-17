@@ -64,6 +64,9 @@ function parseSong(songNum) {
     return;
   }
   console.log(songNum)
+  // remember what the last line and characters were
+  var lastLine = null;
+  var lastCharacter = null;
   fs.readFile('processed/' + songNum + '.json', function(err, lines) {
     lines = JSON.parse(lines);
     _.each(lines, function(line, lineNum) {
@@ -71,44 +74,63 @@ function parseSong(songNum) {
       var character = matchMetaToLyric(songNum, lineNum, 0);
       var theme = matchMetaToLyric(songNum, lineNum, 1);
 
-      console.log('      ' + lineNum)
-      var lineFinal = [
-        songNum + '-' + lineNum,
-        line[0],
-        [
-          _.split(character.characters, '/'),
-          _.split(character.excluding, '/'),
-          _.split(character.directed_to, '/')
-        ],
-        theme && [
-          _.split(theme.themes, '/'),
-          theme.notes
-        ]
-      ];
-      final[lineFinal[0]] = lineFinal;
+      // if this is the first line of the song
+      // or if it's a new character singing
+      if (!lastLine || !_.isEqual(lastCharacter, character)) {
+        if (lastLine) {
+          // save lines by character
+          keyByLine(allCharacters.characters, lastLine[1][0], lastLine[0]);
+          keyByLine(allCharacters.excluding, lastLine[1][1], lastLine[0]);
+          var conversing = _.chain(lastLine[1][0])
+            .map(function(source) {
+              return _.map(lastLine[1][2], function(target) {
+                if (!target) return;
+                return source + '-' + target
+              });
+            }).flatten().filter().value();
+          keyByLine(allCharacters.conversing, conversing, lastLine[0]);
 
-      // save lines by character
-      keyByLine(allCharacters.characters, lineFinal[2][0], lineFinal[0]);
-      keyByLine(allCharacters.excluding, lineFinal[2][1], lineFinal[0]);
-      var conversing = _.chain(lineFinal[2][0])
-        .map(function(source) {
-          return _.map(lineFinal[2][2], function(target) {
-            if (!target) return;
-            return source + '-' + target
-          });
-        }).flatten().filter().value();
-      keyByLine(allCharacters.conversing, conversing, lineFinal[0]);
+          // then take care of the last line
+          final[lastLine[0]] = lastLine;
+        }
+
+        // now that last line has been saved
+        // set the current line to it
+        lastLine = [
+          songNum + ':' + character.lines,
+          [
+            _.split(character.characters, '/'),
+            _.split(character.excluding, '/'),
+            _.split(character.directed_to, '/')
+          ],
+          [line[0]],
+          1 // length of lines for this character
+        ];
+      } else {
+        // if there is a last line and the characters are the same
+        // just push this line into the last line
+        lastLine[2].push(line[0]);
+        lastLine[3] += 1;
+      }
+
       // and by themes if any exists
-      theme && keyByLine(allThemes, lineFinal[3][0], lineFinal[0]);
-      // and finally by words (filter out prepositions)
-      var words = _.chain(lineFinal[1].replace(/[^a-zA-Z\'\’]/g, ' ').split(' '))
+      // save the key as current line / range of lines it's in
+      var themeKey = songNum + ':' + lineNum + '/' + lastLine[0];
+      if (theme) {
+        theme = _.split(theme.themes, '/');
+        keyByLine(allThemes, theme, themeKey);
+      }
+      // and by words (filter out prepositions)
+      var words = _.chain(line[0].replace(/[^a-zA-Z\'\’]/g, ' ').split(' '))
         .map(function(word) {return word.toLowerCase()})
         .uniq().reject(function(word) {
           return _.includes(prepositions, word);
         }).value();
-      keyByLine(allWords, words, lineFinal[0]);
-    });
+      keyByLine(allWords, words, themeKey);
 
+      // set lastCharacter
+      lastCharacter = character;
+    });
     // go to next song
     parseSong(songNum + 1);
   });
