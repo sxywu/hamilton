@@ -21,7 +21,10 @@ var Visualization = React.createClass({
       .enter().append('line')
         .attr('stroke', (d) => d.color)
         .attr('stroke-width', (d) => d.radius * 2)
-        .attr('stroke-linecap', 'round');
+        .attr('stroke-linecap', 'round')
+        .style('cursor', 'pointer');
+    this.circles.append('title')
+      .text((d) => d.data[2].join('\n'));
 
     this.images = this.svg.append('g')
       .classed('images', true)
@@ -58,7 +61,7 @@ var Visualization = React.createClass({
     this.circles
       .attr("x1", (d) => d.x)
       .attr("y1", (d) => d.y)
-      .attr("x2", (d) => d.x + d.length)
+      .attr("x2", (d) => d.x)
       .attr("y2", (d) => d.y + d.length);
 
     this.images.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
