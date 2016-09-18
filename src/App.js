@@ -86,7 +86,7 @@ var App = React.createClass({
   },
 
   updatePositions(type, characterPositions, linesByCharacter) {
-    var charWidth = this.state.width / characterPositions.length;
+    var charWidth = this.state.width / (characterPositions.length + 1);
     characterPositions = _.map(characterPositions, (character, i) => {
       var fx = charWidth * (i + 1);
       var fy = 30;
