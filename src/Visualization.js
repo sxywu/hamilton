@@ -6,7 +6,7 @@ var simulation = d3.forceSimulation()
   .force('collide', d3.forceCollide().radius(d => d.radius))
   .force('x', d3.forceX().x(d => d.focusX))
   .force('y', d3.forceY().y(d => d.focusY))
-  .alphaMin(.5);
+  .alphaMin(.4);
 
 var Visualization = React.createClass({
   componentDidMount() {
@@ -15,12 +15,11 @@ var Visualization = React.createClass({
     // add in the circles, the number of them shouldn't change
     this.circles = this.svg.append('g')
       .classed('circles', true)
-      .selectAll('line')
+      .selectAll('path')
       .data(this.props.linesByCharacter, (d) => d.id)
-      .enter().append('line')
-        .attr('stroke', (d) => d.color)
-        .attr('stroke-width', (d) => d.radius * 2)
-        .attr('stroke-linecap', 'round')
+      .enter().append('path')
+        .attr('fill', (d) => d.color)
+        .attr('d', (d) => this.drawPath(d))
         .style('cursor', 'pointer');
     this.circles.append('title')
       .text((d) => d.data[2].join('\n'));
@@ -49,10 +48,9 @@ var Visualization = React.createClass({
       .on('end', () => {
         this.circles.transition()
           .duration(500)
-          .attr("x1", (d) => d.focusX)
-          .attr("y1", (d) => d.focusY)
-          .attr("x2", (d) => d.focusX)
-          .attr("y2", (d) => d.focusY + d.length);
+          .attr('d', (d) => this.drawPath(d, true))
+          .attr('transform', (d) => 'translate(' + [d.focusX, d.focusY] + ')');
+
         // go through all lines and save their positions
         // var savePos = _.reduce(this.props.linesByCharacter, (obj, line) => {
         //   obj[line.id] = [_.round(line.x, 2), _.round(line.y, 2), line.radius, line.length, 0]
@@ -63,13 +61,26 @@ var Visualization = React.createClass({
   },
 
   forceTick() {
-    this.circles
-      .attr("x1", (d) => d.x)
-      .attr("y1", (d) => d.y)
-      .attr("x2", (d) => d.x)
-      .attr("y2", (d) => d.y);
+    this.circles.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
 
     this.images.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
+  },
+
+  drawPath(d, showLength) {
+    var x1 = -d.radius;
+    var x2 = d.radius;
+    var y1 = d.radius;
+    var length = showLength ? d.length - 2 * d.radius : 0;
+    var y2 = y1 + length;
+
+    var result = 'M' + [x1, y1];
+    result += ' A' + [d.radius, d.radius] + ' 0 0,1 ' + [x2, y1];
+    result += ' L' + [x2, y2];
+    result += ' A' + [d.radius, d.radius] + ' 0 0,1 ' + [x1, y2];
+    result += ' L' + [x1, y1];
+    result += 'Z';
+
+    return result;
   },
 
   render() {
