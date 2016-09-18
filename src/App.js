@@ -20,7 +20,7 @@ var App = React.createClass({
       height: 1000,
       linesByCharacter: [],
       characterPositions: [],
-      positionType: 'characters',
+      positionType: 'song',
     };
   },
 

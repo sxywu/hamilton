@@ -62,7 +62,12 @@ var Visualization = React.createClass({
         this.circles.transition()
           .duration(500)
           .attr('d', (d) => this.drawPath(d, true))
-          .attr('transform', (d) => 'translate(' + [d.focusX, d.focusY] + ')');
+          .attr('transform', (d) => {
+            // set the x and y to its focus (where it should be)
+            d.x = d.focusX;
+            d.y = d.focusY;
+            return 'translate(' + [d.x, d.y] + ')';
+          });
 
         // // go through all lines and save their positions
         // var savePos = _.reduce(this.props.linesByCharacter, (obj, line) => {
@@ -75,7 +80,9 @@ var Visualization = React.createClass({
 
   componentDidUpdate() {
     var nodes = _.union(this.props.characterPositions, this.props.linesByCharacter);
-    simulation.nodes(nodes).restart();
+    simulation
+      .alpha(1)
+      .nodes(nodes).restart();
   },
 
   forceTick() {
