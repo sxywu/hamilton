@@ -7,7 +7,7 @@ import Visualization from './Visualization';
 import charList from './data/char_list.json';
 // import charPositions from './data/char_positions.json';
 // import lineCharPositions from './data/line_char_positions.json';
-import lineSongPositions from './data/line_song_positions.json';
+// import lineSongPositions from './data/line_song_positions.json';
 import characters from './data/characters.json';
 import lines from './data/lines.json';
 
@@ -24,21 +24,53 @@ var App = React.createClass({
   },
 
   componentWillMount() {
+    var lineWidth = 3;
+    var lineHeight = 3;
+    var padding = {x: 17, y: 1};
+    var s = 1;
+    var x = lineWidth * 6;
+    var y = 100;
     // duplicate any of the lines sung by multiple characters
     var linesByCharacter = _.chain(lines)
       .map((line, lineId) => {
         // get all characters from the line
-        return _.map(line[1][0], (character) => {
+        var charLength = line[1][0].length;
+        var songNum = parseInt(lineId.split(':')[0], 10);
+        var startLine = parseInt(lineId.split(':')[1].split('-')[0], 10);
+        var endLine = parseInt(lineId.split(':')[1].split('-')[1], 10) || startLine;
+
+        // if next song
+        if (songNum !== s) {
+          s = songNum;
+          x += padding.x;
+          y = 100;
+        }
+        if (y > 600) {
+          x += 2 * lineWidth + 1;
+          y = 100;
+        }
+        var start = y;
+        var length = lineHeight * (endLine - startLine + 2);
+        y += length + padding.y;
+
+        return _.map(line[1][0], (character, i) => {
           var id = character + '/' + lineId;
-          var pos = lineSongPositions[id];
+
+          var fx = x;
+          var radius = lineWidth;
+          if (charLength > 1) {
+            fx += (lineWidth / (charLength - 1) * i) - (lineWidth / 2);
+            radius = lineWidth / charLength + .5;
+          }
+
         	return {
             id,
             lineId,
             characterId: character,
-            focusX: pos[0],
-            focusY: pos[1],
-            radius: pos[2],
-            length: pos[3],
+            focusX: fx,
+            focusY: start,
+            radius,
+            length,
             color: color(character),
             data: line,
           };
