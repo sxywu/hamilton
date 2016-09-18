@@ -16,12 +16,13 @@ var Visualization = React.createClass({
     // add in the circles, the number of them shouldn't change
     this.circles = this.svg.append('g')
       .classed('circles', true)
-      .selectAll('circle')
+      .selectAll('line')
       .data(this.props.linesByCharacter, (d) => d.id)
-      .enter().append('circle')
-        .attr('fill', (d) => d.color)
-        .attr('r', (d) => d.radius);
-console.log(this.props.characterPositions)
+      .enter().append('line')
+        .attr('stroke', (d) => d.color)
+        .attr('stroke-width', (d) => d.radius * 2)
+        .attr('stroke-linecap', 'round');
+
     this.images = this.svg.append('g')
       .classed('images', true)
       .selectAll('g')
@@ -47,8 +48,10 @@ console.log(this.props.characterPositions)
 
   forceTick() {
     this.circles
-      .attr("cx", (d) => d.x)
-      .attr("cy", (d) => d.y);
+      .attr("x1", (d) => d.x)
+      .attr("y1", (d) => d.y)
+      .attr("x2", (d) => d.x)
+      .attr("y2", (d) => d.y);
 
     this.images.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
   },
