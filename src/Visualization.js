@@ -6,7 +6,7 @@ var simulation = d3.forceSimulation()
   .force('collide', d3.forceCollide().radius(d => d.radius))
   .force('x', d3.forceX().x(d => d.focusX))
   .force('y', d3.forceY().y(d => d.focusY))
-  .alphaMin(.4);
+  .alphaMin(.5);
 
 var Visualization = React.createClass({
   componentDidMount() {

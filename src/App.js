@@ -117,7 +117,11 @@ var App = React.createClass({
 
   filterByCharacter(character) {
     var selectedCharacters = this.state.selectedCharacters;
-    selectedCharacters.push(character);
+    if (_.includes(selectedCharacters, character)) {
+      selectedCharacters = _.without(selectedCharacters, character);
+    } else {
+      selectedCharacters.push(character);
+    }
     var {linesByCharacter} = this.updateOpacities(
       selectedCharacters, this.state.characterPositions, this.state.linesByCharacter);
 
