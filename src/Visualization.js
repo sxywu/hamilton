@@ -67,7 +67,7 @@ var Visualization = React.createClass({
 
         // go through all lines and save their positions
         // var savePos = _.reduce(this.props.linesByCharacter, (obj, line) => {
-        //   obj[line.id] = [_.round(line.x, 2), _.round(line.y, 2), line.radius, line.length, 0]
+        //   obj[line.id] = [line.focusX, line.focusY, line.radius, line.length]
         //   return obj;
         // }, {});
         // console.log(JSON.stringify(savePos));
@@ -76,7 +76,6 @@ var Visualization = React.createClass({
 
   forceTick() {
     this.circles.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
-
     this.images.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
   },
 
