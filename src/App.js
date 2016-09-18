@@ -5,8 +5,8 @@ import * as d3 from "d3";
 import Visualization from './Visualization';
 // load the data
 import charList from './data/char_list.json';
-// import charPositions from './data/char_positions.json';
-// import lineCharPositions from './data/line_char_positions.json';
+import charPositions from './data/char_positions.json';
+import lineCharPositions from './data/line_char_positions.json';
 import lineSongPositions from './data/line_song_positions.json';
 import characters from './data/characters.json';
 import lines from './data/lines.json';
@@ -20,6 +20,7 @@ var App = React.createClass({
       height: 1000,
       linesByCharacter: [],
       characterPositions: [],
+      positionType: 'characters',
     };
   },
 
@@ -30,16 +31,11 @@ var App = React.createClass({
         // get all characters from the line
         return _.map(line[1][0], (character, i) => {
           var id = character + '/' + lineId;
-          var pos = lineSongPositions[id];
 
         	return {
             id,
             lineId,
             characterId: character,
-            focusX: pos[0],
-            focusY: pos[1],
-            radius: pos[2],
-            length: pos[3],
             color: color(character),
             data: line,
           };
@@ -55,23 +51,16 @@ var App = React.createClass({
       .map(0)
       .take(11)
       .value();
-    topChars.push('other');
 
     // now position the characters
-    var charWidth = this.state.width / topChars.length;
     var characterPositions = _.reduce(topChars, (obj, character, i) => {
       obj[character] = {
         id: character,
         name: charList[character] ? charList[character][0] : 'Other',
-        fx: charWidth * (i + 1),
-        fy: 30,
         radius: 20,
         color: color(character),
+        image: require('./images/' + character + '.png'),
       };
-      if (character !== 'other') {
-        // only load image if it's a character
-        obj[character].image = require('./images/' + character + '.png');
-      }
       return obj;
     }, {});
 
@@ -80,18 +69,57 @@ var App = React.createClass({
     //   return obj;
     // }, {});
     // console.log(JSON.stringify(savePos))
-    
-    // now that we've set the positions, take out "other"
-    delete characterPositions['other'];
-    characterPositions = _.values(characterPositions);
 
+    characterPositions = _.values(characterPositions);
+    var {characterPositions, linesByCharacter} = this.updatePositions(
+      this.state.positionType, characterPositions, linesByCharacter);
 
     this.setState({linesByCharacter, characterPositions});
+  },
+
+  togglePositions(positionType) {
+    var {characterPositions, linesByCharacter} = this.updatePositions(
+      positionType, this.state.characterPositions, this.state.linesByCharacter);
+    this.setState({positionType, characterPositions, linesByCharacter});
+  },
+
+  updatePositions(type, characterPositions, linesByCharacter) {
+    var charWidth = this.state.width / characterPositions.length;
+    characterPositions = _.map(characterPositions, (character, i) => {
+      var fx = charWidth * (i + 1);
+      var fy = 30;
+      if (type === 'characters') {
+        fx = charPositions[character.id][0];
+        fy = charPositions[character.id][1];
+      }
+      return Object.assign(character, {
+        fx,
+        fy,
+      })
+    });
+
+    linesByCharacter = _.map(linesByCharacter, line => {
+      var pos = type === 'characters' ?
+        lineCharPositions[line.id] : lineSongPositions[line.id];
+      return Object.assign(line, {
+        focusX: pos[0],
+        focusY: pos[1],
+        radius: pos[2],
+        fullRadius: pos[3],
+        length: pos[4],
+      });
+    });
+
+    return {characterPositions, linesByCharacter};
   },
 
   render() {
     return (
       <div className="App">
+        <div>
+          <button onClick={this.togglePositions.bind(this, 'characters')}>character</button>
+          <button onClick={this.togglePositions.bind(this, 'songs')}>song</button>
+        </div>
         <Visualization {...this.state} />
       </div>
     );

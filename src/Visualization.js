@@ -54,7 +54,6 @@ var Visualization = React.createClass({
       .attr('fill', 'none')
       .attr('stroke', (d) => d.color)
       .attr('stroke-width', 2);
-
     // for now, start force in here
     var nodes = _.union(this.props.characterPositions, this.props.linesByCharacter);
     simulation.nodes(nodes)
@@ -65,13 +64,18 @@ var Visualization = React.createClass({
           .attr('d', (d) => this.drawPath(d, true))
           .attr('transform', (d) => 'translate(' + [d.focusX, d.focusY] + ')');
 
-        // go through all lines and save their positions
+        // // go through all lines and save their positions
         // var savePos = _.reduce(this.props.linesByCharacter, (obj, line) => {
-        //   obj[line.id] = [line.focusX, line.focusY, line.radius, line.length]
+        //   obj[line.id] = [line.focusX, line.focusY, line.radius, line.fullRadius, line.length]
         //   return obj;
         // }, {});
         // console.log(JSON.stringify(savePos));
       });
+  },
+
+  componentDidUpdate() {
+    var nodes = _.union(this.props.characterPositions, this.props.linesByCharacter);
+    simulation.nodes(nodes).restart();
   },
 
   forceTick() {
@@ -82,7 +86,7 @@ var Visualization = React.createClass({
   drawPath(d, showLength) {
     var x1 = -d.radius;
     var x2 = d.radius;
-    var y1 = d.radius;
+    var y1 = d.radius - d.fullRadius;
     var length = showLength ? d.length - 2 * d.radius : 0;
     var y2 = y1 + length;
 
