@@ -3,11 +3,10 @@ import _ from 'lodash';
 import * as d3 from "d3";
 
 var simulation = d3.forceSimulation()
-  .force('collide', d3.forceCollide().radius(d => d.radius + 3))
+  .force('collide', d3.forceCollide().radius(d => d.radius))
   .force('x', d3.forceX().x(d => d.focusX))
   .force('y', d3.forceY().y(d => d.focusY))
-  .alphaMin(.01)
-  .alphaDecay(.02);
+  .alphaMin(.5);
 
 var Visualization = React.createClass({
   componentDidMount() {
@@ -48,12 +47,18 @@ var Visualization = React.createClass({
     simulation.nodes(nodes)
       .on('tick', this.forceTick.bind(this))
       .on('end', () => {
+        this.circles.transition()
+          .duration(500)
+          .attr("x1", (d) => d.focusX)
+          .attr("y1", (d) => d.focusY)
+          .attr("x2", (d) => d.focusX)
+          .attr("y2", (d) => d.focusY + d.length);
         // go through all lines and save their positions
-        var savePos = _.reduce(this.props.linesByCharacter, (obj, line) => {
-          obj[line.id] = [_.round(line.x, 2), _.round(line.y, 2), line.radius, line.length, 0]
-          return obj;
-        }, {});
-        console.log(JSON.stringify(savePos));
+        // var savePos = _.reduce(this.props.linesByCharacter, (obj, line) => {
+        //   obj[line.id] = [_.round(line.x, 2), _.round(line.y, 2), line.radius, line.length, 0]
+        //   return obj;
+        // }, {});
+        // console.log(JSON.stringify(savePos));
       });
   },
 
@@ -62,7 +67,7 @@ var Visualization = React.createClass({
       .attr("x1", (d) => d.x)
       .attr("y1", (d) => d.y)
       .attr("x2", (d) => d.x)
-      .attr("y2", (d) => d.y + d.length);
+      .attr("y2", (d) => d.y);
 
     this.images.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
   },
