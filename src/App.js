@@ -21,6 +21,7 @@ var App = React.createClass({
       linesByCharacter: [],
       characterPositions: [],
       positionType: 'song',
+      selectedCharacters: [],
     };
   },
 
@@ -36,7 +37,7 @@ var App = React.createClass({
             id,
             lineId,
             characterId: character,
-            color: color(character),
+            fill: color(character),
             data: line,
           };
         });
@@ -60,6 +61,7 @@ var App = React.createClass({
         radius: 20,
         color: color(character),
         image: require('./images/' + character + '.png'),
+        selected: true,
       };
       return obj;
     }, {});
@@ -113,6 +115,43 @@ var App = React.createClass({
     return {characterPositions, linesByCharacter};
   },
 
+  filterByCharacter(character) {
+    var selectedCharacters = this.state.selectedCharacters;
+    selectedCharacters.push(character);
+    var {linesByCharacter} = this.updateOpacities(
+      selectedCharacters, this.state.characterPositions, this.state.linesByCharacter);
+
+    this.setState({selectedCharacters, linesByCharacter});
+  },
+
+  updateOpacities(characters, characterPositions, linesByCharacter) {
+    characterPositions = _.map(characterPositions, character => {
+      var selected = true;
+      if (!_.isEmpty(characters)) {
+        // if there are selected characters, then we should
+        // only have 100% opacity for those lines with those characters
+        selected = _.includes(characters, character.id) ? selected : false;
+      }
+      return Object.assign(character, {
+        selected,
+      });
+    });
+
+    linesByCharacter = _.map(linesByCharacter, line => {
+      var fill = color(line.characterId);
+      if (!_.isEmpty(characters)) {
+        // if there are selected characters, then we should
+        // only have 100% opacity for those lines with those characters
+        fill = _.includes(characters, line.characterId) ? fill : '#eee';
+      }
+      return Object.assign(line, {
+        fill,
+      });
+    });
+
+    return {linesByCharacter, characterPositions};
+  },
+
   render() {
     return (
       <div className="App">
@@ -120,7 +159,7 @@ var App = React.createClass({
           <button onClick={this.togglePositions.bind(this, 'characters')}>character</button>
           <button onClick={this.togglePositions.bind(this, 'songs')}>song</button>
         </div>
-        <Visualization {...this.state} />
+        <Visualization {...this.state} onSelectCharacter={this.filterByCharacter} />
       </div>
     );
   }

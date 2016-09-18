@@ -11,19 +11,7 @@ var simulation = d3.forceSimulation()
 var Visualization = React.createClass({
   componentDidMount() {
     this.svg = d3.select(this.refs.svg);
-
-    //SVG filter for the gooey effect
-  	//Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
-  	var defs = this.svg.append('defs');
-  	var filter = defs.append('filter').attr('id','gooey');
-  	filter.append('feGaussianBlur')
-  		.attr('in','SourceGraphic')
-  		.attr('stdDeviation','1')
-  		.attr('result','blur');
-  	filter.append('feColorMatrix')
-  		.attr('in','blur')
-  		.attr('mode','matrix')
-  		.attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7');
+    this.defineFilters();
 
     // add in the circles, the number of them shouldn't change
     this.circles = this.svg.append('g')
@@ -32,7 +20,7 @@ var Visualization = React.createClass({
       .selectAll('path')
       .data(this.props.linesByCharacter, (d) => d.id)
       .enter().append('path')
-        .attr('fill', (d) => d.color)
+        .attr('fill', (d) => d.fill)
         .attr('d', (d) => this.drawPath(d))
         .style('cursor', 'pointer');
     this.circles.append('title')
@@ -42,7 +30,9 @@ var Visualization = React.createClass({
       .classed('images', true)
       .selectAll('g')
       .data(this.props.characterPositions, (d) => d.id)
-      .enter().append('g');
+      .enter().append('g')
+        .style('cursor', 'pointer')
+        .on('click', (d) => this.props.onSelectCharacter(d.id));
     this.images.append('image')
       .attr('width', (d) => d.radius * 2)
       .attr('height', (d) => d.radius * 2)
@@ -79,10 +69,35 @@ var Visualization = React.createClass({
   },
 
   componentDidUpdate() {
+    // update selection
+    this.circles.attr('fill', (d) => d.fill);
+    this.images.attr('filter', (d) => d.selected ? '' : 'url(#gray)');
+
+    // and update position
     var nodes = _.union(this.props.characterPositions, this.props.linesByCharacter);
     simulation
       .alpha(1)
       .nodes(nodes).restart();
+  },
+
+  defineFilters() {
+    //SVG filter for the gooey effect
+    //Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+    var defs = this.svg.append('defs');
+    var gooey = defs.append('filter').attr('id','gooey');
+    gooey.append('feGaussianBlur')
+      .attr('in','SourceGraphic')
+      .attr('stdDeviation','1')
+      .attr('result','blur');
+    gooey.append('feColorMatrix')
+      .attr('in','blur')
+      .attr('mode','matrix')
+      .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7');
+
+    var gray = defs.append('filter').attr('id','gray');
+    gray.append('feColorMatrix')
+      .attr('type','matrix')
+      .attr('values','1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 .5 0');
   },
 
   forceTick() {
