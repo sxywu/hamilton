@@ -5,6 +5,7 @@ import * as d3 from "d3";
 import Visualization from './Visualization';
 // load the data
 import charList from './data/char_list.json';
+import charPositions from './data/char_positions.json';
 import characters from './data/characters.json';
 import lines from './data/lines.json';
 
@@ -15,7 +16,7 @@ var App = React.createClass({
   getInitialState() {
     return {
       width: 800,
-      height: 800,
+      height: 1000,
       linesByCharacter: [],
       characterPositions: [],
     };
@@ -56,28 +57,17 @@ var App = React.createClass({
       .filter((character) => charList[character[0]][2] === 'individual')
       .sortBy((character) => -character[1])
       .map(0)
-      .take(12)
+      .take(11)
       .value();
     topChars.push('other');
 
     // now position the characters
-    var perRow = 4;
-    var rowWidth = this.state.width / perRow;
     var characterPositions = _.reduce(topChars, (obj, character, i) => {
-      // if it's the first two, give them more room
-      var fx = this.state.width / 3 * (i + 1);
-      var fy = this.state.width / 3 * .5;
-      if (i >= 2) {
-        i -= 2;
-        fx = (i % perRow + .5) * rowWidth;
-        fy = (Math.floor(i / perRow) + .5) * (rowWidth);
-        fy += this.state.width / 3; // offset the top two
-      }
       obj[character] = {
         id: character,
         name: charList[character] ? charList[character][0] : 'Other',
-        fx,
-        fy,
+        fx: charPositions[character][0],
+        fy: charPositions[character][1],
         radius: 20,
         color: color(character),
       };
@@ -96,9 +86,15 @@ var App = React.createClass({
       line.focusY = pos.fy;
     });
 
+    // var savePos = _.reduce(characterPositions, (obj, char) => {
+    //   obj[char.id] = [_.round(char.fx, 2), _.round(char.fy, 2)];
+    //   return obj;
+    // }, {});
+    // console.log(JSON.stringify(savePos))
     // now that we've set the positions, take out "other"
     delete characterPositions['other'];
     characterPositions = _.values(characterPositions);
+
 
     this.setState({linesByCharacter, characterPositions});
   },
