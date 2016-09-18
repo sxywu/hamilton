@@ -50,7 +50,7 @@ var Visualization = React.createClass({
       .on('end', () => {
         // go through all lines and save their positions
         var savePos = _.reduce(this.props.linesByCharacter, (obj, line) => {
-          obj[line.id] = [_.round(line.x, 2), _.round(line.y, 2), line.radius, length: 0]
+          obj[line.id] = [_.round(line.x, 2), _.round(line.y, 2), line.radius, line.length, 0]
           return obj;
         }, {});
         console.log(JSON.stringify(savePos));

@@ -60,7 +60,7 @@ var App = React.createClass({
             characterId: character,
             fx: x,
             fy: start,
-            radius: lineWidth,
+            radius: lineWidth / line[1][0].length,
             length,
             color: color(character),
             data: line,
