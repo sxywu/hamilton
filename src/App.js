@@ -46,7 +46,7 @@ var App = React.createClass({
           y = 100;
         }
         if (y > 600) {
-          x += 2 * lineWidth + 1;
+          x += 2 * lineWidth + 2.5;
           y = 100;
         }
         var start = y;

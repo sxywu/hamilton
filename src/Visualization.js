@@ -12,9 +12,23 @@ var Visualization = React.createClass({
   componentDidMount() {
     this.svg = d3.select(this.refs.svg);
 
+    //SVG filter for the gooey effect
+  	//Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+  	var defs = this.svg.append('defs');
+  	var filter = defs.append('filter').attr('id','gooey');
+  	filter.append('feGaussianBlur')
+  		.attr('in','SourceGraphic')
+  		.attr('stdDeviation','1')
+  		.attr('result','blur');
+  	filter.append('feColorMatrix')
+  		.attr('in','blur')
+  		.attr('mode','matrix')
+  		.attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7');
+
     // add in the circles, the number of them shouldn't change
     this.circles = this.svg.append('g')
       .classed('circles', true)
+      .style("filter", "url(#gooey)")
       .selectAll('path')
       .data(this.props.linesByCharacter, (d) => d.id)
       .enter().append('path')
