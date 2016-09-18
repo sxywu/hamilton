@@ -43,15 +43,23 @@ var Visualization = React.createClass({
     // for now, start force in here
     var nodes = _.union(this.props.characterPositions, this.props.linesByCharacter);
     simulation.nodes(nodes)
-      .on('tick', this.forceTick.bind(this));
+      .on('tick', this.forceTick.bind(this))
+      .on('end', () => {
+        // go through all lines and save their positions
+        var savePos = _.reduce(this.props.linesByCharacter, (obj, line) => {
+          obj[line.id] = [_.round(line.x, 2), _.round(line.y, 2), line.radius, length: 0]
+          return obj;
+        }, {});
+        console.log(JSON.stringify(savePos));
+      });
   },
 
   forceTick() {
     this.circles
       .attr("x1", (d) => d.x)
       .attr("y1", (d) => d.y)
-      .attr("x2", (d) => d.x)
-      .attr("y2", (d) => d.y);
+      .attr("x2", (d) => d.x + d.length)
+      .attr("y2", (d) => d.y + d.length);
 
     this.images.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
   },
