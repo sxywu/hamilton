@@ -16,7 +16,7 @@ var LineSummary = React.createClass({
       top: this.props.y - this.props.radius,
       left: this.props.x + margin,
       padding,
-      maxWidth: 300,
+      width: 250,
       backgroundColor: 'rgba(255, 255, 255, .85)',
       borderRadius: 3,
       border: '1px solid',
