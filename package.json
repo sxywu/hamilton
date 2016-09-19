@@ -12,6 +12,7 @@
     "lodash": "^4.0.0",
     "csvtojson": "^1.0.0"
   },
+  "homepage": "http://sxywu.github.io/hamilton",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
