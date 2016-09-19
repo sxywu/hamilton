@@ -39,8 +39,8 @@ var LineSummary = React.createClass({
       fontSize: 12,
     };
 
-    var lines = _.map(this.props.data[2], line => {
-      return (<div>{line}</div>);
+    var lines = _.map(this.props.data[2], (line, i) => {
+      return (<div key={i}>{line}</div>);
     });
 
     return (

@@ -1,7 +1,11 @@
 import React from 'react';
-import * as d3 from "d3";
+import * as d3 from 'd3';
+import './fisheye';
 
 var duration = 500;
+var fisheye = d3.fisheye.circular()
+  .radius(50)
+  .distortion(2);
 var simulation = d3.forceSimulation()
   .force('collide', d3.forceCollide().radius(d => d.radius))
   .force('x', d3.forceX().x(d => d.focusX))
@@ -17,6 +21,7 @@ var Lines = React.createClass({
     // add in the circles, the number of them shouldn't change
     this.circles = d3.select(this.refs.circles)
       .style("filter", "url(#gooey)")
+      // .on('mousemove', this.applyFisheye)
       .selectAll('path')
       .data(this.props.linesByCharacter, (d) => d.id)
       .enter().append('path')
@@ -86,6 +91,15 @@ var Lines = React.createClass({
     result += 'Z';
 
     return result;
+  },
+
+  applyFisheye() {
+    fisheye.focus(d3.mouse(this.refs.circles));
+    this.circles
+      .attr('transform', (d) => {
+        d.fisheye = fisheye(d)
+        return 'translate(' + [d.fisheye.x, d.fisheye.y] + ')scale(' + d.fisheye.z + ')';
+      });
   },
 
   render() {
