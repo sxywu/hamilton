@@ -73,8 +73,10 @@ var App = React.createClass({
     // console.log(JSON.stringify(savePos))
 
     characterPositions = _.values(characterPositions);
-    var {characterPositions, linesByCharacter} = this.updatePositions(
+    var data = this.updatePositions(
       this.state.positionType, characterPositions, linesByCharacter);
+    characterPositions = data.characterPositions;
+    linesByCharacter = data.linesByCharacter;
 
     this.setState({linesByCharacter, characterPositions});
   },
@@ -88,15 +90,15 @@ var App = React.createClass({
   updatePositions(type, characterPositions, linesByCharacter) {
     var charWidth = this.state.width / (characterPositions.length + 1);
     characterPositions = _.map(characterPositions, (character, i) => {
-      var fx = charWidth * (i + 1);
-      var fy = 30;
+      var focusX = charWidth * (i + 1);
+      var focusY = 30;
       if (type === 'characters') {
-        fx = charPositions[character.id][0];
-        fy = charPositions[character.id][1];
+        focusX = charPositions[character.id][0];
+        focusY = charPositions[character.id][1];
       }
       return Object.assign(character, {
-        fx,
-        fy,
+        focusX,
+        focusY,
       })
     });
 
