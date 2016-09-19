@@ -9,6 +9,10 @@ var simulation = d3.forceSimulation()
   .alphaMin(.5);
 
 var Characters = React.createClass({
+  shouldComponentUpdate(nextProps) {
+    return nextProps.update;
+  },
+  
   componentDidMount() {
     this.images = d3.select(this.refs.images)
       .selectAll('g')

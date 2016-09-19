@@ -5,6 +5,7 @@ import * as d3 from "d3";
 import Visualization from './Visualization';
 // load the data
 import charList from './data/char_list.json';
+import songList from './data/song_list.json';
 import charPositions from './data/char_positions.json';
 import lineCharPositions from './data/line_char_positions.json';
 import lineSongPositions from './data/line_song_positions.json';
@@ -17,7 +18,7 @@ var App = React.createClass({
   getInitialState() {
     return {
       width: 800,
-      height: 1000,
+      height: 800,
       linesByCharacter: [],
       characterPositions: [],
       positionType: 'song',
@@ -32,12 +33,17 @@ var App = React.createClass({
         // get all characters from the line
         return _.map(line[1][0], (character, i) => {
           var id = character + '/' + lineId;
+          var songId = lineId.split(':')[0];
 
         	return {
             id,
             lineId,
+            songId,
             characterId: character,
+            characterName: charList[character][0],
+            songName: songList[songId],
             fill: color(character),
+            selected: true,
             data: line,
           };
         });
@@ -145,13 +151,16 @@ var App = React.createClass({
 
     linesByCharacter = _.map(linesByCharacter, line => {
       var fill = color(line.characterId);
+      var selected = true;
       if (!_.isEmpty(characters)) {
         // if there are selected characters, then we should
         // only have 100% opacity for those lines with those characters
         fill = _.includes(characters, line.characterId) ? fill : '#eee';
+        selected = _.includes(characters, line.characterId) ? selected : false;
       }
       return Object.assign(line, {
         fill,
+        selected,
       });
     });
 

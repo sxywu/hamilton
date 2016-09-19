@@ -9,6 +9,10 @@ var simulation = d3.forceSimulation()
   .alphaMin(.5);
 
 var Lines = React.createClass({
+  shouldComponentUpdate(nextProps) {
+    return nextProps.update;
+  },
+
   componentDidMount() {
     // add in the circles, the number of them shouldn't change
     this.circles = d3.select(this.refs.circles)
@@ -18,9 +22,9 @@ var Lines = React.createClass({
       .enter().append('path')
         .attr('fill', (d) => d.fill)
         .attr('d', (d) => this.drawPath(d))
-        .style('cursor', 'pointer');
-    this.circles.append('title')
-      .text((d) => d.data[2].join('\n'));
+        .style('cursor', 'pointer')
+        .on('mouseenter', this.mouseEnter)
+        .on('mouseleave', this.mouseLeave);
 
     // for now, start force in here
     simulation.nodes(this.props.linesByCharacter)
@@ -47,11 +51,20 @@ var Lines = React.createClass({
 
   componentDidUpdate() {
     // update selection
-    this.circles.attr('fill', (d) => d.fill);
+    this.circles.attr('fill', (d) => d.fill)
+      .style('pointer-events', (d) => d.selected ? 'auto' : 'none');
 
     // and update position
     simulation.nodes(this.props.linesByCharacter)
       .alpha(1).restart();
+  },
+
+  mouseEnter(line) {
+    this.props.hover(line);
+  },
+
+  mouseLeave() {
+    this.props.hover(null);
   },
 
   forceTick() {
