@@ -52,10 +52,10 @@ function keyByLine(obj, keys, line) {
 
 function saveData() {
   // first save final data
-  fs.writeFile('final/lines.json', JSON.stringify(final));
-  fs.writeFile('final/characters.json', JSON.stringify(allCharacters));
-  fs.writeFile('final/themes.json', JSON.stringify(allThemes));
-  fs.writeFile('final/words.json', JSON.stringify(allWords));
+  fs.writeFile('src/data/lines.json', JSON.stringify(final));
+  fs.writeFile('src/data/characters.json', JSON.stringify(allCharacters));
+  fs.writeFile('src/data/themes.json', JSON.stringify(allThemes));
+  fs.writeFile('src/data/words.json', JSON.stringify(allWords));
 }
 
 function parseSong(songNum) {
@@ -67,12 +67,37 @@ function parseSong(songNum) {
   // remember what the last line and characters were
   var lastLine = null;
   var lastCharacter = null;
+  var lastLineTheme = null; // save the themes in the context of the lines
+  var lastTheme = null;
   fs.readFile('processed/' + songNum + '.json', function(err, lines) {
     lines = JSON.parse(lines);
     _.each(lines, function(line, lineNum) {
       lineNum += 1;
       var character = matchMetaToLyric(songNum, lineNum, 0);
       var theme = matchMetaToLyric(songNum, lineNum, 1);
+
+      // the theme isn't the same as the last one
+      if (!_.isEqual(lastTheme, theme)) {
+        // if there's a previous theme, save it
+        if (lastTheme) {
+          // only push in the last line key if the last theme had multiple lines
+          if (lastTheme && _.isString(lastTheme.lines)) {
+            lastLineTheme[0].push(lastTheme.song + ':' + lastTheme.lines.split('-')[1]);
+          }
+          // and then save it in allThemes
+          keyByLine(allThemes, _.split(lastTheme.themes, '/'), lastLineTheme);
+        }
+
+        // and then create the next one with line key and actual line
+        // only if there is a theme
+        if (theme) {
+          lastLineTheme = [[songNum + ':' + lineNum], [line[0]]];
+        }
+      } else if (theme && _.isEqual(lastTheme, theme)) {
+        // if the theme is still the same, push in the line
+        // we don't want to push in song/line number unless the character changes
+        lastLineTheme[1].push(line[0]);
+      }
 
       // if this is the first line of the song
       // or if it's a new character singing
@@ -106,6 +131,12 @@ function parseSong(songNum) {
           [line[0]],
           1 // length of lines for this character
         ];
+
+        // and if the theme is the same as the last
+        // but it's a new character singing, save the line key
+        if (theme && _.isEqual(lastTheme, theme)) {
+          lastLineTheme[0].push(songNum + ':' + lineNum);
+        }
       } else {
         // if there is a last line and the characters are the same
         // just push this line into the last line
@@ -113,23 +144,16 @@ function parseSong(songNum) {
         lastLine[3] += 1;
       }
 
-      // and by themes if any exists
-      // save the key as current line / range of lines it's in
-      var themeKey = songNum + ':' + lineNum + '/' + lastLine[0];
-      if (theme) {
-        theme = _.split(theme.themes, '/');
-        keyByLine(allThemes, theme, themeKey);
-      }
       // and by words (filter out prepositions)
       var words = _.chain(line[0].replace(/[^a-zA-Z\'\’]/g, ' ').split(' '))
         .map(function(word) {return word.toLowerCase()})
         .uniq().reject(function(word) {
           return _.includes(prepositions, word);
         }).value();
-      keyByLine(allWords, words, themeKey);
+      keyByLine(allWords, words, (songNum + ':' + lineNum) + '/' + lastLine[0]);
 
-      // set lastCharacter
       lastCharacter = character;
+      lastTheme = theme;
     });
     // go to next song
     parseSong(songNum + 1);
