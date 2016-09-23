@@ -3,14 +3,17 @@ import _ from 'lodash';
 import * as d3 from "d3";
 
 import Visualization from './Visualization';
+import PositionGraph from './PositionGraph';
 // load the data
 import charList from './data/char_list.json';
 import songList from './data/song_list.json';
+import rawCharacters from './data/characters.json';
+import rawLines from './data/lines.json';
+import rawThemes from './data/themes.json';
+// positions
 import charPositions from './data/char_positions.json';
-import lineCharPositions from './data/line_char_positions.json';
-import lineSongPositions from './data/line_song_positions.json';
-import characters from './data/characters.json';
-import lines from './data/lines.json';
+// import lineCharPositions from './data/line_char_positions.json';
+// import lineSongPositions from './data/line_song_positions.json';
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 var App = React.createClass({
@@ -18,9 +21,11 @@ var App = React.createClass({
   getInitialState() {
     return {
       width: 800,
-      height: 800,
-      linesByCharacter: [],
+      height: 1800,
+      linePositions: [],
       characterPositions: [],
+      themePositions: [],
+      songPositions: [],
       positionType: 'song',
       selectedCharacters: [],
     };
@@ -28,7 +33,7 @@ var App = React.createClass({
 
   componentWillMount() {
     // duplicate any of the lines sung by multiple characters
-    var linesByCharacter = _.chain(lines)
+    var lines = _.chain(rawLines)
       .map((line, lineId) => {
         // get all characters from the line
         return _.map(line[1][0], (character, i) => {
@@ -42,6 +47,8 @@ var App = React.createClass({
             characterId: character,
             characterName: charList[character][0],
             songName: songList[songId],
+            numSingers: line[1][0].length,
+            singerIndex: i,
             fill: color(character),
             selected: true,
             data: line,
@@ -50,7 +57,7 @@ var App = React.createClass({
       }).flatten().value();
 
     // get only the top 12 individuals by line count
-    var topChars = _.chain(characters.characters)
+    var topChars = _.chain(rawCharacters.characters)
       .map((lines, character) => [character, lines.length])
       // only keep individual characters' lines
       .filter((character) => charList[character[0]][2] === 'individual')
@@ -60,8 +67,8 @@ var App = React.createClass({
       .value();
 
     // now position the characters
-    var characterPositions = _.reduce(topChars, (obj, character, i) => {
-      obj[character] = {
+    var characters = _.map(topChars, (character, i) => {
+      return {
         id: character,
         name: charList[character] ? charList[character][0] : 'Other',
         radius: 20,
@@ -69,8 +76,21 @@ var App = React.createClass({
         image: require('./images/' + character + '.png'),
         selected: true,
       };
-      return obj;
-    }, {});
+    });
+
+    var themes = _.map(rawThemes, (lineKeys, theme) => {
+      console.log(theme, lineKeys)
+      return _.map(lineKeys, (lineKey) => {
+
+      });
+    });
+
+    var songs = _.map(songList, (name, id) => {
+      return {
+        id,
+        name,
+      }
+    });
 
     // var savePos = _.reduce(characterPositions, (obj, char) => {
     //   obj[char.id] = [_.round(char.fx, 2), _.round(char.fy, 2)];
@@ -78,19 +98,16 @@ var App = React.createClass({
     // }, {});
     // console.log(JSON.stringify(savePos))
 
-    characterPositions = _.values(characterPositions);
-    var data = this.updatePositions(
-      this.state.positionType, characterPositions, linesByCharacter);
-    characterPositions = data.characterPositions;
-    linesByCharacter = data.linesByCharacter;
+    var {characterPositions, linePositions} = this.updatePositions(
+      this.state.positionType, characters, lines, themes, songs);
 
-    this.setState({linesByCharacter, characterPositions});
+    this.setState({linePositions, characterPositions});
   },
 
   togglePositions(positionType) {
-    var {characterPositions, linesByCharacter} = this.updatePositions(
-      positionType, this.state.characterPositions, this.state.linesByCharacter);
-    this.setState({positionType, characterPositions, linesByCharacter});
+    var {characterPositions, linePositions} = this.updatePositions(
+      positionType, this.state.characterPositions, this.state.linePositions);
+    this.setState({positionType, characterPositions, linePositions});
   },
 
   updatePositions(type, characterPositions, linesByCharacter) {
@@ -108,19 +125,20 @@ var App = React.createClass({
       })
     });
 
-    linesByCharacter = _.map(linesByCharacter, line => {
-      var pos = type === 'characters' ?
-        lineCharPositions[line.id] : lineSongPositions[line.id];
-      return Object.assign(line, {
-        focusX: pos[0],
-        focusY: pos[1],
-        radius: pos[2],
-        fullRadius: pos[3],
-        length: pos[4],
-      });
-    });
+    var {linePositions} = PositionGraph.positionLinesBySong(lines, themes, songs);
+    // var linePositions = _.map(lines, line => {
+    //   var pos = type === 'characters' ?
+    //     lineCharPositions[line.id] : lineSongPositions[line.id];
+    //   return Object.assign(line, {
+    //     focusX: pos[0],
+    //     focusY: pos[1],
+    //     radius: pos[2],
+    //     fullRadius: pos[3],
+    //     length: pos[4],
+    //   });
+    // });
 
-    return {characterPositions, linesByCharacter};
+    return {characterPositions, linePositions};
   },
 
   filterByCharacter(character) {
@@ -130,33 +148,33 @@ var App = React.createClass({
     } else {
       selectedCharacters.push(character);
     }
-    var {linesByCharacter} = this.updateOpacities(
-      selectedCharacters, this.state.characterPositions, this.state.linesByCharacter);
+    var {linePositions} = this.updateOpacities(
+      selectedCharacters, this.state.characterPositions, this.state.linePositions);
 
-    this.setState({selectedCharacters, linesByCharacter});
+    this.setState({selectedCharacters, linePositions});
   },
 
-  updateOpacities(characters, characterPositions, linesByCharacter) {
+  updateOpacities(selectedCharacters, characterPositions, linePositions) {
     characterPositions = _.map(characterPositions, character => {
       var selected = true;
-      if (!_.isEmpty(characters)) {
+      if (!_.isEmpty(selectedCharacters)) {
         // if there are selected characters, then we should
         // only have 100% opacity for those lines with those characters
-        selected = _.includes(characters, character.id) ? selected : false;
+        selected = _.includes(selectedCharacters, character.id) ? selected : false;
       }
-      return Object.assign(character, {
+      return Object.assign(selectedCharacters, {
         selected,
       });
     });
 
-    linesByCharacter = _.map(linesByCharacter, line => {
+    linePositions = _.map(linePositions, line => {
       var fill = color(line.characterId);
       var selected = true;
-      if (!_.isEmpty(characters)) {
+      if (!_.isEmpty(selectedCharacters)) {
         // if there are selected characters, then we should
         // only have 100% opacity for those lines with those characters
-        fill = _.includes(characters, line.characterId) ? fill : '#eee';
-        selected = _.includes(characters, line.characterId) ? selected : false;
+        fill = _.includes(selectedCharacters, line.characterId) ? fill : '#eee';
+        selected = _.includes(selectedCharacters, line.characterId) ? selected : false;
       }
       return Object.assign(line, {
         fill,
@@ -164,7 +182,7 @@ var App = React.createClass({
       });
     });
 
-    return {linesByCharacter, characterPositions};
+    return {linePositions, characterPositions};
   },
 
   render() {

@@ -23,7 +23,7 @@ var Lines = React.createClass({
       .style("filter", "url(#gooey)")
       // .on('mousemove', this.applyFisheye)
       .selectAll('path')
-      .data(this.props.linesByCharacter, (d) => d.id)
+      .data(this.props.linePositions, (d) => d.id)
       .enter().append('path')
         .attr('fill', (d) => d.fill)
         .attr('d', (d) => this.drawPath(d))
@@ -32,7 +32,7 @@ var Lines = React.createClass({
         .on('mouseleave', this.mouseLeave);
 
     // for now, start force in here
-    simulation.nodes(this.props.linesByCharacter)
+    simulation.nodes(this.props.linePositions)
       .on('tick', this.forceTick.bind(this))
       .on('end', () => {
         this.circles.transition()
@@ -46,7 +46,7 @@ var Lines = React.createClass({
           });
 
         // // go through all lines and save their positions
-        // var savePos = _.reduce(this.props.linesByCharacter, (obj, line) => {
+        // var savePos = _.reduce(this.props.linePositions, (obj, line) => {
         //   obj[line.id] = [line.focusX, line.focusY, line.radius, line.fullRadius, line.length]
         //   return obj;
         // }, {});
@@ -60,7 +60,7 @@ var Lines = React.createClass({
       .style('pointer-events', (d) => d.selected ? 'auto' : 'none');
 
     // and update position
-    simulation.nodes(this.props.linesByCharacter)
+    simulation.nodes(this.props.linePositions)
       .alpha(1).restart();
   },
 
@@ -77,17 +77,17 @@ var Lines = React.createClass({
   },
 
   drawPath(d, showLength) {
-    var x1 = -d.radius;
-    var x2 = d.radius;
-    var y1 = d.radius - d.fullRadius;
+    var x1 = d.radius - d.fullRadius;
+    var y1 = -d.radius;
     var length = showLength ? d.length - 2 * d.radius : 0;
-    var y2 = y1 + length;
+    var x2 = x1 + length;
+    var y2 = d.radius
 
     var result = 'M' + [x1, y1];
-    result += ' A' + [d.radius, d.radius] + ' 0 0,1 ' + [x2, y1];
-    result += ' L' + [x2, y2];
-    result += ' A' + [d.radius, d.radius] + ' 0 0,1 ' + [x1, y2];
-    result += ' L' + [x1, y1];
+    result += ' L' + [x2, y1];
+    result += ' A' + [d.radius, d.radius] + ' 0 0,1 ' + [x2, y2];
+    result += ' L' + [x1, y2];
+    result += ' A' + [d.radius, d.radius] + ' 0 0,1 ' + [x1, y1];
     result += 'Z';
 
     return result;
