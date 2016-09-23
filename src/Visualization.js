@@ -10,7 +10,7 @@ import LineSummary from './LineSummary';
 var Visualization = React.createClass({
   getInitialState() {
     return {
-      hoveredLine: null,
+      hovered: null,
       update: true,
     };
   },
@@ -26,7 +26,23 @@ var Visualization = React.createClass({
   },
 
   hoverLine(hoveredLine) {
-    this.setState({hoveredLine, update: false});
+    var hovered = hoveredLine && {
+      title: hoveredLine.characterName,
+      lines: hoveredLine.data[2],
+      x: hoveredLine.x,
+      y: hoveredLine.y,
+    };
+    this.setState({hovered, update: false});
+  },
+
+  hoverTheme(hoveredTheme) {
+    var hovered = hoveredTheme && {
+      title: hoveredTheme.themeId,
+      lines: hoveredTheme.lines,
+      x: hoveredTheme.positions[0].x,
+      y: hoveredTheme.positions[0].y,
+    }
+    this.setState({hovered, update: false});
   },
 
   defineFilters() {
@@ -67,12 +83,12 @@ var Visualization = React.createClass({
       <div style={style}>
         <svg ref='svg' width={this.props.width} height={this.props.height}>
           <Lines {...this.state} {...this.props} hover={this.hoverLine} />
-          <Themes {...this.state} {...this.props} />
+          <Themes {...this.state} {...this.props} hover={this.hoverTheme} />
           <g className='songs'>
             {songs}
           </g>
         </svg>
-        <LineSummary {...this.state.hoveredLine} />
+        <LineSummary {...this.state.hovered} />
       </div>
     );
   }

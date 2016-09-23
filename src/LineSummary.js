@@ -13,12 +13,11 @@ var LineSummary = React.createClass({
     var padding = 10;
     var style = {
       position: 'absolute',
-      top: this.props.y - this.props.radius,
+      top: this.props.y + 2 * margin,
       left: this.props.x + margin,
       padding,
       width: 250,
       backgroundColor: 'rgba(255, 255, 255, .85)',
-      borderRadius: 3,
       border: '1px solid',
     };
     var dotSize = 8;
@@ -26,29 +25,27 @@ var LineSummary = React.createClass({
       fontSize: dotSize * 2,
       lineHeight: dotSize * 2 + 'px',
     };
-    var dotStyle = {
-      backgroundColor: this.props.fill,
-      width: dotSize,
-      height: dotSize,
-      borderRadius: dotSize,
-      margin: dotSize / 2 + 'px',
-      marginLeft: 0,
-      display: 'inline-block',
-    };
+    // var dotStyle = {
+    //   backgroundColor: this.props.fill,
+    //   width: dotSize,
+    //   height: dotSize,
+    //   borderRadius: dotSize,
+    //   margin: dotSize / 2 + 'px',
+    //   marginLeft: 0,
+    //   display: 'inline-block',
+    // };
     var linesStyle = {
       fontSize: 12,
     };
 
-    var lines = _.map(this.props.data[2], (line, i) => {
+    var lines = _.map(this.props.lines, (line, i) => {
       return (<div key={i}>{line}</div>);
     });
 
     return (
       <div style={style}>
-        <div style={headerStyle}>{this.props.songName}</div>
         <div style={headerStyle}>
-          <span style={dotStyle} />
-          {this.props.characterName}
+          {this.props.title}
         </div>
         <div style={linesStyle}>{lines}</div>
       </div>

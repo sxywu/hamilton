@@ -16,7 +16,10 @@ var Characters = React.createClass({
       .enter().append('g')
         .classed('theme', true)
         .attr('fill', (d) => colors(d.themeId))
-        .attr('stroke', '#fff');
+        .attr('stroke', '#fff')
+        .style('cursor', 'pointer')
+        .on('mouseenter', (d) => this.props.hover(d))
+        .on('mouseleave', (d) => this.props.hover(null));
 
     this.themes.selectAll('path')
       .data((d) => d.positions)
@@ -34,7 +37,6 @@ var Characters = React.createClass({
       .attr('stroke-width', size / 2)
       .attr('stroke', (d) => colors(d.themeId));
 
-    console.log(this.props.themePositions)
   },
 
   render() {
