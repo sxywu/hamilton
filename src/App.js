@@ -79,29 +79,29 @@ var App = React.createClass({
     });
 
     var themes = _.map(rawThemes, (lineKeys, theme) => {
-      console.log(theme, lineKeys)
+      // console.log(theme, lineKeys)
       return _.map(lineKeys, (lineKey) => {
 
       });
     });
 
-    var songs = _.map(songList, (name, id) => {
-      return {
+    var songs = _.reduce(songList, (obj, name, id) => {
+      obj[id] = {
         id,
         name,
       }
-    });
-
+      return obj;
+    }, {});
     // var savePos = _.reduce(characterPositions, (obj, char) => {
     //   obj[char.id] = [_.round(char.fx, 2), _.round(char.fy, 2)];
     //   return obj;
     // }, {});
     // console.log(JSON.stringify(savePos))
 
-    var {characterPositions, linePositions} = this.updatePositions(
+    var {characterPositions, linePositions, songPositions} = this.updatePositions(
       this.state.positionType, characters, lines, themes, songs);
 
-    this.setState({linePositions, characterPositions});
+    this.setState({linePositions, characterPositions, songPositions});
   },
 
   togglePositions(positionType) {
@@ -125,7 +125,7 @@ var App = React.createClass({
       })
     });
 
-    var {linePositions} = PositionGraph.positionLinesBySong(lines, themes, songs);
+    var {linePositions, songPositions} = PositionGraph.positionLinesBySong(lines, themes, songs);
     // var linePositions = _.map(lines, line => {
     //   var pos = type === 'characters' ?
     //     lineCharPositions[line.id] : lineSongPositions[line.id];
@@ -138,7 +138,7 @@ var App = React.createClass({
     //   });
     // });
 
-    return {characterPositions, linePositions};
+    return {characterPositions, linePositions, songPositions};
   },
 
   filterByCharacter(character) {

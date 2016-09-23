@@ -4,16 +4,18 @@ import _ from 'lodash';
 var width = 720;
 var PositionGraph = {
   positionLinesBySong(lines, themes, songs) {
-    var lineSize = 4;
-    var padding = {x: 1, y: lineSize * 5};
+    var lineSize = 3.5;
+    var fontSize = 14;
+    var padding = {x: 1, y: lineSize * 6};
     var s = 1;
     var x = lineSize * 6;
     var y = lineSize * 6;
     var lastLineId = null;
 
+    var songPositions = [];
     // duplicate any of the lines sung by multiple characters
     var linePositions = _.map(lines, (line, i) => {
-      var songNum = parseInt(line.lineId.split(':')[0], 10);
+      var songNum = line.songId;
       var startLine = parseInt(line.lineId.split(':')[1].split('-')[0], 10);
       var endLine = parseInt(line.lineId.split(':')[1].split('-')[1], 10) || startLine;
 
@@ -21,14 +23,21 @@ var PositionGraph = {
       if (songNum !== s) {
         s = songNum;
         // set positions back to the left
-        x = lineSize * 6;
+        x = lineSize * 10;
         y += padding.y;
+
+        songPositions.push(Object.assign(songs[songNum], {
+          x, y
+        }));
+
+        x += 2 * lineSize;
+        y += fontSize + lineSize;
       }
       // and if a song has gone over the width
       // bring it to next line
       if (x > width && lastLineId !== line.lineId) {
-        x = lineSize * 6;
-        y += 2 * lineSize + 1;
+        x = lineSize * 12;
+        y += 2 * lineSize + 2;
       }
 
       // x-position
@@ -50,7 +59,7 @@ var PositionGraph = {
       var radius = lineSize;
       if (line.numSingers > 1) {
         focusY += (lineSize / (line.numSingers - 1) * line.singerIndex) - (lineSize / 2);
-        radius = lineSize / line.numSingers + .5;
+        radius = lineSize / line.numSingers + .25;
       }
 
       lastLineId = line.lineId;
@@ -63,8 +72,8 @@ var PositionGraph = {
         length,
       });
     });
-
-    return {linePositions};
+console.log(songPositions)
+    return {linePositions, songPositions};
   },
 }
 

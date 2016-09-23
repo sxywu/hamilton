@@ -52,11 +52,11 @@ var Visualization = React.createClass({
       position: 'relative',
     };
 
+    // <Characters {...this.state} {...this.props} />
     return (
       <div style={style}>
         <svg ref='svg' width={this.props.width} height={this.props.height}>
           <Lines {...this.state} {...this.props} hover={this.hoverLine} />
-          <Characters {...this.state} {...this.props} />
         </svg>
         <LineSummary {...this.state.hoveredLine} />
       </div>
