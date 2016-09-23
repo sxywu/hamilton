@@ -1,8 +1,9 @@
 import React from 'react';
+import _ from 'lodash';
 import * as d3 from "d3";
 
 import Lines from './Lines';
-import Characters from './Characters';
+// import Characters from './Characters';
 import LineSummary from './LineSummary';
 
 var Visualization = React.createClass({
@@ -51,12 +52,23 @@ var Visualization = React.createClass({
     var style = {
       position: 'relative',
     };
+    var songs = _.map(this.props.songPositions, (song, i) => {
+      return (
+        <g>
+          <text x={song.x - 5} y={song.y} textAnchor='end' dy='.35em'>{i + 1} |</text>
+          <text x={song.x} y={song.y} dy='.35em'>{song.name}</text>
+        </g>
+      );
+    });
 
     // <Characters {...this.state} {...this.props} />
     return (
       <div style={style}>
         <svg ref='svg' width={this.props.width} height={this.props.height}>
           <Lines {...this.state} {...this.props} hover={this.hoverLine} />
+          <g className='songs'>
+            {songs}
+          </g>
         </svg>
         <LineSummary {...this.state.hoveredLine} />
       </div>

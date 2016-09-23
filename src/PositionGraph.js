@@ -4,9 +4,9 @@ import _ from 'lodash';
 var width = 720;
 var PositionGraph = {
   positionLinesBySong(lines, themes, songs) {
-    var lineSize = 3.5;
+    var lineSize = 4;
     var fontSize = 14;
-    var padding = {x: 1, y: lineSize * 6};
+    var padding = {x: 1, y: lineSize * 5};
     var s = 1;
     var x = lineSize * 6;
     var y = lineSize * 6;
@@ -72,7 +72,7 @@ var PositionGraph = {
         length,
       });
     });
-console.log(songPositions)
+    
     return {linePositions, songPositions};
   },
 }
