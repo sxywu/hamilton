@@ -82,7 +82,8 @@ function parseSong(songNum) {
         if (lastTheme) {
           // only push in the last line key if the last theme had multiple lines
           if (lastTheme && _.isString(lastTheme.lines)) {
-            lastLineTheme[0].push(lastTheme.song + ':' + lastTheme.lines.split('-')[1]);
+            lastLineTheme[0].push((lastTheme.song + ':' +
+              lastTheme.lines.split('-')[1]) + '/' + character.lines);
           }
           // and then save it in allThemes
           keyByLine(allThemes, _.split(lastTheme.themes, '/'), lastLineTheme);
@@ -91,7 +92,10 @@ function parseSong(songNum) {
         // and then create the next one with line key and actual line
         // only if there is a theme
         if (theme) {
-          lastLineTheme = [[songNum + ':' + lineNum], [line[0]]];
+          lastLineTheme = [
+            [(songNum + ':' + lineNum) + '/' + character.lines],
+            [line[0]]
+          ];
         }
       } else if (theme && _.isEqual(lastTheme, theme)) {
         // if the theme is still the same, push in the line
@@ -135,7 +139,7 @@ function parseSong(songNum) {
         // and if the theme is the same as the last
         // but it's a new character singing, save the line key
         if (theme && _.isEqual(lastTheme, theme)) {
-          lastLineTheme[0].push(songNum + ':' + lineNum);
+          lastLineTheme[0].push(songNum + ':' + lineNum + '/' + character.lines);
         }
       } else {
         // if there is a last line and the characters are the same

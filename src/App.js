@@ -78,11 +78,38 @@ var App = React.createClass({
       };
     });
 
-    var themes = _.map(rawThemes, (lineKeys, theme) => {
-      // console.log(theme, lineKeys)
-      return _.map(lineKeys, (lineKey) => {
+    var themes = _.chain(rawThemes)
+      .map((lineKeys, theme) => {
+        return _.map(lineKeys, (lineKey) => {
+          var lineId = lineKey[0][0];
+          var songId = parseInt(lineId.split(':')[0], 10);
+          var startLine = lineId.split(':')[1].split('/');
+          var startLineId = songId + ':' + startLine[1];
+          startLine = parseInt(startLine[0], 10);
+          var endLine = _.last(lineKey[0]).split(':')[1].split('/');
+          var endLineId = songId + ':' + endLine[1];
+          endLine = parseInt(endLine[0], 10);
 
-      });
+          return {
+            id: theme + '/' + songId + ':' + startLine,
+            themeId: theme,
+            lineId: lineId.split('/')[0],
+            songId,
+            startLine,
+            endLine,
+            startLineId,
+            endLineId,
+            keys: lineKey[0],
+            lines: lineKey[1],
+          }
+        });
+      }).flatten().value();
+    // sort the themes by song, then start line
+    themes.sort((a, b) => {
+      if (a.songId === b.songId) {
+        return a.startLine - b.startLine;
+      }
+      return a.songId - b.songId;
     });
 
     var songs = _.reduce(songList, (obj, name, id) => {
@@ -98,10 +125,10 @@ var App = React.createClass({
     // }, {});
     // console.log(JSON.stringify(savePos))
 
-    var {characterPositions, linePositions, songPositions} = this.updatePositions(
+    var {characterPositions, linePositions, songPositions, themePositions} = this.updatePositions(
       this.state.positionType, characters, lines, themes, songs);
 
-    this.setState({linePositions, characterPositions, songPositions});
+    this.setState({linePositions, characterPositions, songPositions, themePositions});
   },
 
   togglePositions(positionType) {
@@ -125,7 +152,8 @@ var App = React.createClass({
       })
     });
 
-    var {linePositions, songPositions} = PositionGraph.positionLinesBySong(lines, themes, songs);
+    var {linePositions, songPositions, themePositions} =
+      PositionGraph.positionLinesBySong(lines, themes, songs);
     // var linePositions = _.map(lines, line => {
     //   var pos = type === 'characters' ?
     //     lineCharPositions[line.id] : lineSongPositions[line.id];
@@ -138,7 +166,7 @@ var App = React.createClass({
     //   });
     // });
 
-    return {characterPositions, linePositions, songPositions};
+    return {characterPositions, linePositions, songPositions, themePositions};
   },
 
   filterByCharacter(character) {

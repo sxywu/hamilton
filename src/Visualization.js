@@ -3,6 +3,7 @@ import _ from 'lodash';
 import * as d3 from "d3";
 
 import Lines from './Lines';
+import Themes from './Themes';
 // import Characters from './Characters';
 import LineSummary from './LineSummary';
 
@@ -66,6 +67,7 @@ var Visualization = React.createClass({
       <div style={style}>
         <svg ref='svg' width={this.props.width} height={this.props.height}>
           <Lines {...this.state} {...this.props} hover={this.hoverLine} />
+          <Themes {...this.state} {...this.props} />
           <g className='songs'>
             {songs}
           </g>

@@ -13,7 +13,7 @@ var PositionGraph = {
     var lastLineId = null;
 
     var songPositions = [];
-    // duplicate any of the lines sung by multiple characters
+    // make it an object keyed by lineId for the sake of themePositions
     var linePositions = _.map(lines, (line, i) => {
       var songNum = line.songId;
       var startLine = parseInt(line.lineId.split(':')[1].split('-')[0], 10);
@@ -26,18 +26,18 @@ var PositionGraph = {
         x = lineSize * 10;
         y += padding.y;
 
+        // also add song position
         songPositions.push(Object.assign(songs[songNum], {
           x, y
         }));
-
-        x += 2 * lineSize;
+        x += 3 * lineSize;
         y += fontSize + lineSize;
       }
       // and if a song has gone over the width
       // bring it to next line
       if (x > width && lastLineId !== line.lineId) {
         x = lineSize * 12;
-        y += 2 * lineSize + 2;
+        y += 4 * lineSize + 2;
       }
 
       // x-position
@@ -67,13 +67,39 @@ var PositionGraph = {
     	return Object.assign(line, {
         focusX,
         focusY,
+        trueY: y,
         radius,
         fullRadius: lineSize,
         length,
+        startLine,
+        endLine,
       });
     });
-    
-    return {linePositions, songPositions};
+
+    var linePositionsByLineId = _.keyBy(linePositions, 'lineId');
+    var themePositions = _.map(themes, (theme) => {
+      var startLine = linePositionsByLineId[theme.startLineId];
+      // TODO(swu): FIGURE OUT WHY LINES ARE MISSING
+      if (!startLine) {
+        theme.positions = [];
+        return theme;
+      }
+
+      var x = startLine.focusX + (theme.startLine - startLine.startLine + 1) * lineSize;
+      var y = startLine.trueY - 2 * startLine.fullRadius;
+      theme.positions = [{x, y}];
+
+      if (theme.startLine !== theme.endLine) {
+        var endLine = linePositionsByLineId[theme.startLineId];
+        x = endLine.focusX + (theme.endLine - endLine.startLine + 1) * lineSize;
+        y = endLine.trueY - 2 * endLine.fullRadius;
+        theme.positions.push({x, y});
+      }
+
+      return theme;
+    });
+
+    return {linePositions, songPositions, themePositions};
   },
 }
 
