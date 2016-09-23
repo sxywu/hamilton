@@ -110,18 +110,18 @@ var App = React.createClass({
     this.setState({positionType, characterPositions, linePositions});
   },
 
-  updatePositions(type, characterPositions, linesByCharacter) {
-    var charWidth = this.state.width / (characterPositions.length + 1);
-    characterPositions = _.map(characterPositions, (character, i) => {
-      var focusX = charWidth * (i + 1);
-      var focusY = 30;
+  updatePositions(type, characters, lines, themes, songs) {
+    var charWidth = this.state.width / (characters.length + 1);
+    var characterPositions = _.map(characters, (character, i) => {
+      var x = charWidth * (i + 1);
+      var y = 30;
       if (type === 'characters') {
-        focusX = charPositions[character.id][0];
-        focusY = charPositions[character.id][1];
+        x = charPositions[character.id][0];
+        y = charPositions[character.id][1];
       }
       return Object.assign(character, {
-        focusX,
-        focusY,
+        x,
+        y,
       })
     });
 
