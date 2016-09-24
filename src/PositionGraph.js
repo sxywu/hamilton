@@ -30,7 +30,7 @@ var PositionGraph = {
         songPositions.push(Object.assign(songs[songNum], {
           x, y
         }));
-        x += 4 * lineSize;
+        x += 2 * lineSize;
         y += fontSize + lineSize;
       }
       // and if a song has gone over the width

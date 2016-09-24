@@ -22,12 +22,14 @@ var App = React.createClass({
     return {
       width: 800,
       height: 1800,
+      lines: [],
+      themes: [],
       linePositions: [],
       characterPositions: [],
       themePositions: [],
       songPositions: [],
       positionType: 'song',
-      selectedCharacters: [],
+      selectedCharacters: ['7'],
     };
   },
 
@@ -124,9 +126,8 @@ var App = React.createClass({
     //   return obj;
     // }, {});
     // console.log(JSON.stringify(savePos))
-
-    var {characterPositions, linePositions, songPositions, themePositions} = this.updatePositions(
-      this.state.positionType, characters, lines, themes, songs);
+    var {characterPositions, linePositions, songPositions, themePositions} =
+      this.filterAndPosition(this.state.selectedCharacters, characters, lines, themes, songs);
 
     this.setState({linePositions, characterPositions, songPositions, themePositions});
   },
@@ -166,7 +167,7 @@ var App = React.createClass({
     //   });
     // });
 
-    return {characterPositions, linePositions, songPositions, themePositions};
+    return {characterPositions, lines, themes, linePositions, songPositions, themePositions};
   },
 
   filterByCharacter(character) {
@@ -176,41 +177,38 @@ var App = React.createClass({
     } else {
       selectedCharacters.push(character);
     }
-    var {linePositions} = this.updateOpacities(
-      selectedCharacters, this.state.characterPositions, this.state.linePositions);
+    selectedCharacters = _.sortBy(selectedCharacters);
+
+    var {linePositions, characterPositions} = this.filterAndPosition(
+      selectedCharacters, this.state.characterPositions, this.state.lines);
 
     this.setState({selectedCharacters, linePositions});
   },
 
-  updateOpacities(selectedCharacters, characterPositions, linePositions) {
-    characterPositions = _.map(characterPositions, character => {
-      var selected = true;
-      if (!_.isEmpty(selectedCharacters)) {
-        // if there are selected characters, then we should
-        // only have 100% opacity for those lines with those characters
-        selected = _.includes(selectedCharacters, character.id) ? selected : false;
-      }
-      return Object.assign(selectedCharacters, {
-        selected,
-      });
-    });
+  filterAndPosition(selectedCharacters, characters, lines, themes, songs) {
+    // filter the songs to keep only those with all characters
+    lines = _.chain(lines)
+      .groupBy((line) => line.songId)
+      .filter((lines) => {
+        // only keep the song if all the selected characters are in it
+        return _.chain(lines)
+          .map(line => {
+            // also use this chance to update the fill based on selected characters
+            line.fill = color(line.characterId);
+            if (!_.isEmpty(selectedCharacters)) {
+              line.fill = _.includes(selectedCharacters, line.characterId) ? line.fill : '#eee';
+            }
+            return line.characterId;
+          }).uniq()
+          .intersection(selectedCharacters)
+          .sortBy().isEqual(selectedCharacters)
+          .value();
+      }).flatten().value();
 
-    linePositions = _.map(linePositions, line => {
-      var fill = color(line.characterId);
-      var selected = true;
-      if (!_.isEmpty(selectedCharacters)) {
-        // if there are selected characters, then we should
-        // only have 100% opacity for those lines with those characters
-        fill = _.includes(selectedCharacters, line.characterId) ? fill : '#eee';
-        selected = _.includes(selectedCharacters, line.characterId) ? selected : false;
-      }
-      return Object.assign(line, {
-        fill,
-        selected,
-      });
-    });
+    var {characterPositions, linePositions, songPositions, themePositions} = this.updatePositions(
+      this.state.positionType, characters, lines, themes, songs);
 
-    return {linePositions, characterPositions};
+    return {linePositions, characterPositions, songPositions, themePositions};
   },
 
   render() {

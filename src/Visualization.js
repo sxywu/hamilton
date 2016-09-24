@@ -72,7 +72,7 @@ var Visualization = React.createClass({
     var songs = _.map(this.props.songPositions, (song, i) => {
       return (
         <g>
-          <text x={song.x - 5} y={song.y} textAnchor='end' dy='.35em'>{i + 1} |</text>
+          <text x={song.x - 5} y={song.y} textAnchor='end' dy='.35em'>{song.id} |</text>
           <text x={song.x} y={song.y} dy='.35em'>{song.name}</text>
         </g>
       );
