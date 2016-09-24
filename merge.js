@@ -41,6 +41,35 @@ function matchMetaToLyric(songNum, lineNum, type) {
   return matched;
 }
 
+function saveLineData(lastLine) {
+  // save lines by character
+  keyByLine(allCharacters.characters, lastLine[1][0], lastLine[0]);
+  keyByLine(allCharacters.excluding, lastLine[1][1], lastLine[0]);
+  var conversing = _.chain(lastLine[1][0])
+    .map(function(source) {
+      return _.map(lastLine[1][2], function(target) {
+        if (!target) return;
+        return source + '-' + target
+      });
+    }).flatten().filter().value();
+  keyByLine(allCharacters.conversing, conversing, lastLine[0]);
+
+  // then take care of the last line
+  final[lastLine[0]] = lastLine;
+}
+
+function saveThemeData(lastLineTheme, lastTheme, character) {
+  if (!lastTheme) return;
+
+  // only push in the last line key if the last theme had multiple lines
+  if (lastTheme && _.isString(lastTheme.lines)) {
+    lastLineTheme[0].push((lastTheme.song + ':' +
+      lastTheme.lines.split('-')[1]) + '/' + character.lines);
+  }
+  // and then save it in allThemes
+  keyByLine(allThemes, _.split(lastTheme.themes, '/'), lastLineTheme);
+}
+
 function keyByLine(obj, keys, line) {
   _.each(keys, function(key) {
     if (!obj[key]) {
@@ -79,15 +108,7 @@ function parseSong(songNum) {
       // the theme isn't the same as the last one
       if (!_.isEqual(lastTheme, theme)) {
         // if there's a previous theme, save it
-        if (lastTheme) {
-          // only push in the last line key if the last theme had multiple lines
-          if (lastTheme && _.isString(lastTheme.lines)) {
-            lastLineTheme[0].push((lastTheme.song + ':' +
-              lastTheme.lines.split('-')[1]) + '/' + character.lines);
-          }
-          // and then save it in allThemes
-          keyByLine(allThemes, _.split(lastTheme.themes, '/'), lastLineTheme);
-        }
+        saveThemeData(lastLineTheme, lastTheme, character);
 
         // and then create the next one with line key and actual line
         // only if there is a theme
@@ -107,20 +128,7 @@ function parseSong(songNum) {
       // or if it's a new character singing
       if (!lastLine || !_.isEqual(lastCharacter, character)) {
         if (lastLine) {
-          // save lines by character
-          keyByLine(allCharacters.characters, lastLine[1][0], lastLine[0]);
-          keyByLine(allCharacters.excluding, lastLine[1][1], lastLine[0]);
-          var conversing = _.chain(lastLine[1][0])
-            .map(function(source) {
-              return _.map(lastLine[1][2], function(target) {
-                if (!target) return;
-                return source + '-' + target
-              });
-            }).flatten().filter().value();
-          keyByLine(allCharacters.conversing, conversing, lastLine[0]);
-
-          // then take care of the last line
-          final[lastLine[0]] = lastLine;
+          saveLineData(lastLine);
         }
 
         // now that last line has been saved
@@ -156,6 +164,12 @@ function parseSong(songNum) {
         }).value();
       keyByLine(allWords, words, (songNum + ':' + lineNum) + '/' + lastLine[0]);
 
+      // if this is actually the last line, also save the song
+      if (lineNum === lines.length) {
+        saveLineData(lastLine);
+        saveThemeData(lastLineTheme, lastTheme, character);
+      }
+      
       lastCharacter = character;
       lastTheme = theme;
     });
