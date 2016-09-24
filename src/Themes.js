@@ -1,7 +1,6 @@
 import React from 'react';
 import * as d3 from "d3";
 
-var colors = d3.scaleOrdinal(d3.schemeCategory20);
 var size = 5;
 var pathD = 'M0,-' + size + ' L' + size + ',0 L0,' + size + ' L-' + size + ',0 Z';
 var Characters = React.createClass({
@@ -15,7 +14,7 @@ var Characters = React.createClass({
       .data(this.props.themePositions)
       .enter().append('g')
         .classed('theme', true)
-        .attr('fill', (d) => colors(d.themeId))
+        .attr('fill', (d) => d.fill)
         .attr('stroke', '#fff')
         .style('cursor', 'pointer')
         .on('mouseenter', (d) => this.props.hover(d))
@@ -35,7 +34,7 @@ var Characters = React.createClass({
       .attr('y1', (d) => d.positions[0].y)
       .attr('y2', (d) => d.positions[1].y)
       .attr('stroke-width', size / 2)
-      .attr('stroke', (d) => colors(d.themeId));
+      .attr('stroke', (d) => d.fill);
 
   },
 

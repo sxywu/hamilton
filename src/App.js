@@ -3,7 +3,7 @@ import _ from 'lodash';
 import * as d3 from "d3";
 
 import Visualization from './Visualization';
-import PositionGraph from './PositionGraph';
+import ProcessGraph from './ProcessGraph';
 // load the data
 import charList from './data/char_list.json';
 import songList from './data/song_list.json';
@@ -51,7 +51,7 @@ var App = React.createClass({
             songName: songList[songId],
             numSingers: line[1][0].length,
             singerIndex: i,
-            fill: color(character),
+            trueFill: color(character),
             selected: true,
             data: line,
           };
@@ -101,6 +101,7 @@ var App = React.createClass({
             endLine,
             startLineId,
             endLineId,
+            fill: color(theme),
             keys: lineKey[0],
             lines: lineKey[1],
           }
@@ -125,7 +126,6 @@ var App = React.createClass({
     //   obj[char.id] = [_.round(char.fx, 2), _.round(char.fy, 2)];
     //   return obj;
     // }, {});
-    // console.log(JSON.stringify(savePos))
     var {characterPositions, linePositions, songPositions, themePositions} =
       this.filterAndPosition(this.state.selectedCharacters, characters, lines, themes, songs);
 
@@ -136,38 +136,6 @@ var App = React.createClass({
     var {characterPositions, linePositions} = this.updatePositions(
       positionType, this.state.characterPositions, this.state.linePositions);
     this.setState({positionType, characterPositions, linePositions});
-  },
-
-  updatePositions(type, characters, lines, themes, songs) {
-    var charWidth = this.state.width / (characters.length + 1);
-    var characterPositions = _.map(characters, (character, i) => {
-      var x = charWidth * (i + 1);
-      var y = 30;
-      if (type === 'characters') {
-        x = charPositions[character.id][0];
-        y = charPositions[character.id][1];
-      }
-      return Object.assign(character, {
-        x,
-        y,
-      })
-    });
-
-    var {linePositions, songPositions, themePositions} =
-      PositionGraph.positionLinesBySong(lines, themes, songs);
-    // var linePositions = _.map(lines, line => {
-    //   var pos = type === 'characters' ?
-    //     lineCharPositions[line.id] : lineSongPositions[line.id];
-    //   return Object.assign(line, {
-    //     focusX: pos[0],
-    //     focusY: pos[1],
-    //     radius: pos[2],
-    //     fullRadius: pos[3],
-    //     length: pos[4],
-    //   });
-    // });
-
-    return {characterPositions, lines, themes, linePositions, songPositions, themePositions};
   },
 
   filterByCharacter(character) {
@@ -186,29 +154,13 @@ var App = React.createClass({
   },
 
   filterAndPosition(selectedCharacters, characters, lines, themes, songs) {
-    // filter the songs to keep only those with all characters
-    lines = _.chain(lines)
-      .groupBy((line) => line.songId)
-      .filter((lines) => {
-        // only keep the song if all the selected characters are in it
-        return _.chain(lines)
-          .map(line => {
-            // also use this chance to update the fill based on selected characters
-            line.fill = color(line.characterId);
-            if (!_.isEmpty(selectedCharacters)) {
-              line.fill = _.includes(selectedCharacters, line.characterId) ? line.fill : '#eee';
-            }
-            return line.characterId;
-          }).uniq()
-          .intersection(selectedCharacters)
-          .sortBy().isEqual(selectedCharacters)
-          .value();
-      }).flatten().value();
+    var {lines, themes} = ProcessGraph.filterBySelectedCharacter(
+      selectedCharacters, lines, themes);
 
-    var {characterPositions, linePositions, songPositions, themePositions} = this.updatePositions(
-      this.state.positionType, characters, lines, themes, songs);
+    var {linePositions, songPositions, themePositions} =
+      ProcessGraph.positionLinesBySong(lines, themes, songs);
 
-    return {linePositions, characterPositions, songPositions, themePositions};
+    return {linePositions, songPositions, themePositions};
   },
 
   render() {

@@ -3,6 +3,39 @@ import _ from 'lodash';
 
 var width = 720;
 var PositionGraph = {
+  filterBySelectedCharacter(selectedCharacters, lines, themes) {
+    lines = _.chain(lines)
+      .groupBy((line) => line.songId)
+      .filter((lines) => {
+        // only keep the song if all the selected characters are in it
+        return _.chain(lines)
+          .map(line => {
+            // also use this chance to update the fill based on selected characters
+            line.fill = line.trueFill;
+            line.selected = true;
+            if (!_.isEmpty(selectedCharacters)) {
+              line.fill = _.includes(selectedCharacters, line.characterId) ? line.fill : '#eee';
+              line.selected = _.includes(selectedCharacters, line.characterId) ? line.selected : false;
+            }
+            return line.characterId;
+          }).uniq()
+          .intersection(selectedCharacters)
+          .sortBy().isEqual(selectedCharacters)
+          .value();
+      }).flatten().value();
+
+    var linesById = _.keyBy(lines, 'lineId');
+    themes = _.filter(themes, theme => {
+      var startLine = linesById[theme.startLineId];
+      var endLine = linesById[theme.endLineId];
+      if (theme.songId === 40) debugger
+      // keep a theme if either its start or end is in a selected character's line
+      return (startLine && startLine.selected) || (endLine && endLine.selected);
+    });
+
+    return {lines, themes};
+  },
+
   positionLinesBySong(lines, themes, songs) {
     var lineSize = 4;
     var fontSize = 14;
@@ -85,13 +118,13 @@ var PositionGraph = {
         return theme;
       }
 
-      var x = startLine.focusX + (theme.startLine - startLine.startLine + 1) * lineSize;
+      var x = startLine.focusX + (theme.startLine - startLine.startLine) * lineSize;
       var y = startLine.trueY - 2 * startLine.fullRadius;
       theme.positions = [{x, y}];
 
       if (theme.startLine !== theme.endLine) {
         var endLine = linePositionsByLineId[theme.startLineId];
-        x = endLine.focusX + (theme.endLine - endLine.startLine + 1) * lineSize;
+        x = endLine.focusX + (theme.endLine - endLine.startLine) * lineSize;
         y = endLine.trueY - 2 * endLine.fullRadius;
         theme.positions.push({x, y});
       }
