@@ -108,7 +108,7 @@ function parseSong(songNum) {
       // the theme isn't the same as the last one
       if (!_.isEqual(lastTheme, theme)) {
         // if there's a previous theme, save it
-        saveThemeData(lastLineTheme, lastTheme, character);
+        saveThemeData(lastLineTheme, lastTheme, lastCharacter);
 
         // and then create the next one with line key and actual line
         // only if there is a theme
@@ -169,7 +169,7 @@ function parseSong(songNum) {
         saveLineData(lastLine);
         saveThemeData(lastLineTheme, lastTheme, character);
       }
-      
+
       lastCharacter = character;
       lastTheme = theme;
     });
