@@ -23,7 +23,7 @@ var App = React.createClass({
   getInitialState() {
     return {
       width: 800,
-      height: 1800,
+      height: 2000,
       lines: [],
       themes: [],
       linePositions: [],
