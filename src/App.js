@@ -108,6 +108,7 @@ var App = React.createClass({
           id: link.id,
           source: link.source,
           target: link.target,
+          color: link.source.color,
           weight: _.reduce(links, (sum, link) => sum + link.weight, 0),
           allIds: _.map(links, 'id'),
         }
@@ -149,9 +150,9 @@ var App = React.createClass({
       return obj;
     }, {});
 
-    var {linePositions, songPositions, themePositions} =
-      this.filterAndPosition(this.state.selectedCharacters,
-      this.state.selectedConversation, lines, themes, songs);
+    var {linePositions, songPositions, themePositions, characterNodes, characterLinks} =
+      this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
+        characterNodes, characterLinks, lines, themes, songs);
 
     this.setState({linePositions, characterNodes, characterLinks,
       lines, themes, songs, songPositions, themePositions});
@@ -166,22 +167,26 @@ var App = React.createClass({
     }
     selectedCharacters = _.sortBy(selectedCharacters);
 
-    var {linePositions, songPositions, themePositions} = this.filterAndPosition(
-      selectedCharacters, this.state.selectedConversation,
+    var {linePositions, songPositions, themePositions, characterNodes, characterLinks} =
+    this.filterAndPosition(selectedCharacters, this.state.selectedConversation,
+      this.state.characterNodes, this.state.characterLinks,
       this.state.lines, this.state.themes, this.state.songs);
 
     this.setState({selectedCharacters, selectedConversation: [],
-      linePositions, songPositions, themePositions});
+      characterNodes, characterLinks, linePositions, songPositions, themePositions});
   },
 
-  filterAndPosition(selectedCharacters, selectedConversation, lines, themes, songs) {
+  filterAndPosition(selectedCharacters, selectedConversation,
+    characters, conversations, lines, themes, songs) {
     var {lines, themes} = ProcessGraph.filterBySelectedCharacter(
       selectedCharacters, selectedConversation, lines, themes);
+    var {characterNodes, characterLinks} = ProcessGraph.updateCharacterOpacity(
+      selectedCharacters, selectedConversation, characters, conversations);
 
     var {linePositions, songPositions, themePositions} =
       ProcessGraph.positionLinesBySong(lines, themes, songs);
 
-    return {linePositions, songPositions, themePositions};
+    return {linePositions, songPositions, themePositions, characterNodes, characterLinks};
   },
 
   render() {

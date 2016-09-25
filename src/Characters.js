@@ -10,11 +10,12 @@ var simulation = d3.forceSimulation()
 var Characters = React.createClass({
   componentDidMount() {
     this.container = d3.select(this.refs.images);
+    this.defineFilters();
 
     this.links = this.container.selectAll('line')
       .data(this.props.characterLinks, (d) => d.id)
       .enter().append('line')
-      .attr('stroke', (d) => d.source.color)
+      .attr('stroke', (d) => d.color)
       .attr('stroke-width', (d) => d.weight);
 
     this.images = this.container.selectAll('g')
@@ -64,6 +65,15 @@ var Characters = React.createClass({
     // update selection
     this.images.attr('filter', (d) => d.selected ? '' : 'url(#gray)')
       .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
+    this.links.attr('stroke', (d) => d.color)
+  },
+
+  defineFilters() {
+    var defs = this.container.append('defs');
+    var gray = defs.append('filter').attr('id','gray');
+    gray.append('feColorMatrix')
+      .attr('type','matrix')
+      .attr('values','1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 1 0');
   },
 
   render() {

@@ -57,11 +57,6 @@ var Visualization = React.createClass({
       .attr('in','blur')
       .attr('mode','matrix')
       .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7');
-
-    var gray = defs.append('filter').attr('id','gray');
-    gray.append('feColorMatrix')
-      .attr('type','matrix')
-      .attr('values','1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 .5 0');
   },
 
   render() {

@@ -2,7 +2,33 @@ import _ from 'lodash';
 // import * as d3 from "d3";
 
 var width = 720;
+var gray = '#eee';
 var PositionGraph = {
+  updateCharacterOpacity(selectedCharacters, selectedConversation, characterNodes, characterLinks) {
+    if (!_.isEmpty(selectedCharacters)) {
+      // so if characters are selected, all links should be gray
+      characterLinks = _.map(characterLinks, link => {
+        link.color = gray;
+        return link;
+      });
+      characterNodes = _.map(characterNodes, node => {
+        node.selected = _.includes(selectedCharacters, node.id);
+        return node;
+      });
+    } else {
+      characterLinks = _.map(characterLinks, link => {
+        link.color = link.source.color;
+        return link;
+      });
+      characterNodes = _.map(characterNodes, node => {
+        node.selected = true;
+        return node;
+      });
+    }
+
+    return {characterNodes, characterLinks};
+  },
+
   filterBySelectedCharacter(selectedCharacters, selectedConversation, lines, themes) {
     // can only select characters or conversation, not both
     if (!_.isEmpty(selectedCharacters)) {
@@ -13,7 +39,7 @@ var PositionGraph = {
           return _.chain(lines)
             .map(line => {
               // also use this chance to update the fill based on selected characters
-              line.fill = _.includes(selectedCharacters, line.characterId) ? line.trueFill : '#eee';
+              line.fill = _.includes(selectedCharacters, line.characterId) ? line.trueFill : gray;
               line.selected = _.includes(selectedCharacters, line.characterId);
               return line.characterId;
             }).uniq()
@@ -30,7 +56,7 @@ var PositionGraph = {
           _.each(lines, line => {
             line.selected = _.some(line.conversing, converseId =>
               _.includes(selectedConversation, converseId));
-            line.fill = line.selected ? line.trueFill : '#eee';
+            line.fill = line.selected ? line.trueFill : gray;
 
             atLeastOne = atLeastOne || line.selected;
           });
