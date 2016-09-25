@@ -166,13 +166,34 @@ var App = React.createClass({
       selectedCharacters.push(character);
     }
     selectedCharacters = _.sortBy(selectedCharacters);
+    var selectedConversation = [];
 
     var {linePositions, songPositions, themePositions, characterNodes, characterLinks} =
-    this.filterAndPosition(selectedCharacters, this.state.selectedConversation,
+    this.filterAndPosition(selectedCharacters, selectedConversation,
       this.state.characterNodes, this.state.characterLinks,
       this.state.lines, this.state.themes, this.state.songs);
 
-    this.setState({selectedCharacters, selectedConversation: [],
+    this.setState({selectedCharacters, selectedConversation,
+      characterNodes, characterLinks, linePositions, songPositions, themePositions});
+  },
+
+  filterByConversation(allIds) {
+    var selectedConversation = this.state.selectedConversation;
+    _.each(allIds, (id) => {
+      if (_.includes(selectedConversation, id)) {
+        selectedConversation = _.without(selectedConversation, id);
+      } else {
+        selectedConversation.push(id);
+      }
+    });
+    var selectedCharacters = [];
+
+    var {linePositions, songPositions, themePositions, characterNodes, characterLinks} =
+    this.filterAndPosition(selectedCharacters, selectedConversation,
+      this.state.characterNodes, this.state.characterLinks,
+      this.state.lines, this.state.themes, this.state.songs);
+
+    this.setState({selectedCharacters, selectedConversation,
       characterNodes, characterLinks, linePositions, songPositions, themePositions});
   },
 
@@ -199,7 +220,8 @@ var App = React.createClass({
       <div className="App">
         <svg style={sideStyle}>
           <Characters {...this.state} {...this.props} {...sideStyle}
-            onSelectCharacter={this.filterByCharacter} />
+            onSelectCharacter={this.filterByCharacter}
+            onSelectConversation={this.filterByConversation} />
         </svg>
         <Visualization {...this.state} onSelectCharacter={this.filterByCharacter} />
       </div>

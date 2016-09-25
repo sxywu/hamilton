@@ -16,7 +16,9 @@ var Characters = React.createClass({
       .data(this.props.characterLinks, (d) => d.id)
       .enter().append('line')
       .attr('stroke', (d) => d.color)
-      .attr('stroke-width', (d) => d.weight);
+      .attr('stroke-width', (d) => d.weight)
+      .style('cursor', 'pointer')
+      .on('click', (d) => this.props.onSelectConversation(d.allIds));
 
     this.images = this.container.selectAll('g')
       .data(this.props.characterNodes, (d) => d.id)

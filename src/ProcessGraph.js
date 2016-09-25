@@ -15,6 +15,15 @@ var PositionGraph = {
         node.selected = _.includes(selectedCharacters, node.id);
         return node;
       });
+    } else if (!_.isEmpty(selectedConversation)) {
+      characterLinks = _.map(characterLinks, link => {
+        link.color = _.includes(selectedConversation, link.id) ? link.source.color : gray;
+        return link;
+      });
+      characterNodes = _.map(characterNodes, node => {
+        node.selected = false;
+        return node;
+      });
     } else {
       characterLinks = _.map(characterLinks, link => {
         link.color = link.source.color;
