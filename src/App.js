@@ -16,6 +16,8 @@ import charPositions from './data/char_positions.json';
 // import lineSongPositions from './data/line_song_positions.json';
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
+var linkScale = d3.scaleLinear().range([1, 10]);
+
 var App = React.createClass({
 
   getInitialState() {
@@ -29,7 +31,8 @@ var App = React.createClass({
       themePositions: [],
       songPositions: [],
       positionType: 'song',
-      selectedCharacters: ['7'],
+      selectedCharacters: [],
+      selectedConversation: [],
     };
   },
 
@@ -51,12 +54,15 @@ var App = React.createClass({
             songName: songList[songId],
             numSingers: line[1][0].length,
             singerIndex: i,
+            conversing: [],
+            fill: color(character),
             trueFill: color(character),
             selected: true,
             data: line,
           };
         });
       }).flatten().value();
+    var linesById = _.keyBy(lines, 'lineId');
 
     // get only the top 12 individuals by line count
     var topChars = _.chain(rawCharacters.characters)
@@ -68,7 +74,7 @@ var App = React.createClass({
       .take(11)
       .value();
 
-    // now position the characters
+    // character nodes
     var characters = _.map(topChars, (character, i) => {
       return {
         id: character,
@@ -78,6 +84,26 @@ var App = React.createClass({
         image: require('./images/' + character + '.png'),
         selected: true,
       };
+    });
+    var charactersById = _.keyBy(characters, 'id');
+
+    // character links
+    var conversingValues = _.values(rawCharacters.conversing);
+    var minWidth = _.minBy(conversingValues, (lines) => lines.length).length;
+    var maxWidth = _.maxBy(conversingValues, (lines) => lines.length).length;
+    linkScale.domain([minWidth, maxWidth]);
+    var characterLinks = _.map(rawCharacters.conversing, (lines, conversing) => {
+      var source = conversing.split('-');
+      var target = charactersById[source[1]];
+      source = charactersById[source[0]];
+      var weight = linkScale(lines.length);
+
+      _.each(lines, lineId => {
+        // remember the targets in the lines
+        linesById[lineId].conversing.push(conversing);
+      });
+
+      return {id: conversing, source, target, weight};
     });
 
     var themes = _.chain(rawThemes)
@@ -127,7 +153,8 @@ var App = React.createClass({
     //   return obj;
     // }, {});
     var {characterPositions, linePositions, songPositions, themePositions} =
-      this.filterAndPosition(this.state.selectedCharacters, characters, lines, themes, songs);
+      this.filterAndPosition(this.state.selectedCharacters,
+      this.state.selectedConversation, characters, lines, themes, songs);
 
     this.setState({linePositions, characterPositions, songPositions, themePositions});
   },
@@ -148,14 +175,15 @@ var App = React.createClass({
     selectedCharacters = _.sortBy(selectedCharacters);
 
     var {linePositions, characterPositions} = this.filterAndPosition(
-      selectedCharacters, this.state.characterPositions, this.state.lines);
+      selectedCharacters, this.state.selectedConversation,
+      this.state.characterPositions, this.state.lines, this.state.themes, this.state.songs);
 
-    this.setState({selectedCharacters, linePositions});
+    this.setState({selectedCharacters, linePositions, selectedConversation: []});
   },
 
-  filterAndPosition(selectedCharacters, characters, lines, themes, songs) {
+  filterAndPosition(selectedCharacters, selectedConversation, characters, lines, themes, songs) {
     var {lines, themes} = ProcessGraph.filterBySelectedCharacter(
-      selectedCharacters, lines, themes);
+      selectedCharacters, selectedConversation, lines, themes);
 
     var {linePositions, songPositions, themePositions} =
       ProcessGraph.positionLinesBySong(lines, themes, songs);
@@ -166,10 +194,6 @@ var App = React.createClass({
   render() {
     return (
       <div className="App">
-        <div>
-          <button onClick={this.togglePositions.bind(this, 'characters')}>character</button>
-          <button onClick={this.togglePositions.bind(this, 'songs')}>song</button>
-        </div>
         <Visualization {...this.state} onSelectCharacter={this.filterByCharacter} />
       </div>
     );

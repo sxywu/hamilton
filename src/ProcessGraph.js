@@ -3,32 +3,45 @@ import _ from 'lodash';
 
 var width = 720;
 var PositionGraph = {
-  filterBySelectedCharacter(selectedCharacters, lines, themes) {
-    lines = _.chain(lines)
-      .groupBy((line) => line.songId)
-      .filter((lines) => {
-        // only keep the song if all the selected characters are in it
-        return _.chain(lines)
-          .map(line => {
-            // also use this chance to update the fill based on selected characters
-            line.fill = line.trueFill;
-            line.selected = true;
-            if (!_.isEmpty(selectedCharacters)) {
-              line.fill = _.includes(selectedCharacters, line.characterId) ? line.fill : '#eee';
-              line.selected = _.includes(selectedCharacters, line.characterId) ? line.selected : false;
-            }
-            return line.characterId;
-          }).uniq()
-          .intersection(selectedCharacters)
-          .sortBy().isEqual(selectedCharacters)
-          .value();
-      }).flatten().value();
+  filterBySelectedCharacter(selectedCharacters, selectedConversation, lines, themes) {
+    // can only select characters or conversation, not both
+    if (!_.isEmpty(selectedCharacters)) {
+      lines = _.chain(lines)
+        .groupBy((line) => line.songId)
+        .filter((lines) => {
+          // only keep the song if all the selected characters are in it
+          return _.chain(lines)
+            .map(line => {
+              // also use this chance to update the fill based on selected characters
+              line.fill = _.includes(selectedCharacters, line.characterId) ? line.trueFill : '#eee';
+              line.selected = _.includes(selectedCharacters, line.characterId);
+              return line.characterId;
+            }).uniq()
+            .intersection(selectedCharacters)
+            .sortBy().isEqual(selectedCharacters)
+            .value();
+        }).flatten().value();
+    } else if (!_.isEmpty(selectedConversation)) {
+      lines = _.chain(lines)
+        .groupBy(line => line.songId)
+        .filter(lines => {
+          // if even one of the lines
+          var atLeastOne = false;
+          _.each(lines, line => {
+            line.selected = _.some(line.conversing, converseId =>
+              _.includes(selectedConversation, converseId));
+            line.fill = line.selected ? line.trueFill : '#eee';
+
+            atLeastOne = atLeastOne || line.selected;
+          });
+          return atLeastOne;
+        }).flatten().value();
+    }
 
     var linesById = _.keyBy(lines, 'lineId');
     themes = _.filter(themes, theme => {
       var startLine = linesById[theme.startLineId];
       var endLine = linesById[theme.endLineId];
-      if (theme.songId === 40) debugger
       // keep a theme if either its start or end is in a selected character's line
       return (startLine && startLine.selected) || (endLine && endLine.selected);
     });
