@@ -3,6 +3,7 @@ import _ from 'lodash';
 import * as d3 from "d3";
 
 import Visualization from './Visualization';
+import Characters from './Characters';
 import ProcessGraph from './ProcessGraph';
 // load the data
 import charList from './data/char_list.json';
@@ -26,11 +27,11 @@ var App = React.createClass({
       height: 2000,
       lines: [],
       themes: [],
+      characterNodes: [],
+      characterLinks: [],
       linePositions: [],
-      characterPositions: [],
       themePositions: [],
       songPositions: [],
-      positionType: 'song',
       selectedCharacters: [],
       selectedConversation: [],
     };
@@ -64,47 +65,53 @@ var App = React.createClass({
       }).flatten().value();
     var linesById = _.keyBy(lines, 'lineId');
 
-    // get only the top 12 individuals by line count
-    var topChars = _.chain(rawCharacters.characters)
-      .map((lines, character) => [character, lines.length])
-      // only keep individual characters' lines
-      .filter((character) => charList[character[0]][2] === 'individual')
-      .sortBy((character) => -character[1])
-      .map(0)
-      .take(11)
-      .value();
-
     // character nodes
-    var characters = _.map(topChars, (character, i) => {
+    var characterNodes = _.map(rawCharacters.characters, (lines, id) => {
+      var character = charList[id];
+      var name = character[0];
+      var initials = _.map(name.split(' '), 0).join('');
+
       return {
-        id: character,
-        name: charList[character] ? charList[character][0] : 'Other',
+        id,
+        name,
+        initials,
         radius: 20,
-        color: color(character),
-        image: require('./images/' + character + '.png'),
+        color: color(id),
+        image: character[3] && require('./images/' + id + '.png'),
         selected: true,
       };
     });
-    var charactersById = _.keyBy(characters, 'id');
+    var charactersById = _.keyBy(characterNodes, 'id');
 
     // character links
     var conversingValues = _.values(rawCharacters.conversing);
     var minWidth = _.minBy(conversingValues, (lines) => lines.length).length;
     var maxWidth = _.maxBy(conversingValues, (lines) => lines.length).length;
     linkScale.domain([minWidth, maxWidth]);
-    var characterLinks = _.map(rawCharacters.conversing, (lines, conversing) => {
-      var source = conversing.split('-');
-      var target = charactersById[source[1]];
-      source = charactersById[source[0]];
-      var weight = linkScale(lines.length);
+    var characterLinks = _.chain(rawCharacters.conversing)
+      .map((lines, conversing) => {
+        var source = conversing.split('-');
+        var target = charactersById[source[1]];
+        source = charactersById[source[0]];
+        var weight = linkScale(lines.length);
 
-      _.each(lines, lineId => {
-        // remember the targets in the lines
-        linesById[lineId].conversing.push(conversing);
-      });
+        _.each(lines, lineId => {
+          // remember the targets in the lines
+          linesById[lineId].conversing.push(conversing);
+        });
 
-      return {id: conversing, source, target, weight};
-    });
+        return {id: conversing, source, target, weight};
+      }).groupBy((link) => _.sortBy([link.source.id, link.target.id]).join('-'))
+      .map((links, id) => {
+        var link = links[0];
+        return {
+          id: link.id,
+          source: link.source,
+          target: link.target,
+          weight: _.reduce(links, (sum, link) => sum + link.weight, 0),
+          allIds: _.map(links, 'id'),
+        }
+      }).value();
 
     var themes = _.chain(rawThemes)
       .map((lineKeys, theme) => {
@@ -133,13 +140,6 @@ var App = React.createClass({
           }
         });
       }).flatten().value();
-    // sort the themes by song, then start line
-    themes.sort((a, b) => {
-      if (a.songId === b.songId) {
-        return a.startLine - b.startLine;
-      }
-      return a.songId - b.songId;
-    });
 
     var songs = _.reduce(songList, (obj, name, id) => {
       obj[id] = {
@@ -148,21 +148,12 @@ var App = React.createClass({
       }
       return obj;
     }, {});
-    // var savePos = _.reduce(characterPositions, (obj, char) => {
-    //   obj[char.id] = [_.round(char.fx, 2), _.round(char.fy, 2)];
-    //   return obj;
-    // }, {});
-    var {characterPositions, linePositions, songPositions, themePositions} =
+
+    var {linePositions, songPositions, themePositions} =
       this.filterAndPosition(this.state.selectedCharacters,
-      this.state.selectedConversation, characters, lines, themes, songs);
+      this.state.selectedConversation, lines, themes, songs);
 
-    this.setState({linePositions, characterPositions, songPositions, themePositions});
-  },
-
-  togglePositions(positionType) {
-    var {characterPositions, linePositions} = this.updatePositions(
-      positionType, this.state.characterPositions, this.state.linePositions);
-    this.setState({positionType, characterPositions, linePositions});
+    this.setState({linePositions, characterNodes, characterLinks, songPositions, themePositions});
   },
 
   filterByCharacter(character) {
@@ -174,14 +165,14 @@ var App = React.createClass({
     }
     selectedCharacters = _.sortBy(selectedCharacters);
 
-    var {linePositions, characterPositions} = this.filterAndPosition(
+    var {linePositions, songPositions, themePositions} = this.filterAndPosition(
       selectedCharacters, this.state.selectedConversation,
-      this.state.characterPositions, this.state.lines, this.state.themes, this.state.songs);
+      this.state.lines, this.state.themes, this.state.songs);
 
     this.setState({selectedCharacters, linePositions, selectedConversation: []});
   },
 
-  filterAndPosition(selectedCharacters, selectedConversation, characters, lines, themes, songs) {
+  filterAndPosition(selectedCharacters, selectedConversation, lines, themes, songs) {
     var {lines, themes} = ProcessGraph.filterBySelectedCharacter(
       selectedCharacters, selectedConversation, lines, themes);
 
@@ -192,8 +183,16 @@ var App = React.createClass({
   },
 
   render() {
+    var sideStyle = {
+      width: 800,
+      height: 400,
+    };
+
     return (
       <div className="App">
+        <svg style={sideStyle}>
+          <Characters {...this.state} {...this.props} {...sideStyle} />
+        </svg>
         <Visualization {...this.state} onSelectCharacter={this.filterByCharacter} />
       </div>
     );

@@ -4,7 +4,6 @@ import * as d3 from "d3";
 
 import Lines from './Lines';
 import Themes from './Themes';
-// import Characters from './Characters';
 import LineSummary from './LineSummary';
 
 var Visualization = React.createClass({
@@ -78,7 +77,6 @@ var Visualization = React.createClass({
       );
     });
 
-    // <Characters {...this.state} {...this.props} />
     return (
       <div style={style}>
         <svg ref='svg' width={this.props.width} height={this.props.height}>
