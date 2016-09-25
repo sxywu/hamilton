@@ -36,6 +36,12 @@ var PositionGraph = {
           });
           return atLeastOne;
         }).flatten().value();
+    } else {
+      lines = _.map(lines, line => {
+        line.selected = true;
+        line.fill = line.trueFill;
+        return line;
+      });
     }
 
     var linesById = _.keyBy(lines, 'lineId');

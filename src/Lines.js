@@ -19,49 +19,37 @@ var Lines = React.createClass({
 
   componentDidMount() {
     // add in the circles, the number of them shouldn't change
-    this.circles = d3.select(this.refs.circles)
-      .style("filter", "url(#gooey)")
-      // .on('mousemove', this.applyFisheye)
-      .selectAll('path')
-      .data(this.props.linePositions, (d) => d.id)
-      .enter().append('path')
-        .attr('fill', (d) => d.fill)
-        .attr('d', (d) => this.drawPath(d))
-        .style('cursor', 'pointer')
-        .on('mouseenter', this.mouseEnter)
-        .on('mouseleave', this.mouseLeave);
+    this.container = d3.select(this.refs.circles)
+      .style("filter", "url(#gooey)");
+    this.updateRender();
 
-    // for now, start force in here
     simulation.nodes(this.props.linePositions)
       .on('tick', this.forceTick.bind(this))
-      .on('end', () => {
-        this.circles.transition()
-          .duration(duration)
-          .attr('d', (d) => this.drawPath(d, true))
-          .attr('transform', (d) => {
-            // set the x and y to its focus (where it should be)
-            d.x = d.focusX;
-            d.y = d.focusY;
-            return 'translate(' + [d.x, d.y] + ')';
-          });
-
-        // // go through all lines and save their positions
-        // var savePos = _.reduce(this.props.linePositions, (obj, line) => {
-        //   obj[line.id] = [line.focusX, line.focusY, line.radius, line.fullRadius, line.length]
-        //   return obj;
-        // }, {});
-        // console.log(JSON.stringify(savePos));
-      });
+      .on('end', this.forceEnd.bind(this));
   },
 
   componentDidUpdate() {
-    // update selection
-    this.circles.attr('fill', (d) => d.fill)
-      .style('pointer-events', (d) => d.selected ? 'auto' : 'none');
+    this.updateRender();
 
-    // and update position
     simulation.nodes(this.props.linePositions)
       .alpha(1).restart();
+  },
+
+  updateRender() {
+    this.circles = this.container.selectAll('path')
+      .data(this.props.linePositions, (d) => d.id);
+
+    this.circles.exit().remove();
+
+    this.circles = this.circles.enter().append('path')
+      .style('cursor', 'pointer')
+      .on('mouseenter', this.mouseEnter)
+      .on('mouseleave', this.mouseLeave)
+      .merge(this.circles)
+      .attr('fill', (d) => d.fill)
+      .attr('d', (d) => this.drawPath(d));
+
+
   },
 
   mouseEnter(line) {
@@ -74,6 +62,18 @@ var Lines = React.createClass({
 
   forceTick() {
     this.circles.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
+  },
+
+  forceEnd() {
+    this.circles.transition()
+      .duration(duration)
+      .attr('d', (d) => this.drawPath(d, true))
+      .attr('transform', (d) => {
+        // set the x and y to its focus (where it should be)
+        d.x = d.focusX;
+        d.y = d.focusY;
+        return 'translate(' + [d.x, d.y] + ')';
+      });
   },
 
   drawPath(d, showLength) {

@@ -60,10 +60,6 @@ var Characters = React.createClass({
       .attr('y2', (d) => d.target.y);
   },
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.update;
-  },
-
   componentDidUpdate() {
     // update selection
     this.images.attr('filter', (d) => d.selected ? '' : 'url(#gray)')

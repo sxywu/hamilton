@@ -153,7 +153,8 @@ var App = React.createClass({
       this.filterAndPosition(this.state.selectedCharacters,
       this.state.selectedConversation, lines, themes, songs);
 
-    this.setState({linePositions, characterNodes, characterLinks, songPositions, themePositions});
+    this.setState({linePositions, characterNodes, characterLinks,
+      lines, themes, songs, songPositions, themePositions});
   },
 
   filterByCharacter(character) {
@@ -169,7 +170,8 @@ var App = React.createClass({
       selectedCharacters, this.state.selectedConversation,
       this.state.lines, this.state.themes, this.state.songs);
 
-    this.setState({selectedCharacters, linePositions, selectedConversation: []});
+    this.setState({selectedCharacters, selectedConversation: [],
+      linePositions, songPositions, themePositions});
   },
 
   filterAndPosition(selectedCharacters, selectedConversation, lines, themes, songs) {
@@ -191,7 +193,8 @@ var App = React.createClass({
     return (
       <div className="App">
         <svg style={sideStyle}>
-          <Characters {...this.state} {...this.props} {...sideStyle} />
+          <Characters {...this.state} {...this.props} {...sideStyle}
+            onSelectCharacter={this.filterByCharacter} />
         </svg>
         <Visualization {...this.state} onSelectCharacter={this.filterByCharacter} />
       </div>
