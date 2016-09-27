@@ -91,7 +91,7 @@ var PositionGraph = {
   },
 
   positionLinesBySong(lines, themes, songs) {
-    var lineSize = 4;
+    var lineSize = 5;
     var fontSize = 14;
     var padding = {x: 1, y: lineSize * 5};
     var s = 1;
@@ -166,21 +166,16 @@ var PositionGraph = {
     var linePositionsByLineId = _.keyBy(linePositions, 'lineId');
     var themePositions = _.map(themes, (theme) => {
       var startLine = linePositionsByLineId[theme.startLineId];
-      // TODO(swu): FIGURE OUT WHY LINES ARE MISSING
-      if (!startLine) {
-        theme.positions = [];
-        return theme;
-      }
 
       var x = startLine.focusX + (theme.startLine - startLine.startLine) * lineSize;
       var y = startLine.trueY - 2 * startLine.fullRadius;
-      theme.positions = [{x, y}];
+      theme.positions = [{x, y, size: lineSize}];
 
       if (theme.startLine !== theme.endLine) {
         var endLine = linePositionsByLineId[theme.startLineId];
         x = endLine.focusX + (theme.endLine - endLine.startLine) * lineSize;
         y = endLine.trueY - 2 * endLine.fullRadius;
-        theme.positions.push({x, y});
+        theme.positions.push({x, y, size: lineSize});
       }
 
       return theme;

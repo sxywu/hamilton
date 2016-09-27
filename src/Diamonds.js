@@ -1,8 +1,6 @@
 import React from 'react';
 import * as d3 from "d3";
 
-var size = 5;
-var pathD = 'M0,-' + size + ' L' + size + ',0 L0,' + size + ' L-' + size + ',0 Z';
 var Themes = React.createClass({
   shouldComponentUpdate(nextProps) {
     return nextProps.update;
@@ -18,6 +16,7 @@ var Themes = React.createClass({
   },
 
   updateRender() {
+
     this.diamonds = this.containers.selectAll('g')
       .data(this.props.themePositions, (d) => d.id);
 
@@ -41,7 +40,7 @@ var Themes = React.createClass({
 
     this.diamonds.selectAll('path')
       .attr('transform', (d) => 'translate(' + [d.x, d.y]+ ')')
-      .attr('d', pathD);
+      .attr('d', (d) => 'M0,-' + d.size + ' L' + d.size + ',0 L0,' + d.size + ' L-' + d.size + ',0 Z');
 
     // only draw lines for those with two positions
     this.diamonds.selectAll('line')
@@ -49,7 +48,6 @@ var Themes = React.createClass({
       .attr('x2', (d) => d.positions[1].x)
       .attr('y1', (d) => d.positions[0].y)
       .attr('y2', (d) => d.positions[1].y)
-      .attr('stroke-width', size / 2)
       .attr('stroke', (d) => d.fill);
   },
 
