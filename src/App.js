@@ -17,7 +17,7 @@ import charPositions from './data/char_positions.json';
 // import lineSongPositions from './data/line_song_positions.json';
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
-var linkScale = d3.scaleLinear().range([1, 10]);
+var linkScale = d3.scaleLinear().range([1, 5]);
 
 var App = React.createClass({
 
