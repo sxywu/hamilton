@@ -42,21 +42,21 @@ var Lines = React.createClass({
     this.circles.exit().remove();
 
     this.circles = this.circles.enter().append('path')
-      .style('cursor', 'pointer')
       .on('mouseenter', this.mouseEnter)
       .on('mouseleave', this.mouseLeave)
       .merge(this.circles)
+      .style('cursor', (d) => d.selected ? 'pointer' : 'default')
       .attr('fill', (d) => d.fill)
       .attr('d', (d) => this.drawPath(d));
-
-
   },
 
   mouseEnter(line) {
+    if (!line.selected) return;
     this.props.hover(line);
   },
 
-  mouseLeave() {
+  mouseLeave(line) {
+    if (!line.selected) return;
     this.props.hover(null);
   },
 
