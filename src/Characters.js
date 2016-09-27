@@ -12,13 +12,14 @@ var Characters = React.createClass({
     this.container = d3.select(this.refs.images);
     this.defineFilters();
 
-    this.links = this.container.selectAll('line')
+    this.links = this.container.selectAll('path')
       .data(this.props.characterLinks, (d) => d.id)
-      .enter().append('line')
+      .enter().append('path')
+      .attr('fill', 'none')
       .attr('stroke', (d) => d.color)
       .attr('stroke-width', (d) => d.weight)
       .style('cursor', 'pointer')
-      .on('click', (d) => this.props.onSelectConversation(d.allIds));
+      .on('click', (d) => this.props.onSelectConversation(d.id));
 
     this.images = this.container.selectAll('g')
       .data(this.props.characterNodes, (d) => d.id)
@@ -57,10 +58,10 @@ var Characters = React.createClass({
 
   forceTick() {
     this.images.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
-    this.links.attr('x1', (d) => d.source.x)
-      .attr('x2', (d) => d.target.x)
-      .attr('y1', (d) => d.source.y)
-      .attr('y2', (d) => d.target.y);
+    this.links.attr('d', (d) => {
+      return 'M' + [d.source.x, d.source.y] +
+        'A 45,45 0 0 1 ' + [d.target.x, d.target.y];
+    });
   },
 
   componentDidUpdate() {

@@ -4,44 +4,30 @@ import _ from 'lodash';
 var width = 720;
 var gray = '#eee';
 var PositionGraph = {
-  updateCharacterOpacity(selectedCharacters, selectedConversation, characterNodes, characterLinks) {
-    if (!_.isEmpty(selectedCharacters)) {
-      // so if characters are selected, all links should be gray
-      characterLinks = _.map(characterLinks, link => {
-        link.color = gray;
-        return link;
-      });
-      characterNodes = _.map(characterNodes, node => {
-        node.selected = _.includes(selectedCharacters, node.id);
-        return node;
-      });
-    } else if (!_.isEmpty(selectedConversation)) {
-      characterLinks = _.map(characterLinks, link => {
-        link.color = _.includes(selectedConversation, link.id) ? link.source.color : gray;
-        return link;
-      });
-      characterNodes = _.map(characterNodes, node => {
-        node.selected = false;
-        return node;
-      });
-    } else {
-      characterLinks = _.map(characterLinks, link => {
-        link.color = link.source.color;
-        return link;
-      });
-      characterNodes = _.map(characterNodes, node => {
-        node.selected = true;
-        return node;
-      });
-    }
+  updateCharacterOpacity(lines, diamonds, characterNodes, characterLinks) {
+    var selectedLines = _.filter(lines, line => line.selected);
+    var selectedCharacters = _.chain(selectedLines)
+      .map('characterId')
+      .uniq().value();
+    var selectedConversation = _.chain(selectedLines)
+      .map('conversing').flatten()
+      .uniq().value();
 
-    return {characterNodes, characterLinks};
+    _.each(characterNodes, (node) => {
+      node.selected = _.includes(selectedCharacters, node.id);
+    });
+    _.each(characterLinks, (link) => {
+      link.color = _.includes(selectedConversation, link.id) ? link.source.color : gray;
+    });
+
+    return {selectedCharacters, selectedConversation, characterNodes, characterLinks};
   },
 
   filterBySelectedCharacter(selectedCharacters, selectedConversation, lines, diamonds) {
     // can only select characters or conversation, not both
+    var filteredLines = lines;
     if (!_.isEmpty(selectedCharacters)) {
-      lines = _.chain(lines)
+      filteredLines = _.chain(lines)
         .groupBy((line) => line.songId)
         .filter((lines) => {
           // only keep the song if all the selected characters are in it
@@ -57,14 +43,13 @@ var PositionGraph = {
             .value();
         }).flatten().value();
     } else if (!_.isEmpty(selectedConversation)) {
-      lines = _.chain(lines)
+      filteredLines = _.chain(lines)
         .groupBy(line => line.songId)
         .filter(lines => {
           // if even one of the lines
           var atLeastOne = false;
           _.each(lines, line => {
-            line.selected = _.some(line.conversing, converseId =>
-              _.includes(selectedConversation, converseId));
+            line.selected = _.includes(selectedConversation, line.conversing);
             line.fill = line.selected ? line.trueFill : gray;
 
             atLeastOne = atLeastOne || line.selected;
@@ -72,7 +57,7 @@ var PositionGraph = {
           return atLeastOne;
         }).flatten().value();
     } else {
-      lines = _.map(lines, line => {
+      filteredLines = _.map(lines, line => {
         line.selected = true;
         line.fill = line.trueFill;
         return line;
@@ -80,14 +65,15 @@ var PositionGraph = {
     }
 
     var linesById = _.keyBy(lines, 'lineId');
-    diamonds = _.filter(diamonds, theme => {
+    var filteredDiamonds = diamonds;
+    filteredDiamonds = _.filter(diamonds, theme => {
       var startLine = linesById[theme.startLineId];
       var endLine = linesById[theme.endLineId];
       // keep a theme if either its start or end is in a selected character's line
       return (startLine && startLine.selected) || (endLine && endLine.selected);
     });
 
-    return {lines, diamonds};
+    return {filteredLines, filteredDiamonds};
   },
 
   positionLinesBySong(lines, diamonds, songs) {

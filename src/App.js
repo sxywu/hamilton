@@ -18,7 +18,7 @@ import charPositions from './data/char_positions.json';
 // import lineSongPositions from './data/line_song_positions.json';
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
-var linkScale = d3.scaleLinear().range([1, 5]);
+var linkScale = d3.scaleLinear().range([2, 8]);
 
 var App = React.createClass({
 
@@ -26,6 +26,7 @@ var App = React.createClass({
     return {
       lines: [],
       diamonds: [],
+      groupedThemes: [],
       characterNodes: [],
       characterLinks: [],
       linePositions: [],
@@ -54,7 +55,7 @@ var App = React.createClass({
             songName: songList[songId],
             numSingers: line[1][0].length,
             singerIndex: i,
-            conversing: [],
+            conversing: null,
             fill: color(character),
             trueFill: color(character),
             selected: true,
@@ -62,7 +63,7 @@ var App = React.createClass({
           };
         });
       }).flatten().value();
-    var linesById = _.keyBy(lines, 'lineId');
+    var linesById = _.groupBy(lines, 'lineId');
 
     // character nodes
     var characterNodes = _.map(rawCharacters.characters, (lines, id) => {
@@ -87,35 +88,32 @@ var App = React.createClass({
     var minWidth = _.minBy(conversingValues, (lines) => lines.length).length;
     var maxWidth = _.maxBy(conversingValues, (lines) => lines.length).length;
     linkScale.domain([minWidth, maxWidth]);
-    var characterLinks = _.chain(rawCharacters.conversing)
-      .map((lines, conversing) => {
-        var source = conversing.split('-');
-        var target = charactersById[source[1]];
-        source = charactersById[source[0]];
-        var weight = linkScale(lines.length);
+    var characterLinks = _.map(rawCharacters.conversing, (lines, conversing) => {
+      var source = conversing.split('-');
+      var target = charactersById[source[1]];
+      source = charactersById[source[0]];
+      var weight = linkScale(lines.length);
 
-        _.each(lines, lineId => {
-          // remember the targets in the lines
-          linesById[lineId].conversing.push(conversing);
+      _.each(lines, lineId => {
+        // for each line that has this conversation,
+        // there could be multiple characters, so go through them all
+        _.each(linesById[lineId], line => {
+          if (line.characterId === source.id) {
+            line.conversing = conversing;
+          }
         });
+      });
 
-        return {id: conversing, source, target, weight};
-      }).groupBy((link) => _.sortBy([link.source.id, link.target.id]).join('-'))
-      .map((links, id) => {
-        var link = links[0];
-        return {
-          id: link.id,
-          source: link.source,
-          target: link.target,
-          color: link.source.color,
-          weight: _.reduce(links, (sum, link) => sum + link.weight, 0),
-          allIds: _.map(links, 'id'),
-        }
-      }).value();
+      return {
+        id: conversing,
+        color: source.color,
+        source, target, weight
+      };
+    });
 
     var diamonds = _.chain(rawThemes)
       .map((lineKeys, theme) => {
-        if (!themeList[theme][2]) return;
+        if (!themeList[theme][2]) return null;
 
         return _.map(lineKeys, (lineKey) => {
           var lineId = lineKey[0][0];
@@ -154,12 +152,8 @@ var App = React.createClass({
       return obj;
     }, {});
 
-    var {linePositions, songPositions, diamondPositions, characterNodes, characterLinks} =
-      this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
-        characterNodes, characterLinks, lines, diamonds, songs);
-
-    this.setState({linePositions, characterNodes, characterLinks,
-      lines, diamonds, songs, songPositions, diamondPositions});
+    this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
+      characterNodes, characterLinks, lines, diamonds, songs);
   },
 
   filterByCharacter(character) {
@@ -172,46 +166,41 @@ var App = React.createClass({
     selectedCharacters = _.sortBy(selectedCharacters);
     var selectedConversation = [];
 
-    var {linePositions, songPositions, diamondPositions, characterNodes, characterLinks} =
     this.filterAndPosition(selectedCharacters, selectedConversation,
       this.state.characterNodes, this.state.characterLinks,
       this.state.lines, this.state.diamonds, this.state.songs);
-
-    this.setState({selectedCharacters, selectedConversation,
-      characterNodes, characterLinks, linePositions, songPositions, diamondPositions});
   },
 
-  filterByConversation(allIds) {
+  filterByConversation(id) {
     var selectedConversation = this.state.selectedConversation;
-    _.each(allIds, (id) => {
-      if (_.includes(selectedConversation, id)) {
-        selectedConversation = _.without(selectedConversation, id);
-      } else {
-        selectedConversation.push(id);
-      }
-    });
+    if (_.includes(selectedConversation, id)) {
+      selectedConversation = _.without(selectedConversation, id);
+    } else {
+      selectedConversation.push(id);
+    }
     var selectedCharacters = [];
 
-    var {linePositions, songPositions, diamondPositions, characterNodes, characterLinks} =
     this.filterAndPosition(selectedCharacters, selectedConversation,
       this.state.characterNodes, this.state.characterLinks,
       this.state.lines, this.state.diamonds, this.state.songs);
-
-    this.setState({selectedCharacters, selectedConversation,
-      characterNodes, characterLinks, linePositions, songPositions, diamondPositions});
   },
 
   filterAndPosition(selectedCharacters, selectedConversation,
     characters, conversations, lines, diamonds, songs) {
-    var {lines, diamonds} = ProcessGraph.filterBySelectedCharacter(
+    var {filteredLines, filteredDiamonds} = ProcessGraph.filterBySelectedCharacter(
       selectedCharacters, selectedConversation, lines, diamonds);
     var {characterNodes, characterLinks} = ProcessGraph.updateCharacterOpacity(
-      selectedCharacters, selectedConversation, characters, conversations);
-
+      filteredLines, filteredDiamonds, characters, conversations);
     var {linePositions, songPositions, diamondPositions} =
-      ProcessGraph.positionLinesBySong(lines, diamonds, songs);
+      ProcessGraph.positionLinesBySong(filteredLines, filteredDiamonds, songs);
 
-    return {linePositions, songPositions, diamondPositions, characterNodes, characterLinks};
+    console.log(selectedCharacters, selectedConversation)
+    this.setState({
+      selectedCharacters, selectedConversation,
+      linePositions, songPositions, diamondPositions,
+      characterNodes, characterLinks,
+      lines, diamonds, songs
+    });
   },
 
   render() {
