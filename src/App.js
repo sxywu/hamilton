@@ -8,6 +8,7 @@ import ProcessGraph from './ProcessGraph';
 // load the data
 import charList from './data/char_list.json';
 import songList from './data/song_list.json';
+import themeList from './data/theme_list.json';
 import rawCharacters from './data/characters.json';
 import rawLines from './data/lines.json';
 import rawThemes from './data/themes.json';
@@ -114,6 +115,8 @@ var App = React.createClass({
 
     var themes = _.chain(rawThemes)
       .map((lineKeys, theme) => {
+        if (!themeList[theme][2]) return;
+
         return _.map(lineKeys, (lineKey) => {
           var lineId = lineKey[0][0];
           var songId = parseInt(lineId.split(':')[0], 10);
@@ -127,6 +130,8 @@ var App = React.createClass({
           return {
             id: theme + '/' + songId + ':' + startLine,
             themeId: theme,
+            themeType: themeList[theme][1],
+            themeLines: themeList[theme][0],
             lineId: lineId.split('/')[0],
             songId,
             startLine,
@@ -138,7 +143,8 @@ var App = React.createClass({
             lines: lineKey[1],
           }
         });
-      }).flatten().value();
+      }).filter().flatten()
+      .value();
 
     var songs = _.reduce(songList, (obj, name, id) => {
       obj[id] = {

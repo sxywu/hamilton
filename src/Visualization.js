@@ -36,7 +36,7 @@ var Visualization = React.createClass({
 
   hoverTheme(hoveredTheme) {
     var hovered = hoveredTheme && {
-      title: hoveredTheme.themeId,
+      title: hoveredTheme.themeType,
       lines: hoveredTheme.lines,
       x: hoveredTheme.positions[0].x,
       y: hoveredTheme.positions[0].y,
@@ -62,6 +62,7 @@ var Visualization = React.createClass({
   render() {
     var style = {
       display: 'inline-block',
+      position: 'relative',
     };
     var songs = _.map(this.props.songPositions, (song, i) => {
       return (
