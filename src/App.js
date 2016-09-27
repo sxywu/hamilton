@@ -23,8 +23,6 @@ var App = React.createClass({
 
   getInitialState() {
     return {
-      width: 800,
-      height: 2000,
       lines: [],
       themes: [],
       characterNodes: [],
@@ -211,19 +209,32 @@ var App = React.createClass({
   },
 
   render() {
+    var width = 1200;
+    var height = 2400;
     var sideStyle = {
-      width: 800,
-      height: 400,
+      width: width / 3,
+      height: height / 4,
+      display: 'inline-block',
+      verticalAlign: 'top',
     };
+    var characterStyle = {
+      width: width / 3,
+      height: height / 4,
+    };
+    var vizStyle = {
+      width: width / 3 * 2,
+      height: height,
+    }
 
     return (
       <div className="App">
-        <svg style={sideStyle}>
-          <Characters {...this.state} {...this.props} {...sideStyle}
+        <div style={sideStyle}>
+          <Characters {...this.state} {...this.props} {...characterStyle}
             onSelectCharacter={this.filterByCharacter}
             onSelectConversation={this.filterByConversation} />
-        </svg>
-        <Visualization {...this.state} onSelectCharacter={this.filterByCharacter} />
+        </div>
+        <Visualization {...this.state} {...vizStyle}
+          onSelectCharacter={this.filterByCharacter} />
       </div>
     );
   }

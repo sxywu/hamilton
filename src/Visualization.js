@@ -61,7 +61,7 @@ var Visualization = React.createClass({
 
   render() {
     var style = {
-      position: 'relative',
+      display: 'inline-block',
     };
     var songs = _.map(this.props.songPositions, (song, i) => {
       return (

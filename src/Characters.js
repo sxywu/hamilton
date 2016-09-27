@@ -80,7 +80,9 @@ var Characters = React.createClass({
 
   render() {
     return (
-      <g ref='images' className='images' />
+      <svg width={this.props.width} height={this.props.height}>
+        <g ref='images' className='images' />
+      </svg>
     );
   }
 });
