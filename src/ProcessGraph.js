@@ -64,7 +64,7 @@ var PositionGraph = {
       });
     }
 
-    var linesById = _.keyBy(lines, 'lineId');
+    var linesById = _.keyBy(filteredLines, 'lineId');
     var filteredDiamonds = diamonds;
     filteredDiamonds = _.filter(diamonds, theme => {
       var startLine = linesById[theme.startLineId];
