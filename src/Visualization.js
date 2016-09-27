@@ -3,7 +3,7 @@ import _ from 'lodash';
 import * as d3 from "d3";
 
 import Lines from './Lines';
-import Themes from './Themes';
+import Diamonds from './Diamonds';
 import LineSummary from './LineSummary';
 
 var Visualization = React.createClass({
@@ -76,7 +76,7 @@ var Visualization = React.createClass({
       <div style={style}>
         <svg ref='svg' width={this.props.width} height={this.props.height}>
           <Lines {...this.state} {...this.props} hover={this.hoverLine} />
-          <Themes {...this.state} {...this.props} hover={this.hoverTheme} />
+          <Diamonds {...this.state} {...this.props} hover={this.hoverTheme} />
           <g className='songs'>
             {songs}
           </g>
