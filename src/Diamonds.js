@@ -18,12 +18,12 @@ var Themes = React.createClass({
   updateRender() {
 
     this.diamonds = this.containers.selectAll('g')
-      .data(this.props.themePositions, (d) => d.id);
+      .data(this.props.diamondPositions, (d) => d.id);
 
     this.diamonds.exit().remove();
 
     var enter = this.diamonds.enter().append('g')
-      .classed('theme', true)
+      .classed('diamond', true)
       .attr('stroke', '#fff')
       .style('cursor', 'pointer');
 

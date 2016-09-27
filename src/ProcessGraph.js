@@ -38,7 +38,7 @@ var PositionGraph = {
     return {characterNodes, characterLinks};
   },
 
-  filterBySelectedCharacter(selectedCharacters, selectedConversation, lines, themes) {
+  filterBySelectedCharacter(selectedCharacters, selectedConversation, lines, diamonds) {
     // can only select characters or conversation, not both
     if (!_.isEmpty(selectedCharacters)) {
       lines = _.chain(lines)
@@ -80,17 +80,17 @@ var PositionGraph = {
     }
 
     var linesById = _.keyBy(lines, 'lineId');
-    themes = _.filter(themes, theme => {
+    diamonds = _.filter(diamonds, theme => {
       var startLine = linesById[theme.startLineId];
       var endLine = linesById[theme.endLineId];
       // keep a theme if either its start or end is in a selected character's line
       return (startLine && startLine.selected) || (endLine && endLine.selected);
     });
 
-    return {lines, themes};
+    return {lines, diamonds};
   },
 
-  positionLinesBySong(lines, themes, songs) {
+  positionLinesBySong(lines, diamonds, songs) {
     var lineSize = 5;
     var fontSize = 14;
     var padding = {x: 1, y: lineSize * 5};
@@ -100,7 +100,7 @@ var PositionGraph = {
     var lastLineId = null;
 
     var songPositions = [];
-    // make it an object keyed by lineId for the sake of themePositions
+    // make it an object keyed by lineId for the sake of diamondPositions
     var linePositions = _.map(lines, (line, i) => {
       var songNum = line.songId;
       var startLine = parseInt(line.lineId.split(':')[1].split('-')[0], 10);
@@ -164,7 +164,7 @@ var PositionGraph = {
     });
 
     var linePositionsByLineId = _.keyBy(linePositions, 'lineId');
-    var themePositions = _.map(themes, (theme) => {
+    var diamondPositions = _.map(diamonds, (theme) => {
       var startLine = linePositionsByLineId[theme.startLineId];
 
       var x = startLine.focusX + (theme.startLine - startLine.startLine) * lineSize;
@@ -181,7 +181,7 @@ var PositionGraph = {
       return theme;
     });
 
-    return {linePositions, songPositions, themePositions};
+    return {linePositions, songPositions, diamondPositions};
   },
 }
 
