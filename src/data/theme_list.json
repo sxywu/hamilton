@@ -17,7 +17,7 @@
   "10": [["Look around, look around",
     "how lucky we are to be alive right now"],
     "Life", true],
-  "11": [["Right hand man"], "Relationship", true],
+  "11": [["Right hand man"], "Relationship", false],
   "12": [["_______ is easy, young man.  _______ is harder"], "Phrases", true],
   "13": [["Helpless"], "Personality", true],
   "14": [["Satisfied"], "What is enough?", true],
