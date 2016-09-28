@@ -33,6 +33,7 @@ var PositionGraph = {
             numSingers: line[1][0].length,
             singerIndex: i,
             conversing: null,
+            themes: [],
             fill: color(character),
             trueFill: color(character),
             selected: true,
@@ -103,7 +104,9 @@ var PositionGraph = {
     return {characterNodes, characterLinks};
   },
 
-  processThemes() {
+  processThemes(lines) {
+    var linesById = _.groupBy(lines, 'lineId');
+
     var diamonds = _.chain(rawThemes)
       .map((lineKeys, theme) => {
         if (!themeList[theme][2]) return null;
@@ -117,6 +120,16 @@ var PositionGraph = {
           var endLine = _.last(lineKey[0]).split(':')[1].split('/');
           var endLineId = songId + ':' + endLine[1];
           endLine = parseInt(endLine[0], 10);
+
+          // add themes to the lines
+          _.chain(lineKey[0])
+            .map((lineId) => lineId.split(':')[0] + ':' + lineId.split('/')[1])
+            .uniq()
+            .each((lineId) => {
+              _.each(linesById[lineId], (line) => {
+                line.themes.push(theme);
+              });
+            }).value();
 
           return {
             id: theme + '/' + songId + ':' + startLine,
@@ -178,7 +191,6 @@ var PositionGraph = {
     });
 
     var selectedDiamonds = _.chain(diamonds).map('themeId').uniq().value();
-    console.log(selectedDiamonds);
     _.each(groupedThemes, (theme) => {
       _.each(theme.diamonds, diamond => {
         diamond.fill = _.includes(selectedDiamonds, diamond.id) ? diamond.trueFill : gray;
@@ -238,6 +250,33 @@ var PositionGraph = {
     });
 
     return {filteredLines, filteredDiamonds};
+  },
+
+  filterBySelectedThemes(selectedThemes, lines, diamonds) {
+    // first take out the themes
+    var filteredDiamonds2 = diamonds;
+    var filteredLines2 = lines;
+
+    if (!_.isEmpty(selectedThemes)) {
+      filteredDiamonds2 = _.filter(diamonds, (diamond) =>
+        _.includes(selectedThemes, diamond.themeId));
+
+      // then go through the diamonds and only keep the lines with those themes
+      filteredLines2 = _.chain(lines)
+        .groupBy(line => line.songId)
+        .filter(lines => {
+          var atLeastOne = false;
+          _.each(lines, line => {
+            line.selected = _.some(line.themes, theme => _.includes(selectedThemes, theme));
+            line.fill = line.selected ? line.trueFill : gray;
+
+            atLeastOne = atLeastOne || line.selected;
+          });
+          return atLeastOne;
+        }).flatten().value();
+    }
+
+    return {filteredDiamonds2, filteredLines2};
   },
 
   positionLinesBySong(lines, diamonds, songs) {

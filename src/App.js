@@ -25,6 +25,7 @@ var App = React.createClass({
       songPositions: [],
       selectedCharacters: [],
       selectedConversation: [],
+      selectedThemes: [],
     };
   },
 
@@ -33,9 +34,10 @@ var App = React.createClass({
 
     var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines);
 
-    var {diamonds, groupedThemes} = ProcessGraph.processThemes();
+    var {diamonds, groupedThemes} = ProcessGraph.processThemes(lines);
 
-    this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
+    this.filterAndPosition(this.state.selectedCharacters,
+      this.state.selectedConversation, this.state.selectedThemes,
       characterNodes, characterLinks, lines, songs, diamonds, groupedThemes);
   },
 
@@ -50,7 +52,7 @@ var App = React.createClass({
     var selectedConversation = [];
 
     this.filterAndPosition(selectedCharacters, selectedConversation,
-      this.state.characterNodes, this.state.characterLinks,
+      this.state.selectedThemes, this.state.characterNodes, this.state.characterLinks,
       this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
   },
 
@@ -64,18 +66,20 @@ var App = React.createClass({
     var selectedCharacters = [];
 
     this.filterAndPosition(selectedCharacters, selectedConversation,
-      this.state.characterNodes, this.state.characterLinks,
+      this.state.selectedThemes, this.state.characterNodes, this.state.characterLinks,
       this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
   },
 
-  filterAndPosition(selectedCharacters, selectedConversation,
+  filterAndPosition(selectedCharacters, selectedConversation, selectedThemes,
     characters, conversations, lines, songs, diamonds, themes) {
     var {filteredLines, filteredDiamonds} = ProcessGraph.filterBySelectedCharacter(
       selectedCharacters, selectedConversation, lines, diamonds);
+    var {filteredLines2, filteredDiamonds2} = ProcessGraph.filterBySelectedThemes(
+      selectedThemes, filteredLines, filteredDiamonds);
     var {characterNodes, characterLinks, groupedThemes} = ProcessGraph.updateOpacity(
-      filteredLines, filteredDiamonds, characters, conversations, themes);
+      filteredLines2, filteredDiamonds2, characters, conversations, themes);
     var {linePositions, songPositions, diamondPositions} =
-      ProcessGraph.positionLinesBySong(filteredLines, filteredDiamonds, songs);
+      ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds2, songs);
 
     this.setState({
       update: true,
