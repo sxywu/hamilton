@@ -4,7 +4,7 @@ import Diamonds from './Diamonds';
 
 var Characters = React.createClass({
   selectTheme(diamond) {
-    this.props.onSelectTheme(diamond.id);
+    diamond.selected && this.props.onSelectTheme(diamond.id);
   },
 
   render() {

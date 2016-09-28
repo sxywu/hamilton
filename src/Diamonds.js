@@ -24,13 +24,13 @@ var Themes = React.createClass({
 
     var enter = this.diamonds.enter().append('g')
       .classed('diamond', true)
-      .attr('stroke', '#fff')
-      .style('cursor', 'pointer');
+      .attr('stroke', '#fff');
 
     this.diamonds = enter.merge(this.diamonds)
       .attr('fill', (d) => d.fill)
-      .on('mouseenter', (d) => this.props.hover(d))
-      .on('mouseleave', (d) => this.props.hover(null));
+      .on('mouseenter', (d) => d.selected && this.props.hover(d))
+      .on('mouseleave', (d) => d.selected && this.props.hover(null))
+      .style('cursor', (d) => d.selected ? 'pointer' : 'default');
 
     this.diamonds.selectAll('path')
       .data((d) => d.positions)

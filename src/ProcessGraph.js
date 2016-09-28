@@ -187,16 +187,19 @@ var PositionGraph = {
       node.selected = _.includes(selectedCharacters, node.id);
     });
     _.each(characterLinks, (link) => {
-      link.color = _.includes(selectedConversation, link.id) ? link.source.color : gray;
+      link.selected = _.includes(selectedConversation, link.id);
+      link.color = link.selected ? link.source.color : gray;
     });
 
     var selectedDiamonds = _.chain(diamonds).map('themeId').uniq().value();
     _.each(groupedThemes, (theme) => {
       _.each(theme.diamonds, diamond => {
-        diamond.fill = _.includes(selectedDiamonds, diamond.id) ? diamond.trueFill : gray;
+        diamond.selected = _.includes(selectedDiamonds, diamond.id);
+        diamond.fill = diamond.selected ? diamond.trueFill : gray;
       });
     });
-    return {selectedCharacters, selectedConversation, characterNodes, characterLinks, groupedThemes};
+
+    return {characterNodes, characterLinks, groupedThemes};
   },
 
   filterBySelectedCharacter(selectedCharacters, selectedConversation, lines, diamonds) {
@@ -242,11 +245,12 @@ var PositionGraph = {
 
     var linesById = _.keyBy(filteredLines, 'lineId');
     var filteredDiamonds = diamonds;
-    filteredDiamonds = _.filter(diamonds, theme => {
-      var startLine = linesById[theme.startLineId];
-      var endLine = linesById[theme.endLineId];
+    filteredDiamonds = _.filter(diamonds, diamond => {
+      var startLine = linesById[diamond.startLineId];
+      var endLine = linesById[diamond.endLineId];
       // keep a theme if either its start or end is in a selected character's line
-      return (startLine && startLine.selected) || (endLine && endLine.selected);
+      diamond.selected = (startLine && startLine.selected) || (endLine && endLine.selected);
+      return diamond.selected;
     });
 
     return {filteredLines, filteredDiamonds};
@@ -258,8 +262,10 @@ var PositionGraph = {
     var filteredLines2 = lines;
 
     if (!_.isEmpty(selectedThemes)) {
-      filteredDiamonds2 = _.filter(diamonds, (diamond) =>
-        _.includes(selectedThemes, diamond.themeId));
+      filteredDiamonds2 = _.filter(diamonds, (diamond) => {
+        diamond.selected = _.includes(selectedThemes, diamond.themeId);
+        return diamond.selected;
+      });
 
       // then go through the diamonds and only keep the lines with those themes
       filteredLines2 = _.chain(lines)

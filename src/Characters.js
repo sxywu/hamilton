@@ -18,15 +18,11 @@ var Characters = React.createClass({
       .attr('fill', 'none')
       .attr('stroke', (d) => d.color)
       .attr('stroke-width', (d) => d.weight)
-      .attr('opacity', .5)
-      .style('cursor', 'pointer')
-      .on('click', (d) => this.props.onSelectConversation(d.id));
+      .attr('opacity', .5);
 
     this.images = this.container.selectAll('g')
       .data(this.props.characterNodes, (d) => d.id)
-      .enter().append('g')
-        .style('cursor', 'pointer')
-        .on('click', (d) => this.props.onSelectCharacter(d.id));
+      .enter().append('g');
     this.images.append('circle')
       .attr('r', (d) => d.radius)
       .attr('fill', '#fff');
@@ -49,12 +45,18 @@ var Characters = React.createClass({
       .attr('stroke', (d) => d.color)
       .attr('stroke-width', 2);
 
+    this.updateRender();
+
     simulation
       .nodes(this.props.characterNodes)
       .on("tick", this.forceTick.bind(this));
     simulation
       .force("center", d3.forceCenter(this.props.width / 2, this.props.height / 2))
       .force("link").links(this.props.characterLinks);
+  },
+
+  componentDidUpdate() {
+    this.updateRender();
   },
 
   forceTick() {
@@ -65,11 +67,15 @@ var Characters = React.createClass({
     });
   },
 
-  componentDidUpdate() {
-    // update selection
+  updateRender() {
     this.images.attr('filter', (d) => d.selected ? '' : 'url(#gray)')
-      .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
+      .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')')
+      .style('cursor', (d) => d.selected ? 'pointer' : 'default')
+      .on('click', (d) => d.selected && this.props.onSelectCharacter(d.id));
+
     this.links.attr('stroke', (d) => d.color)
+      .style('cursor', (d) => d.selected ? 'pointer' : 'default')
+      .on('click', (d) => d.selected && this.props.onSelectConversation(d.id));
   },
 
   defineFilters() {
