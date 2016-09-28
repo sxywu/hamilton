@@ -267,7 +267,8 @@ var PositionGraph = {
         .filter(lines => {
           var atLeastOne = false;
           _.each(lines, line => {
-            line.selected = _.some(line.themes, theme => _.includes(selectedThemes, theme));
+            line.selected = line.selected && _.some(line.themes, theme =>
+              _.includes(selectedThemes, theme));
             line.fill = line.selected ? line.trueFill : gray;
 
             atLeastOne = atLeastOne || line.selected;

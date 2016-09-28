@@ -70,6 +70,19 @@ var App = React.createClass({
       this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
   },
 
+  filterByThemes(id) {
+    var selectedThemes = this.state.selectedThemes;
+    if (_.includes(selectedThemes, id)) {
+      selectedThemes = _.without(selectedThemes, id);
+    } else {
+      selectedThemes.push(id);
+    }
+
+    this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
+      selectedThemes, this.state.characterNodes, this.state.characterLinks,
+      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
+  },
+
   filterAndPosition(selectedCharacters, selectedConversation, selectedThemes,
     characters, conversations, lines, songs, diamonds, themes) {
     var {filteredLines, filteredDiamonds} = ProcessGraph.filterBySelectedCharacter(
@@ -158,7 +171,8 @@ var App = React.createClass({
             onSelectCharacter={this.filterByCharacter}
             onSelectConversation={this.filterByConversation} />
           <Themes {...this.state} {...this.props} {...themeStyle}
-            onHoverTheme={this.hoverSideTheme} />
+            onHoverTheme={this.hoverSideTheme}
+            onSelectTheme={this.filterByThemes} />
           <LineSummary {...this.state.sideHovered} />
         </div>
       </div>
