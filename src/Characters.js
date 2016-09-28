@@ -18,6 +18,7 @@ var Characters = React.createClass({
       .attr('fill', 'none')
       .attr('stroke', (d) => d.color)
       .attr('stroke-width', (d) => d.weight)
+      .attr('opacity', .5)
       .style('cursor', 'pointer')
       .on('click', (d) => this.props.onSelectConversation(d.id));
 
