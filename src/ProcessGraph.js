@@ -137,7 +137,27 @@ var PositionGraph = {
       }).filter().flatten()
       .value();
 
-    return {diamonds};
+    var groupedThemes = _.chain(diamonds)
+      .groupBy(diamond => diamond.themeType)
+      .map((diamonds, themeType) => {
+        diamonds = _.chain(diamonds)
+          .groupBy(diamond => diamond.themeId)
+          .map((diamonds, themeId) => {
+            var size = 12;
+            return {
+              id: themeId,
+              lines: diamonds[0].themeLines,
+              length: diamonds.length,
+              fill: diamonds[0].fill,
+              size,
+              positions: [{x: size / 2, y: size / 2, size: size - 4}],
+            }
+          }).sortBy(diamond => -diamond.length).value();
+
+        return {name: themeType, diamonds};
+      }).value();
+
+    return {diamonds, groupedThemes};
   },
 
   updateCharacterOpacity(lines, diamonds, characterNodes, characterLinks) {

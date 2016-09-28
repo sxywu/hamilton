@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import Visualization from './Visualization';
 import Characters from './Characters';
+import Themes from './Themes';
 import ProcessGraph from './ProcessGraph';
 
 var App = React.createClass({
@@ -27,10 +28,10 @@ var App = React.createClass({
 
     var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines);
 
-    var {diamonds} = ProcessGraph.processThemes();
+    var {diamonds, groupedThemes} = ProcessGraph.processThemes();
 
     this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
-      characterNodes, characterLinks, lines, diamonds, songs);
+      characterNodes, characterLinks, lines, songs, diamonds, groupedThemes);
   },
 
   filterByCharacter(character) {
@@ -45,7 +46,7 @@ var App = React.createClass({
 
     this.filterAndPosition(selectedCharacters, selectedConversation,
       this.state.characterNodes, this.state.characterLinks,
-      this.state.lines, this.state.diamonds, this.state.songs);
+      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
   },
 
   filterByConversation(id) {
@@ -59,11 +60,11 @@ var App = React.createClass({
 
     this.filterAndPosition(selectedCharacters, selectedConversation,
       this.state.characterNodes, this.state.characterLinks,
-      this.state.lines, this.state.diamonds, this.state.songs);
+      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
   },
 
   filterAndPosition(selectedCharacters, selectedConversation,
-    characters, conversations, lines, diamonds, songs) {
+    characters, conversations, lines, songs, diamonds, groupedThemes) {
     var {filteredLines, filteredDiamonds} = ProcessGraph.filterBySelectedCharacter(
       selectedCharacters, selectedConversation, lines, diamonds);
     var {characterNodes, characterLinks} = ProcessGraph.updateCharacterOpacity(
@@ -71,31 +72,35 @@ var App = React.createClass({
     var {linePositions, songPositions, diamondPositions} =
       ProcessGraph.positionLinesBySong(filteredLines, filteredDiamonds, songs);
 
-    console.log(selectedCharacters, selectedConversation)
     this.setState({
       selectedCharacters, selectedConversation,
       linePositions, songPositions, diamondPositions,
       characterNodes, characterLinks,
-      lines, diamonds, songs
+      lines, songs, diamonds, groupedThemes,
     });
   },
 
   render() {
     var width = 1200;
-    var height = 2400;
+    var vizHeight = 2400;
+    var sideHeight = 800;
     var sideStyle = {
       width: width / 3,
-      height: height / 4,
+      height: sideHeight,
       display: 'inline-block',
       verticalAlign: 'top',
     };
     var characterStyle = {
       width: width / 3,
-      height: height / 4,
+      height: sideHeight / 2,
+    };
+    var themeStyle = {
+      width: width / 3,
+      height: sideHeight / 2,
     };
     var vizStyle = {
       width: width / 3 * 2,
-      height: height,
+      height: vizHeight,
     }
 
     return (
@@ -104,6 +109,7 @@ var App = React.createClass({
           <Characters {...this.state} {...this.props} {...characterStyle}
             onSelectCharacter={this.filterByCharacter}
             onSelectConversation={this.filterByConversation} />
+          <Themes {...this.state} {...this.props} {...themeStyle} />
         </div>
         <Visualization {...this.state} {...vizStyle}
           onSelectCharacter={this.filterByCharacter} />
