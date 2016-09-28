@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import * as d3 from 'd3';
 
 import Visualization from './Visualization';
 import Characters from './Characters';
@@ -13,6 +14,7 @@ var App = React.createClass({
     return {
       update: true,
       hovered: null,
+      sideHovered: null,
       lines: [],
       diamonds: [],
       groupedThemes: [],
@@ -89,7 +91,7 @@ var App = React.createClass({
     var hovered = hoveredLine && {
       title: hoveredLine.characterName,
       lines: hoveredLine.data[2],
-      x: hoveredLine.x + 400,
+      x: hoveredLine.x,
       y: hoveredLine.y,
     };
     this.setState({hovered, update: false});
@@ -99,10 +101,19 @@ var App = React.createClass({
     var hovered = hoveredTheme && {
       title: hoveredTheme.themeType,
       lines: hoveredTheme.lines,
-      x: hoveredTheme.positions[0].x + 400,
+      x: hoveredTheme.positions[0].x,
       y: hoveredTheme.positions[0].y,
     }
     this.setState({hovered, update: false});
+  },
+
+  hoverSideTheme(hoveredTheme) {
+    var sideHovered = hoveredTheme && {
+      lines: hoveredTheme.lines,
+      x: d3.event.x,
+      y: d3.event.y,
+    }
+    this.setState({sideHovered, update: false});
   },
 
   render() {
@@ -126,20 +137,26 @@ var App = React.createClass({
     var vizStyle = {
       width: width / 3 * 2,
       height: vizHeight,
+      position: 'relative',
+      display: 'inline-block',
     }
 
     return (
       <div className="App">
+        <div style={vizStyle}>
+          <Visualization {...this.state} {...vizStyle}
+            onHoverLine={this.hoverLine}
+            onHoverTheme={this.hoverTheme} />
+          <LineSummary {...this.state.hovered} />
+        </div>
         <div style={sideStyle}>
           <Characters {...this.state} {...this.props} {...characterStyle}
             onSelectCharacter={this.filterByCharacter}
             onSelectConversation={this.filterByConversation} />
-          <Themes {...this.state} {...this.props} {...themeStyle} />
+          <Themes {...this.state} {...this.props} {...themeStyle}
+            onHoverTheme={this.hoverSideTheme} />
+          <LineSummary {...this.state.sideHovered} />
         </div>
-        <Visualization {...this.state} {...vizStyle}
-          onHoverLine={this.hoverLine}
-          onHoverTheme={this.hoverTheme} />
-        <LineSummary {...this.state.hovered} />
       </div>
     );
   }

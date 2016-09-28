@@ -3,10 +3,6 @@ import _ from 'lodash';
 import Diamonds from './Diamonds';
 
 var Characters = React.createClass({
-  hoverTheme() {
-
-  },
-
   render() {
     var style = {
       padding: 20,
@@ -21,7 +17,7 @@ var Characters = React.createClass({
         return (
           <span style={diamondStyle}>
             <svg width={diamond.size} height={diamond.size}>
-              <Diamonds {...props} hover={this.hoverTheme} />
+              <Diamonds {...props} hover={this.props.onHoverTheme} />
             </svg>
             {diamond.length}
           </span>
