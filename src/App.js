@@ -4,12 +4,15 @@ import _ from 'lodash';
 import Visualization from './Visualization';
 import Characters from './Characters';
 import Themes from './Themes';
+import LineSummary from './LineSummary';
 import ProcessGraph from './ProcessGraph';
 
 var App = React.createClass({
 
   getInitialState() {
     return {
+      update: true,
+      hovered: null,
       lines: [],
       diamonds: [],
       groupedThemes: [],
@@ -73,11 +76,33 @@ var App = React.createClass({
       ProcessGraph.positionLinesBySong(filteredLines, filteredDiamonds, songs);
 
     this.setState({
+      update: true,
       selectedCharacters, selectedConversation,
       linePositions, songPositions, diamondPositions,
       characterNodes, characterLinks,
       lines, songs, diamonds, groupedThemes,
     });
+  },
+
+  hoverLine(hoveredLine) {
+    // TODO: fix x-position to not be hardcoded
+    var hovered = hoveredLine && {
+      title: hoveredLine.characterName,
+      lines: hoveredLine.data[2],
+      x: hoveredLine.x + 400,
+      y: hoveredLine.y,
+    };
+    this.setState({hovered, update: false});
+  },
+
+  hoverTheme(hoveredTheme) {
+    var hovered = hoveredTheme && {
+      title: hoveredTheme.themeType,
+      lines: hoveredTheme.lines,
+      x: hoveredTheme.positions[0].x + 400,
+      y: hoveredTheme.positions[0].y,
+    }
+    this.setState({hovered, update: false});
   },
 
   render() {
@@ -112,7 +137,9 @@ var App = React.createClass({
           <Themes {...this.state} {...this.props} {...themeStyle} />
         </div>
         <Visualization {...this.state} {...vizStyle}
-          onSelectCharacter={this.filterByCharacter} />
+          onHoverLine={this.hoverLine}
+          onHoverTheme={this.hoverTheme} />
+        <LineSummary {...this.state.hovered} />
       </div>
     );
   }

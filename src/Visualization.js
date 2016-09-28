@@ -4,44 +4,16 @@ import * as d3 from "d3";
 
 import Lines from './Lines';
 import Diamonds from './Diamonds';
-import LineSummary from './LineSummary';
 
 var Visualization = React.createClass({
-  getInitialState() {
-    return {
-      hovered: null,
-      update: true,
-    };
-  },
-
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
     // if getting update from parent, make sure Lines and Characters get updated
-    this.setState({update: true});
+    return nextProps.update;
   },
 
   componentDidMount() {
     this.svg = d3.select(this.refs.svg);
     this.defineFilters();
-  },
-
-  hoverLine(hoveredLine) {
-    var hovered = hoveredLine && {
-      title: hoveredLine.characterName,
-      lines: hoveredLine.data[2],
-      x: hoveredLine.x,
-      y: hoveredLine.y,
-    };
-    this.setState({hovered, update: false});
-  },
-
-  hoverTheme(hoveredTheme) {
-    var hovered = hoveredTheme && {
-      title: hoveredTheme.themeType,
-      lines: hoveredTheme.lines,
-      x: hoveredTheme.positions[0].x,
-      y: hoveredTheme.positions[0].y,
-    }
-    this.setState({hovered, update: false});
   },
 
   defineFilters() {
@@ -60,10 +32,6 @@ var Visualization = React.createClass({
   },
 
   render() {
-    var style = {
-      display: 'inline-block',
-      position: 'relative',
-    };
     var songs = _.map(this.props.songPositions, (song, i) => {
       return (
         <g>
@@ -74,16 +42,13 @@ var Visualization = React.createClass({
     });
 
     return (
-      <div style={style}>
-        <svg ref='svg' width={this.props.width} height={this.props.height}>
-          <Lines {...this.state} {...this.props} hover={this.hoverLine} />
-          <Diamonds {...this.state} {...this.props} hover={this.hoverTheme} />
-          <g className='songs'>
-            {songs}
-          </g>
-        </svg>
-        <LineSummary {...this.state.hovered} />
-      </div>
+      <svg ref='svg' width={this.props.width} height={this.props.height}>
+        <Lines {...this.state} {...this.props} hover={this.props.onHoverLine} />
+        <Diamonds {...this.state} {...this.props} hover={this.props.onHoverTheme} />
+        <g className='songs'>
+          {songs}
+        </g>
+      </svg>
     );
   }
 });
