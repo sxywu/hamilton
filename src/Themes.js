@@ -10,7 +10,6 @@ var Characters = React.createClass({
   render() {
     var style = {
       padding: 20,
-      textAlign: 'center',
     };
     var diamondStyle = {
       padding: '0 5px',
@@ -29,7 +28,7 @@ var Characters = React.createClass({
       });
 
       return (
-        <h2>{theme.name}: {diamonds}</h2>
+        <h3>{theme.name} {diamonds}</h3>
       );
     });
 

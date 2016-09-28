@@ -142,6 +142,7 @@ var App = React.createClass({
       height: sideHeight,
       display: 'inline-block',
       verticalAlign: 'top',
+      textAlign: 'center',
     };
     var characterStyle = {
       width: width / 3,
@@ -160,20 +161,23 @@ var App = React.createClass({
 
     return (
       <div className="App">
+        <div style={sideStyle}>
+          <h1>Filters</h1>
+          <h2>Characters</h2>
+          <Characters {...this.state} {...this.props} {...characterStyle}
+            onSelectCharacter={this.filterByCharacter}
+            onSelectConversation={this.filterByConversation} />
+          <h2>Recurring Themes</h2>
+          <Themes {...this.state} {...this.props} {...themeStyle}
+            onHoverTheme={this.hoverSideTheme}
+            onSelectTheme={this.filterByThemes} />
+          <LineSummary {...this.state.sideHovered} />
+        </div>
         <div style={vizStyle}>
           <Visualization {...this.state} {...vizStyle}
             onHoverLine={this.hoverLine}
             onHoverTheme={this.hoverTheme} />
           <LineSummary {...this.state.hovered} />
-        </div>
-        <div style={sideStyle}>
-          <Characters {...this.state} {...this.props} {...characterStyle}
-            onSelectCharacter={this.filterByCharacter}
-            onSelectConversation={this.filterByConversation} />
-          <Themes {...this.state} {...this.props} {...themeStyle}
-            onHoverTheme={this.hoverSideTheme}
-            onSelectTheme={this.filterByThemes} />
-          <LineSummary {...this.state.sideHovered} />
         </div>
       </div>
     );
