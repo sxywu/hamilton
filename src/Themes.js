@@ -3,6 +3,9 @@ import _ from 'lodash';
 import Diamonds from './Diamonds';
 
 var Characters = React.createClass({
+  hoverTheme() {
+
+  },
 
   render() {
     var style = {
@@ -14,10 +17,11 @@ var Characters = React.createClass({
     };
     var themes = _.map(this.props.groupedThemes, theme => {
       var diamonds = _.map(theme.diamonds, diamond => {
+        var props = {update: true, diamondPositions: [diamond]};
         return (
           <span style={diamondStyle}>
             <svg width={diamond.size} height={diamond.size}>
-              <Diamonds diamondPositions={[diamond]} />
+              <Diamonds {...props} hover={this.hoverTheme} />
             </svg>
             {diamond.length}
           </span>
@@ -25,10 +29,7 @@ var Characters = React.createClass({
       });
 
       return (
-        <div>
-          <h2>{theme.name}</h2>
-          <h3>{diamonds}</h3>
-        </div>
+        <h2>{theme.name}: {diamonds}</h2>
       );
     });
 

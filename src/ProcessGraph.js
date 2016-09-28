@@ -149,6 +149,7 @@ var PositionGraph = {
               lines: diamonds[0].themeLines,
               length: diamonds.length,
               fill: diamonds[0].fill,
+              trueFill: diamonds[0].fill,
               size,
               positions: [{x: size / 2, y: size / 2, size: size - 4}],
             }
@@ -160,7 +161,7 @@ var PositionGraph = {
     return {diamonds, groupedThemes};
   },
 
-  updateCharacterOpacity(lines, diamonds, characterNodes, characterLinks) {
+  updateOpacity(lines, diamonds, characterNodes, characterLinks, groupedThemes) {
     var selectedLines = _.filter(lines, line => line.selected);
     var selectedCharacters = _.chain(selectedLines)
       .map('characterId')
@@ -176,7 +177,14 @@ var PositionGraph = {
       link.color = _.includes(selectedConversation, link.id) ? link.source.color : gray;
     });
 
-    return {selectedCharacters, selectedConversation, characterNodes, characterLinks};
+    var selectedDiamonds = _.chain(diamonds).map('themeId').uniq().value();
+    console.log(selectedDiamonds);
+    _.each(groupedThemes, (theme) => {
+      _.each(theme.diamonds, diamond => {
+        diamond.fill = _.includes(selectedDiamonds, diamond.id) ? diamond.trueFill : gray;
+      });
+    });
+    return {selectedCharacters, selectedConversation, characterNodes, characterLinks, groupedThemes};
   },
 
   filterBySelectedCharacter(selectedCharacters, selectedConversation, lines, diamonds) {
