@@ -28,9 +28,8 @@ var Themes = React.createClass({
 
     this.diamonds = enter.merge(this.diamonds)
       .attr('fill', (d) => d.fill)
-      .on('mouseenter', (d) => d.selected && this.props.hover(d))
-      .on('mouseleave', (d) => d.selected && this.props.hover(null))
-      .style('cursor', (d) => d.selected ? 'pointer' : 'default');
+      .on('mouseenter', (d) => this.props.hover(d))
+      .on('mouseleave', (d) => this.props.hover(null));
 
     this.diamonds.selectAll('path')
       .data((d) => d.positions)

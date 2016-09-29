@@ -4,7 +4,7 @@ import Diamonds from './Diamonds';
 
 var Characters = React.createClass({
   selectTheme(diamond) {
-    diamond.selected && this.props.onSelectTheme(diamond.id);
+    this.props.onSelectTheme(diamond.id);
   },
 
   render() {
@@ -13,6 +13,7 @@ var Characters = React.createClass({
     };
     var diamondStyle = {
       padding: '0 5px',
+      cursor: 'pointer',
     };
     var themes = _.map(this.props.groupedThemes, theme => {
       var diamonds = _.map(theme.diamonds, diamond => {

@@ -15,6 +15,8 @@ var Characters = React.createClass({
     this.links = this.container.selectAll('path')
       .data(this.props.characterLinks, (d) => d.id)
       .enter().append('path')
+      .style('cursor', 'pointer')
+      .on('click', (d) => this.props.onSelectConversation(d.id))
       .attr('fill', 'none')
       .attr('stroke', (d) => d.color)
       .attr('stroke-width', (d) => d.weight)
@@ -22,7 +24,9 @@ var Characters = React.createClass({
 
     this.images = this.container.selectAll('g')
       .data(this.props.characterNodes, (d) => d.id)
-      .enter().append('g');
+      .enter().append('g')
+      .style('cursor', 'pointer')
+      .on('click', (d) => this.props.onSelectCharacter(d.id));
     this.images.append('circle')
       .attr('r', (d) => d.radius)
       .attr('fill', '#fff');
@@ -45,8 +49,6 @@ var Characters = React.createClass({
       .attr('stroke', (d) => d.color)
       .attr('stroke-width', 2);
 
-    this.updateRender();
-
     simulation
       .nodes(this.props.characterNodes)
       .on("tick", this.forceTick.bind(this));
@@ -56,7 +58,10 @@ var Characters = React.createClass({
   },
 
   componentDidUpdate() {
-    this.updateRender();
+    this.images.attr('filter', (d) => d.selected ? '' : 'url(#gray)')
+      .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
+
+    this.links.attr('stroke', (d) => d.color);
   },
 
   forceTick() {
@@ -65,17 +70,6 @@ var Characters = React.createClass({
       return 'M' + [d.source.x, d.source.y] +
         'A 45,45 0 0 1 ' + [d.target.x, d.target.y];
     });
-  },
-
-  updateRender() {
-    this.images.attr('filter', (d) => d.selected ? '' : 'url(#gray)')
-      .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')')
-      .style('cursor', (d) => d.selected ? 'pointer' : 'default')
-      .on('click', (d) => d.selected && this.props.onSelectCharacter(d.id));
-
-    this.links.attr('stroke', (d) => d.color)
-      .style('cursor', (d) => d.selected ? 'pointer' : 'default')
-      .on('click', (d) => d.selected && this.props.onSelectConversation(d.id));
   },
 
   defineFilters() {

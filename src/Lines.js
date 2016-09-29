@@ -45,7 +45,6 @@ var Lines = React.createClass({
       .on('mouseenter', this.mouseEnter)
       .on('mouseleave', this.mouseLeave)
       .merge(this.circles)
-      .style('cursor', (d) => d.selected ? 'pointer' : 'default')
       .attr('fill', (d) => d.fill)
       .attr('d', (d) => this.drawPath(d));
   },
