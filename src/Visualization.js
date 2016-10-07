@@ -33,10 +33,14 @@ var Visualization = React.createClass({
 
   render() {
     var songs = _.map(this.props.songPositions, (song, i) => {
+      var name = song.name;
+      var nameLength = 20;
+      if (name.length > nameLength) {
+        name = name.substring(0, nameLength) + '...';
+      }
       return (
         <g>
-          <text x={song.x - 5} y={song.y} textAnchor='end' dy='.35em'>{song.id} |</text>
-          <text x={song.x} y={song.y} dy='.35em'>{song.name}</text>
+          <text x={song.x - 10} y={song.y} textAnchor='end' dy='.35em'>{name}</text>
         </g>
       );
     });

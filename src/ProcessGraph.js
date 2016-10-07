@@ -9,9 +9,9 @@ import rawCharacters from './data/characters.json';
 import rawThemes from './data/themes.json';
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
+var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([2, 8]);
 
-var width = 720;
 var gray = '#eee';
 var PositionGraph = {
   processLinesSongs() {
@@ -45,7 +45,7 @@ var PositionGraph = {
     var songs = _.reduce(songList, (obj, name, id) => {
       obj[id] = {
         id,
-        name,
+        name: name[0],
       }
       return obj;
     }, {});
@@ -142,7 +142,7 @@ var PositionGraph = {
             endLine,
             startLineId,
             endLineId,
-            fill: color(theme),
+            fill: themeColor(theme),
             keys: lineKey[0],
             lines: lineKey[1],
           }
@@ -192,10 +192,12 @@ var PositionGraph = {
     });
 
     var selectedDiamonds = _.chain(diamonds).map('themeId').uniq().value();
+    var countedDiamonds = _.countBy(diamonds, 'themeId');
     _.each(groupedThemes, (theme) => {
       _.each(theme.diamonds, diamond => {
         diamond.selected = _.includes(selectedDiamonds, diamond.id);
         diamond.fill = diamond.selected ? diamond.trueFill : gray;
+        diamond.length = countedDiamonds[diamond.id];
       });
     });
 
@@ -286,15 +288,15 @@ var PositionGraph = {
     return {filteredDiamonds2, filteredLines2};
   },
 
-  positionLinesBySong(lines, diamonds, songs) {
+  positionLinesBySong(lines, diamonds, songs, width) {
     var lineSize = 5;
     var fontSize = 14;
     var padding = {x: 1, y: lineSize * 5};
+    var songWidth = 200;
     var s = 1;
-    var x = lineSize * 6;
+    var x = songWidth;
     var y = lineSize * 6;
     var lastLineId = null;
-
     var songPositions = [];
     // make it an object keyed by lineId for the sake of diamondPositions
     var linePositions = _.map(lines, (line, i) => {
@@ -306,21 +308,19 @@ var PositionGraph = {
       if (songNum !== s) {
         s = songNum;
         // set positions back to the left
-        x = lineSize * 10;
+        x = songWidth;
         y += padding.y;
 
         // also add song position
         songPositions.push(Object.assign(songs[songNum], {
           x, y
         }));
-        x += 2 * lineSize;
-        y += fontSize + lineSize;
       }
       // and if a song has gone over the width
       // bring it to next line
       if (x > width && lastLineId !== line.lineId) {
-        x = lineSize * 12;
-        y += 4 * lineSize + 2;
+        x = songWidth;
+        y += 4 * lineSize;
       }
 
       // x-position

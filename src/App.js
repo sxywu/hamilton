@@ -8,6 +8,7 @@ import Themes from './Themes';
 import LineSummary from './LineSummary';
 import ProcessGraph from './ProcessGraph';
 
+var width = 1200;
 var App = React.createClass({
 
   getInitialState() {
@@ -92,7 +93,7 @@ var App = React.createClass({
     var {characterNodes, characterLinks, groupedThemes} =
       ProcessGraph.updateOpacity(filteredLines2, filteredDiamonds2, characters, conversations, themes);
     var {linePositions, songPositions, diamondPositions} =
-      ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds2, songs);
+      ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds2, songs, width);
 
     this.setState({
       update: true,
@@ -134,26 +135,25 @@ var App = React.createClass({
   },
 
   render() {
-    var width = 1200;
     var vizHeight = 2400;
-    var sideHeight = 800;
+    var sideHeight = 400;
     var sideStyle = {
-      width: width / 3,
+      width: width,
       height: sideHeight,
       display: 'inline-block',
       verticalAlign: 'top',
       textAlign: 'center',
     };
     var characterStyle = {
-      width: width / 3,
+      width: width / 2,
       height: sideHeight / 2,
     };
     var themeStyle = {
-      width: width / 3,
+      width: width / 2,
       height: sideHeight / 2,
     };
     var vizStyle = {
-      width: width / 3 * 2,
+      width: width,
       height: vizHeight,
       position: 'relative',
       display: 'inline-block',
