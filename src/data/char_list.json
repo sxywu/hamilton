@@ -10,14 +10,14 @@
 	"9": ["Peggy Schuyler", "F", "individual", false, "#dcc96b"],
 	"10": ["Thomas Jefferson", "M", "individual", true, "#e0765a"],
 	"11": ["James Madison", "M", "individual", true, "#f19b6f"],
-	"12": ["King George III", "M", "individual", false, "#cc373c"],
-	"13": ["Samuel Seabury", "M", "individual", false, "#640000"],
+	"12": ["King George III", "M", "individual", true, "#cc373c"],
+	"13": ["Samuel Seabury", "M", "individual", true, "#640000"],
 	"14": ["Charles Lee", "M", "individual", false, "#b6e86f"],
 	"15": ["Phillip Hamilton", "M", "individual", true, "#6ddbc4"],
 	"16": ["Maria Reynolds", "F", "individual", true, "#a41750"],
 	"17": ["James Reynolds", "M", "individual", false, "#a9db63"],
 	"18": ["George Eacker", "M", "individual", false, "#9dcf57"],
-	"21": ["Women", "F", "group", false, "#cc3662"],
-	"22": ["Men", "M", "group", false, "#4681ce"],
-	"24": ["Company", "F/M", "group", false, "#f7d783"]
+	"21": ["Women", "F", "group", true, "#cc3662"],
+	"22": ["Men", "M", "group", true, "#4681ce"],
+	"24": ["Company", "F/M", "group", true, "#f7d783"]
 }
