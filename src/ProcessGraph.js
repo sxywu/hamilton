@@ -8,7 +8,6 @@ import themeList from './data/theme_list.json';
 import rawCharacters from './data/characters.json';
 import rawThemes from './data/themes.json';
 
-var color = d3.scaleOrdinal(d3.schemeCategory20);
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([2, 8]);
 
@@ -34,8 +33,8 @@ var PositionGraph = {
             singerIndex: i,
             conversing: null,
             themes: [],
-            fill: color(character),
-            trueFill: color(character),
+            fill: charList[character][4],
+            trueFill: charList[character][4],
             selected: true,
             data: line,
           };
@@ -66,7 +65,7 @@ var PositionGraph = {
         name,
         initials,
         radius: 20,
-        color: color(id),
+        color: character[4],
         image: character[3] && require('./images/' + id + '.png'),
         selected: true,
       };
