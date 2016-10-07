@@ -1,6 +1,7 @@
 import React from 'react';
 import * as d3 from "d3";
 
+var duration = 1000;
 var Themes = React.createClass({
   shouldComponentUpdate(nextProps) {
     return nextProps.update;
@@ -23,8 +24,7 @@ var Themes = React.createClass({
     this.diamonds.exit().remove();
 
     var enter = this.diamonds.enter().append('g')
-      .classed('diamond', true)
-      .attr('stroke', '#fff');
+      .classed('diamond', true);
 
     this.diamonds = enter.merge(this.diamonds)
       .attr('fill', (d) => d.fill)
@@ -39,15 +39,24 @@ var Themes = React.createClass({
 
     this.diamonds.selectAll('path')
       .attr('transform', (d) => 'translate(' + [d.x, d.y]+ ')')
-      .attr('d', (d) => 'M0,-' + d.size + ' L' + d.size + ',0 L0,' + d.size + ' L-' + d.size + ',0 Z');
+      .attr('d', (d) => 'M0,-' + d.size + ' L' + d.size + ',0 L0,' + d.size + ' L-' + d.size + ',0 Z')
+      .transition().duration(duration)
+      .ease(d3.easeSin)
+      .attr('transform', (d) => 'translate(' + [d.x, d.y]+ ')');
 
     // only draw lines for those with two positions
     this.diamonds.selectAll('line')
+      .attr('stroke', (d) => d.fill)
       .attr('x1', (d) => d.positions[0].x)
       .attr('x2', (d) => d.positions[1].x)
       .attr('y1', (d) => d.positions[0].y)
       .attr('y2', (d) => d.positions[1].y)
-      .attr('stroke', (d) => d.fill);
+      .transition().duration(duration)
+      .ease(d3.easeSin)
+      .attr('x1', (d) => d.positions[0].x)
+      .attr('x2', (d) => d.positions[1].x)
+      .attr('y1', (d) => d.positions[0].y)
+      .attr('y2', (d) => d.positions[1].y);
   },
 
   render() {

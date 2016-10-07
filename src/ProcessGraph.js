@@ -365,13 +365,13 @@ var PositionGraph = {
 
       var x = startLine.focusX + (theme.startLine - startLine.startLine) * lineSize;
       var y = startLine.trueY - 2 * startLine.fullRadius;
-      theme.positions = [{x, y, size: lineSize}];
+      theme.positions = [{x, y, size: lineSize * .8}];
 
       if (theme.startLine !== theme.endLine) {
         var endLine = linePositionsByLineId[theme.startLineId];
         x = endLine.focusX + (theme.endLine - endLine.startLine) * lineSize;
         y = endLine.trueY - 2 * endLine.fullRadius;
-        theme.positions.push({x, y, size: lineSize});
+        theme.positions.push({x, y, size: lineSize * .8});
       }
 
       return theme;

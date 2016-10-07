@@ -4,6 +4,7 @@ import * as d3 from "d3";
 
 import Lines from './Lines';
 import Diamonds from './Diamonds';
+import Songs from './Songs';
 
 var Visualization = React.createClass({
   componentWillReceiveProps(nextProps) {
@@ -32,26 +33,11 @@ var Visualization = React.createClass({
   },
 
   render() {
-    var songs = _.map(this.props.songPositions, (song, i) => {
-      var name = song.name;
-      var nameLength = 20;
-      if (name.length > nameLength) {
-        name = name.substring(0, nameLength) + '...';
-      }
-      return (
-        <g>
-          <text x={song.x - 10} y={song.y} textAnchor='end' dy='.35em'>{name}</text>
-        </g>
-      );
-    });
-
     return (
       <svg ref='svg' width={this.props.width} height={this.props.height}>
-        <Lines {...this.state} {...this.props} hover={this.props.onHoverLine} />
-        <Diamonds {...this.state} {...this.props} hover={this.props.onHoverTheme} />
-        <g className='songs'>
-          {songs}
-        </g>
+        <Lines {...this.props} hover={this.props.onHoverLine} />
+        <Diamonds {...this.props} hover={this.props.onHoverTheme} />
+        <Songs {...this.props} />
       </svg>
     );
   }
