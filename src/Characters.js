@@ -1,15 +1,11 @@
 import React from 'react';
 import * as d3 from "d3";
 
-var simulation = d3.forceSimulation()
-  .force('collide', d3.forceCollide().radius(d => d.radius + 25))
-  .force('link', d3.forceLink())
-  .force('charge', d3.forceManyBody().distanceMin(500))
-  .alphaMin(.5);
-
 var Characters = React.createClass({
   componentDidMount() {
-    this.container = d3.select(this.refs.images);
+    this.container = d3.select(this.refs.images).append('g')
+      .attr('transform', 'translate(' +
+      [this.props.width / 2, this.props.height / 2] + ')');
     this.defineFilters();
 
     this.links = this.container.selectAll('path')
@@ -17,15 +13,17 @@ var Characters = React.createClass({
       .enter().append('path')
       .style('cursor', 'pointer')
       .on('click', (d) => this.props.onSelectConversation(d.id))
+      .attr('d', this.calcualteLinkPath)
       .attr('fill', 'none')
       .attr('stroke', (d) => d.color)
       .attr('stroke-width', (d) => d.weight)
-      .attr('opacity', .5);
+      .attr('opacity', .75);
 
     this.images = this.container.selectAll('g')
       .data(this.props.characterNodes, (d) => d.id)
       .enter().append('g')
       .style('cursor', 'pointer')
+      .attr('transform', (d, i) => 'translate(' + [d.x, d.y] + ')')
       .on('click', (d) => this.props.onSelectCharacter(d.id));
     this.images.append('circle')
       .attr('r', (d) => d.radius)
@@ -49,12 +47,6 @@ var Characters = React.createClass({
       .attr('stroke', (d) => d.color)
       .attr('stroke-width', 2);
 
-    simulation
-      .nodes(this.props.characterNodes)
-      .on("tick", this.forceTick.bind(this));
-    simulation
-      .force("center", d3.forceCenter(this.props.width / 2, this.props.height / 2))
-      .force("link").links(this.props.characterLinks);
   },
 
   componentDidUpdate() {
@@ -64,12 +56,26 @@ var Characters = React.createClass({
     this.links.attr('stroke', (d) => d.color);
   },
 
-  forceTick() {
-    this.images.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
-    this.links.attr('d', (d) => {
-      return 'M' + [d.source.x, d.source.y] +
-        'A 45,45 0 0 1 ' + [d.target.x, d.target.y];
-    });
+  calcualteLinkPath(link) {
+    var x1, x2, y1, y2;
+    if (link.source.x < link.target.x) {
+      x1 = link.source.x;
+      y1 = link.source.y - link.weight / 2;
+      x2 = link.target.x;
+      y2 = link.target.y - link.weight / 2;
+    } else {
+      x1 = link.target.x;
+      y1 = link.target.y + link.weight / 2;
+      x2 = link.source.x;
+      y2 = link.source.y + link.weight / 2;
+    }
+    // if it's on same level, then curve if not straight line
+    var curve = (y1 === y2) ? (x2 - x1) / 4 : 0;
+    var cx1 = x1 + curve;
+    var cy1 = y1 + curve;
+    var cx2 = x2 - curve;
+    var cy2 = y1 + curve;
+    return 'M' + [x1, y1] + ' C' + [cx1, cy1] + ' ' + [cx2, cy2] + ' ' + [x2, y2];
   },
 
   defineFilters() {

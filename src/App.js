@@ -33,7 +33,7 @@ var App = React.createClass({
   componentWillMount() {
     var {lines, songs} = ProcessGraph.processLinesSongs();
 
-    var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines);
+    var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines, width / 2);
 
     var {diamonds, groupedThemes} = ProcessGraph.processThemes(lines);
 
@@ -136,7 +136,7 @@ var App = React.createClass({
 
   render() {
     var vizHeight = 2400;
-    var sideHeight = 400;
+    var sideHeight = 500;
     var sideStyle = {
       width: width,
       height: sideHeight,

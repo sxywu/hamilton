@@ -9,7 +9,7 @@ import rawCharacters from './data/characters.json';
 import rawThemes from './data/themes.json';
 
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
-var linkScale = d3.scaleLinear().range([2, 8]);
+var linkScale = d3.scaleLinear().range([3, 8]);
 
 var gray = '#eee';
 var PositionGraph = {
@@ -52,24 +52,28 @@ var PositionGraph = {
     return {songs, lines};
   },
 
-  processCharacters(lines) {
+  processCharacters(lines, width) {
     var linesById = _.groupBy(lines, 'lineId');
+    var filteredCharList = _.pickBy(charList, char => char[3]);
     // character nodes
-    var characterNodes = _.map(rawCharacters.characters, (lines, id) => {
-      var character = charList[id];
-      var name = character[0];
-      var initials = _.map(name.split(' '), 0).join('');
+    var characterNodes = _.chain(rawCharacters.characters)
+      .map((lines, id) => {
+        var character = filteredCharList[id];
+        if (!character) return null;
 
-      return {
-        id,
-        name,
-        initials,
-        radius: 20,
-        color: character[4],
-        image: character[3] && require('./images/' + id + '.png'),
-        selected: true,
-      };
-    });
+        var name = character[0];
+        var initials = _.map(name.split(' '), 0).join('');
+
+        return {
+          id,
+          name,
+          initials,
+          color: character[4],
+          image: character[3] && require('./images/' + id + '.png'),
+          selected: true,
+          numLines: lines.length,
+        };
+      }).filter().value();
     var charactersById = _.keyBy(characterNodes, 'id');
 
     // character links
@@ -77,28 +81,58 @@ var PositionGraph = {
     var minWidth = _.minBy(conversingValues, (lines) => lines.length).length;
     var maxWidth = _.maxBy(conversingValues, (lines) => lines.length).length;
     linkScale.domain([minWidth, maxWidth]);
-    var characterLinks = _.map(rawCharacters.conversing, (lines, conversing) => {
-      var source = conversing.split('-');
-      var target = charactersById[source[1]];
-      source = charactersById[source[0]];
-      var weight = linkScale(lines.length);
+    var characterLinks = _.chain(rawCharacters.conversing)
+      .map((lines, conversing) => {
+        var source = conversing.split('-');
+        var target = charactersById[source[1]];
+        source = charactersById[source[0]];
+        if (!source || !target) return null;
 
-      _.each(lines, lineId => {
-        // for each line that has this conversation,
-        // there could be multiple characters, so go through them all
-        _.each(linesById[lineId], line => {
-          if (line.characterId === source.id) {
-            line.conversing = conversing;
-          }
+        var weight = linkScale(lines.length);
+        _.each(lines, lineId => {
+          // for each line that has this conversation,
+          // there could be multiple characters, so go through them all
+          _.each(linesById[lineId], line => {
+            if (line.characterId === source.id) {
+              line.conversing = conversing;
+            }
+          });
         });
-      });
 
-      return {
-        id: conversing,
-        color: source.color,
-        source, target, weight
-      };
-    });
+        return {
+          id: conversing,
+          color: source.color,
+          source, target, weight
+        };
+      }).filter().value();
+
+    // position them right away
+    var middleRow = 6;
+    var otherRows = 5;
+    var radius = Math.min(20, width / middleRow * 3);
+    var simulation = d3.forceSimulation()
+      .force('collide', d3.forceCollide().radius(d => d.radius * 2))
+      // .force('y', d3.forceY().y(d => d.focusY))
+      .force('link', d3.forceLink(characterLinks).distance(radius))
+      .force("center", d3.forceCenter())
+      .stop();
+
+    _.chain(characterNodes)
+      // .sortBy(character => -character.numLines)
+      .each((character, i) => {
+        if (i < middleRow) {
+          character.fy = 0;
+        } else if (i < middleRow + otherRows) {
+          character.fy = -radius * 4;
+        } else {
+          character.fy = radius * 4;
+        }
+
+        character.radius = radius;
+      }).value();
+
+    simulation.nodes(characterNodes);
+    _.times(1000, simulation.tick);
 
     return {characterNodes, characterLinks};
   },
