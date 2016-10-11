@@ -3,8 +3,7 @@ import * as d3 from "d3";
 
 var Characters = React.createClass({
   componentDidMount() {
-    this.container = d3.select(this.refs.images).append('g')
-      .attr('transform', 'translate(' +
+    this.container = d3.select(this.refs.images).attr('transform', 'translate(' +
       [this.props.width / 2, this.props.height / 2] + ')');
     this.defineFilters();
 

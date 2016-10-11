@@ -9,7 +9,15 @@ var Characters = React.createClass({
 
   render() {
     var style = {
-      padding: 20,
+      display: 'inline-block',
+      width: this.props.width,
+      height: this.props.height,
+      verticalAlign: 'top',
+      textAlign: 'center',
+    };
+    var groupStyle = {
+      display: 'inline-block',
+      padding: '0 15px',
     };
     var diamondStyle = {
       padding: '0 5px',
@@ -19,17 +27,19 @@ var Characters = React.createClass({
       var diamonds = _.map(theme.diamonds, diamond => {
         var props = {update: true, diamondPositions: [diamond]};
         return (
-          <span style={diamondStyle} onClick={this.selectTheme.bind(this, diamond)}>
-            <svg width={diamond.size} height={diamond.size}>
-              <Diamonds {...props} hover={this.props.onHoverTheme} />
-            </svg>
-            {diamond.length}
-          </span>
+          <svg style={diamondStyle} onClick={this.selectTheme.bind(this, diamond)}
+            width={diamond.size} height={diamond.size}>
+            <Diamonds {...props} hover={this.props.onHoverTheme} />
+          </svg>
         );
       });
 
       return (
-        <h3>{theme.name} {diamonds}</h3>
+        <h3 style={groupStyle}>
+          {theme.name}
+          <br />
+          {diamonds}
+        </h3>
       );
     });
 

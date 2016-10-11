@@ -1,6 +1,6 @@
 {
   "1": [["Just you wait", "wait for it"], "Ambition", true],
-  "3": [["At your service, sir"], "Relation", false],
+  "3": [["At your service, sir"], "Relationship", true],
   "4": [["Talk less, smile more.",
     "Why do you always say what you believe?"],
     "Personality", true],
@@ -17,7 +17,7 @@
   "10": [["Look around, look around",
     "how lucky we are to be alive right now"],
     "Life", true],
-  "11": [["Right hand man"], "Relationship", false],
+  "11": [["Right hand man"], "Relationship", true],
   "12": [["_______ is easy, young man.  _______ is harder"], "Miscellaneous", true],
   "13": [["Helpless"], "Personality", true],
   "14": [["Satisfied"], "Contentment", true],

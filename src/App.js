@@ -8,7 +8,11 @@ import Themes from './Themes';
 import LineSummary from './LineSummary';
 import ProcessGraph from './ProcessGraph';
 
-var width = 1200;
+var width = 1000;
+var characterWidth = 620;
+var themeWidth = width - characterWidth;
+var filterHeight = 220;
+
 var App = React.createClass({
 
   getInitialState() {
@@ -33,7 +37,7 @@ var App = React.createClass({
   componentWillMount() {
     var {lines, songs} = ProcessGraph.processLinesSongs();
 
-    var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines, width / 2);
+    var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines, characterWidth, filterHeight);
 
     var {diamonds, groupedThemes} = ProcessGraph.processThemes(lines);
 
@@ -109,8 +113,8 @@ var App = React.createClass({
     var hovered = hoveredLine && {
       title: hoveredLine.characterName,
       lines: hoveredLine.data[2],
-      x: hoveredLine.x,
-      y: hoveredLine.y,
+      x: hoveredLine.focusX,
+      y: hoveredLine.focusY,
     };
     this.setState({hovered, update: false});
   },
@@ -135,39 +139,38 @@ var App = React.createClass({
   },
 
   render() {
+    var style = {
+      width,
+      margin: 'auto',
+    }
     var vizHeight = 2400;
-    var sideHeight = 500;
     var sideStyle = {
-      width: width,
-      height: sideHeight,
-      display: 'inline-block',
+      width,
+      height: filterHeight,
       verticalAlign: 'top',
-      textAlign: 'center',
     };
     var characterStyle = {
-      width: width / 2,
-      height: sideHeight / 2,
+      width: characterWidth,
+      height: filterHeight,
     };
     var themeStyle = {
-      width: width / 2,
-      height: sideHeight / 2,
+      width: themeWidth,
+      height: filterHeight,
+      display: 'inline-block',
     };
     var vizStyle = {
-      width: width,
+      width,
       height: vizHeight,
       position: 'relative',
       display: 'inline-block',
     }
 
     return (
-      <div className="App">
+      <div className="App" style={style}>
         <div style={sideStyle}>
-          <h1>Filters</h1>
-          <h2>Characters</h2>
           <Characters {...this.state} {...this.props} {...characterStyle}
             onSelectCharacter={this.filterByCharacter}
             onSelectConversation={this.filterByConversation} />
-          <h2>Recurring Themes</h2>
           <Themes {...this.state} {...this.props} {...themeStyle}
             onHoverTheme={this.hoverSideTheme}
             onSelectTheme={this.filterByThemes} />

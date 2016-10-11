@@ -10,6 +10,7 @@ import rawThemes from './data/themes.json';
 
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([3, 8]);
+var themeScale = d3.scaleLinear().range([8, 12]);
 
 var gray = '#eee';
 var PositionGraph = {
@@ -52,7 +53,7 @@ var PositionGraph = {
     return {songs, lines};
   },
 
-  processCharacters(lines, width) {
+  processCharacters(lines, width, height) {
     var linesById = _.groupBy(lines, 'lineId');
     var filteredCharList = _.pickBy(charList, char => char[3]);
     // character nodes
@@ -107,8 +108,7 @@ var PositionGraph = {
       }).filter().value();
 
     // position them right away
-    var middleRow = 6;
-    var otherRows = 5;
+    var middleRow = Math.ceil(characterNodes.length / 2);
     var radius = Math.min(20, width / middleRow * 3);
     var simulation = d3.forceSimulation()
       .force('collide', d3.forceCollide().radius(d => d.radius * 2))
@@ -118,14 +118,12 @@ var PositionGraph = {
       .stop();
 
     _.chain(characterNodes)
-      // .sortBy(character => -character.numLines)
+      .sortBy(character => -character.numLines)
       .each((character, i) => {
         if (i < middleRow) {
           character.fy = 0;
-        } else if (i < middleRow + otherRows) {
-          character.fy = -radius * 4;
         } else {
-          character.fy = radius * 4;
+          character.fy = -radius * 4;
         }
 
         character.radius = radius;
@@ -189,15 +187,12 @@ var PositionGraph = {
         diamonds = _.chain(diamonds)
           .groupBy(diamond => diamond.themeId)
           .map((diamonds, themeId) => {
-            var size = 12;
             return {
               id: themeId,
               lines: diamonds[0].themeLines,
               length: diamonds.length,
               fill: diamonds[0].fill,
               trueFill: diamonds[0].fill,
-              size,
-              positions: [{x: size / 2, y: size / 2, size: size - 4}],
             }
           }).sortBy(diamond => -diamond.length).value();
 
@@ -226,11 +221,18 @@ var PositionGraph = {
 
     var selectedDiamonds = _.chain(diamonds).map('themeId').uniq().value();
     var countedDiamonds = _.countBy(diamonds, 'themeId');
+    var maxDiamonds = _.chain(diamonds).countBy('themeId').values().max().value();
+    themeScale.domain([0, maxDiamonds]);
+    var svgSize = themeScale(maxDiamonds);
     _.each(groupedThemes, (theme) => {
       _.each(theme.diamonds, diamond => {
         diamond.selected = _.includes(selectedDiamonds, diamond.id);
         diamond.fill = diamond.selected ? diamond.trueFill : gray;
-        diamond.length = countedDiamonds[diamond.id];
+        diamond.length = countedDiamonds[diamond.id] || 0;
+
+        var size = themeScale(diamond.length);
+        diamond.size = svgSize;
+        diamond.positions = [{x: svgSize / 2, y: svgSize / 2, size: size / 2}]
       });
     });
 
@@ -323,8 +325,7 @@ var PositionGraph = {
 
   positionLinesBySong(lines, diamonds, songs, width) {
     var lineSize = 5;
-    var fontSize = 14;
-    var padding = {x: 1, y: lineSize * 5};
+    var padding = {x: 1, y: lineSize * 5, right: 50};
     var songWidth = 200;
     var s = 1;
     var x = songWidth;
@@ -351,7 +352,7 @@ var PositionGraph = {
       }
       // and if a song has gone over the width
       // bring it to next line
-      if (x > width && lastLineId !== line.lineId) {
+      if (x > width - padding.right && lastLineId !== line.lineId) {
         x = songWidth;
         y += 4 * lineSize;
       }

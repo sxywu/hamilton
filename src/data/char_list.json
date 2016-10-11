@@ -10,7 +10,7 @@
 	"9": ["Peggy Schuyler", "F", "individual", false, "#dcc96b"],
 	"10": ["Thomas Jefferson", "M", "individual", true, "#e0765a"],
 	"11": ["James Madison", "M", "individual", true, "#f19b6f"],
-	"12": ["King George III", "M", "individual", true, "#cc373c"],
+	"12": ["King George III", "M", "individual", false, "#cc373c"],
 	"13": ["Samuel Seabury", "M", "individual", false, "#640000"],
 	"14": ["Charles Lee", "M", "individual", false, "#b6e86f"],
 	"15": ["Phillip Hamilton", "M", "individual", true, "#6ddbc4"],
