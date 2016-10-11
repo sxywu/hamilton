@@ -46,6 +46,7 @@ var PositionGraph = {
       obj[id] = {
         id,
         name: name[0],
+        selected: true,
       }
       return obj;
     }, {});
@@ -326,7 +327,7 @@ var PositionGraph = {
   positionLinesBySong(lines, diamonds, songs, width) {
     var lineSize = 5;
     var padding = {x: 1, y: lineSize * 5, right: 50};
-    var songWidth = 200;
+    var songWidth = 170;
     var s = 1;
     var x = songWidth;
     var y = lineSize * 6;

@@ -27,7 +27,7 @@ var Visualization = React.createClass({
       .attr('y', d => d.y)
       .text(d => {
         var name = d.name;
-        var nameLength = 20;
+        var nameLength = 18;
         if (name.length > nameLength) {
           name = name.substring(0, nameLength) + '...';
         }

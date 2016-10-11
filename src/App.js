@@ -22,6 +22,7 @@ var App = React.createClass({
       sideHovered: null,
       lines: [],
       diamonds: [],
+      songs: [],
       groupedThemes: [],
       characterNodes: [],
       characterLinks: [],
