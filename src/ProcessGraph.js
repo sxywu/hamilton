@@ -206,6 +206,8 @@ var PositionGraph = {
     characterNodes, characterLinks, groupedThemes) {
     var nonSelected = _.isEmpty(selectedCharacters)
       && _.isEmpty(selectedConversation) && _.isEmpty(selectedThemes);
+    var availableCharacters = _.chain(lines).map('characterId').uniq().value();
+    var availableConversations = _.chain(lines).map('conversing').uniq().value();
     var selectedLines = _.filter(lines, line => line.selected);
     var filteredCharacters = _.chain(selectedLines)
       .map('characterId')
@@ -214,14 +216,20 @@ var PositionGraph = {
       .map('conversing').flatten()
       .uniq().value();
 
-    _.each(characterNodes, (node) => {
-      node.selected = nonSelected || _.includes(selectedCharacters, node.id);
-      node.filtered = _.includes(filteredCharacters, node.id);
-    });
-    _.each(characterLinks, (link) => {
-      link.selected = nonSelected || _.includes(selectedConversation, link.id);
-      link.filtered = _.includes(filteredConversation, link.id);
-    });
+    characterNodes = _.chain(characterNodes)
+      .filter(node => _.includes(availableCharacters, node.id))
+      .map((node) => {
+        node.selected = nonSelected || _.includes(selectedCharacters, node.id);
+        node.filtered = _.includes(filteredCharacters, node.id);
+        return node;
+      }).value();
+    characterLinks = _.chain(characterLinks)
+      .filter(link => _.includes(availableConversations, link.id))
+      .map((link) => {
+        link.selected = nonSelected || _.includes(selectedConversation, link.id);
+        link.filtered = _.includes(filteredConversation, link.id);
+        return link;
+      }).value();
 
     var filteredDiamonds = _.chain(diamonds).map('themeId').uniq().value();
     var countedDiamonds = _.countBy(diamonds, 'themeId');
@@ -244,7 +252,6 @@ var PositionGraph = {
   },
 
   filterBySelectedCharacter(selectedCharacters, selectedConversation, lines, diamonds) {
-    // can only select characters or conversation, not both
     var filteredLines = lines;
     if (!_.isEmpty(selectedCharacters)) {
       filteredLines = _.chain(lines)
@@ -261,21 +268,26 @@ var PositionGraph = {
             .sortBy().isEqual(selectedCharacters)
             .value();
         }).flatten().value();
-    } else if (!_.isEmpty(selectedConversation)) {
-      filteredLines = _.chain(lines)
+    }
+    if (!_.isEmpty(selectedConversation)) {
+      filteredLines = _.chain(filteredLines)
         .groupBy(line => line.songId)
         .filter(lines => {
           // if even one of the lines
           var atLeastOne = false;
           _.each(lines, line => {
-            line.selected = _.includes(selectedConversation, line.conversing);
+            var selected = _.includes(selectedConversation, line.conversing);
+            // if there's also selected characters take that into consideration
+            line.selected = !_.isEmpty(selectedCharacters) ? line.selected || selected : selected;
 
-            atLeastOne = atLeastOne || line.selected;
+            atLeastOne = atLeastOne || selected;
           });
           return atLeastOne;
         }).flatten().value();
-    } else {
-      filteredLines = _.map(lines, line => {
+    }
+
+    if (_.isEmpty(selectedCharacters) && _.isEmpty(selectedConversation)) {
+      filteredLines = _.map(filteredLines, line => {
         line.selected = true;
         return line;
       });

@@ -24,6 +24,8 @@ var App = React.createClass({
       diamonds: [],
       songs: [],
       groupedThemes: [],
+      characters: [],
+      conversations: [],
       characterNodes: [],
       characterLinks: [],
       linePositions: [],
@@ -56,10 +58,9 @@ var App = React.createClass({
       selectedCharacters.push(character);
     }
     selectedCharacters = _.sortBy(selectedCharacters);
-    var selectedConversation = [];
 
-    this.filterAndPosition(selectedCharacters, selectedConversation,
-      this.state.selectedThemes, this.state.characterNodes, this.state.characterLinks,
+    this.filterAndPosition(selectedCharacters, this.state.selectedConversation,
+      this.state.selectedThemes, this.state.characters, this.state.conversations,
       this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
   },
 
@@ -70,10 +71,9 @@ var App = React.createClass({
     } else {
       selectedConversation.push(id);
     }
-    var selectedCharacters = [];
 
-    this.filterAndPosition(selectedCharacters, selectedConversation,
-      this.state.selectedThemes, this.state.characterNodes, this.state.characterLinks,
+    this.filterAndPosition(this.state.selectedCharacters, selectedConversation,
+      this.state.selectedThemes, this.state.characters, this.state.conversations,
       this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
   },
 
@@ -86,7 +86,7 @@ var App = React.createClass({
     }
 
     this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
-      selectedThemes, this.state.characterNodes, this.state.characterLinks,
+      selectedThemes, this.state.characters, this.state.conversations,
       this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
   },
 
@@ -107,7 +107,7 @@ var App = React.createClass({
       update: true,
       selectedCharacters, selectedConversation, selectedThemes,
       linePositions, songPositions, diamondPositions,
-      characterNodes, characterLinks,
+      characters, conversations, characterNodes, characterLinks,
       lines, songs, diamonds, groupedThemes,
     });
   },

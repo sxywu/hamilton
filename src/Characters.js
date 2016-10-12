@@ -28,6 +28,7 @@ var Characters = React.createClass({
     this.images.exit().remove();
 
     var enter = this.images.enter().append('g')
+      .classed('image', true)
       .style('cursor', 'pointer');
 
     enter.append('circle')
@@ -65,7 +66,7 @@ var Characters = React.createClass({
 
       this.links.exit().remove();
 
-      this.links = this.links.enter().append('path')
+      this.links = this.links.enter().insert('path', '.image')
           .style('cursor', 'pointer')
           .on('click', (d) => this.props.onSelectConversation(d.id))
           .attr('fill', 'none')
@@ -74,7 +75,7 @@ var Characters = React.createClass({
           .attr('stroke', (d) => d.selected || d.filtered ? d.color : this.props.gray)
           .attr('stroke-width', (d) => d.weight)
           .attr('opacity', d => {
-            if (d.selected) return .9;
+            if (d.selected) return 1;
             if (!d.selected && d.filtered) return .25;
             return .75;
           });
