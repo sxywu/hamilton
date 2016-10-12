@@ -28,8 +28,7 @@ var Characters = React.createClass({
     this.images.exit().remove();
 
     var enter = this.images.enter().append('g')
-      .classed('image', true)
-      .style('cursor', 'pointer');
+      .classed('image', true);
 
     enter.append('circle')
       .classed('bg', true)
@@ -42,7 +41,8 @@ var Characters = React.createClass({
 
     this.images = enter.merge(this.images)
       .attr('transform', (d, i) => 'translate(' + [d.x, d.y] + ')')
-      .on('click', (d) => this.props.onSelectCharacter(d.id));
+      .style('cursor', (d) => d.available ? 'pointer' : 'default')
+      .on('click', (d) => d.available && this.props.onSelectCharacter(d.id));
 
     this.images.selectAll('.bg')
       .attr('r', (d) => d.radius);
@@ -53,10 +53,16 @@ var Characters = React.createClass({
       .attr('y', (d) => -d.radius)
       .attr('xlink:href', (d) => d.image)
       .attr('filter', (d) => !d.selected && !d.filtered ? 'url(#gray)' : '')
-      .attr('opacity', (d) => !d.selected && d.filtered ? .5 : 1);
+      .attr('opacity', (d) => {
+        if (d.selected) return 1;
+        if (d.filtered) return .5;
+        if (d.available) return 1;
+        return 0;
+      });
     this.images.selectAll('.ring')
       .attr('r', (d) => d.radius)
       .attr('stroke', (d) => !d.selected && !d.filtered ? this.props.gray : d.color)
+      .attr('stroke-dasharray', (d) => !d.available ? '5 5' : '')
       .attr('opacity', (d) => !d.selected && d.filtered ? .5 : 1);
   },
 

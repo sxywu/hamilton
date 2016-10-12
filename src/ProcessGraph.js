@@ -237,8 +237,8 @@ var PositionGraph = {
     }
 
     characterNodes = _.chain(characterNodes)
-      .filter(node => _.includes(availableCharacters, node.id))
       .map((node) => {
+        node.available = _.includes(availableCharacters, node.id);
         node.selected = nonSelected || _.includes(selectedCharacters, node.id);
         node.filtered = _.includes(filteredCharacters, node.id);
         return node;
