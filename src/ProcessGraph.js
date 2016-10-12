@@ -151,14 +151,20 @@ var PositionGraph = {
           var endLine = _.last(lineKey[0]).split(':')[1].split('/');
           var endLineId = songId + ':' + endLine[1];
           endLine = parseInt(endLine[0], 10);
+          var characterIds = [];
+          var conversationIds = [];
 
           // add themes to the lines
           _.chain(lineKey[0])
             .map((lineId) => lineId.split(':')[0] + ':' + lineId.split('/')[1])
             .uniq()
             .each((lineId) => {
+              // have to loop through all the lines bc could have multiple characters
               _.each(linesById[lineId], (line) => {
                 line.themes.push(theme);
+                // also add in characters
+                characterIds.push(line.characterId);
+                conversationIds.push(line.conversing);
               });
             }).value();
 
@@ -173,6 +179,8 @@ var PositionGraph = {
             endLine,
             startLineId,
             endLineId,
+            characterIds: _.uniq(characterIds),
+            conversationIds: _.uniq(conversationIds),
             fill: themeColor(theme),
             keys: lineKey[0],
             lines: lineKey[1],
@@ -202,19 +210,31 @@ var PositionGraph = {
     return {diamonds, groupedThemes};
   },
 
-  updateFilterOpacities(lines, diamonds, selectedCharacters, selectedConversation, selectedThemes,
+  updateFilterOpacities(lines, diamonds,
+    selectedCharacters, selectedConversation, selectedThemes,
     characterNodes, characterLinks, groupedThemes) {
     var nonSelected = _.isEmpty(selectedCharacters)
       && _.isEmpty(selectedConversation) && _.isEmpty(selectedThemes);
+
     var availableCharacters = _.chain(lines).map('characterId').uniq().value();
     var availableConversations = _.chain(lines).map('conversing').uniq().value();
     var selectedLines = _.filter(lines, 'selected');
     var filteredCharacters = _.chain(selectedLines)
-      .map('characterId')
-      .uniq().value();
+      .map('characterId').uniq().value();
     var filteredConversation = _.chain(selectedLines)
-      .map('conversing').flatten()
-      .uniq().value();
+      .map('conversing').uniq().value();
+
+    if (!_.isEmpty(selectedThemes)) {
+      // only if there are themes selected, intersect the characters and conversations
+      var selectedThemeCharacters = _.chain(diamonds).filter('selected')
+        .map('characterIds').flatten().uniq().value();
+      var selectedThemeConversations = _.chain(diamonds).filter('selected')
+        .map('conversationIds').flatten().uniq().value();
+      availableCharacters = _.intersection(availableCharacters, selectedThemeCharacters);
+      availableConversations = _.intersection(availableConversations, selectedThemeConversations);
+      filteredCharacters = _.intersection(filteredCharacters, selectedThemeCharacters);
+      filteredConversation = _.intersection(filteredConversation, selectedThemeConversations);
+    }
 
     characterNodes = _.chain(characterNodes)
       .filter(node => _.includes(availableCharacters, node.id))
@@ -301,7 +321,7 @@ var PositionGraph = {
     // first take out the themes
     var filteredLines2 = lines;
     if (!_.isEmpty(selectedThemes)) {
-      filteredLines2 = _.chain(lines)
+      filteredLines2 = _.chain(filteredLines2)
         .groupBy(line => line.songId)
         .filter(lines => {
           var atLeastOne = false;
