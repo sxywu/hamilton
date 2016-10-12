@@ -3,6 +3,10 @@ import _ from 'lodash';
 import Diamonds from './Diamonds';
 
 var Characters = React.createClass({
+  shouldComponentUpdate(nextProps) {
+    return nextProps.update;
+  },
+  
   selectTheme(diamond) {
     this.props.onSelectTheme(diamond.id);
   },

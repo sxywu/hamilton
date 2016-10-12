@@ -35,7 +35,7 @@ var Lines = React.createClass({
       .attr('d', (d) => this.drawPath(d))
       .attr('transform', (d) => 'translate(' + [d.focusX, d.focusY] + ')')
       .merge(this.circles)
-      .attr('fill', (d) => d.fill)
+      .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
       .transition().duration(duration)
       .attr('d', (d) => this.drawPath(d, true))
       .ease(d3.easeSin)

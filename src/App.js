@@ -32,6 +32,7 @@ var App = React.createClass({
       selectedCharacters: [],
       selectedConversation: [],
       selectedThemes: [],
+      gray: '#eee',
     };
   },
 
@@ -96,7 +97,9 @@ var App = React.createClass({
     var {filteredLines2, filteredDiamonds2} = ProcessGraph.filterBySelectedThemes(
       selectedThemes, filteredLines, filteredDiamonds);
     var {characterNodes, characterLinks, groupedThemes} =
-      ProcessGraph.updateOpacity(filteredLines2, filteredDiamonds2, characters, conversations, themes);
+      ProcessGraph.updateOpacity(filteredLines2, filteredDiamonds2,
+        selectedCharacters, selectedConversation, selectedThemes,
+        characters, conversations, themes);
     var {linePositions, songPositions, diamondPositions} =
       ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds2, songs, width);
 

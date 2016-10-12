@@ -2,57 +2,82 @@ import React from 'react';
 import * as d3 from "d3";
 
 var Characters = React.createClass({
+  shouldComponentUpdate(nextProps) {
+    return nextProps.update;
+  },
+
   componentDidMount() {
     this.container = d3.select(this.refs.images).attr('transform', 'translate(' +
       [this.props.width / 2, this.props.height / 2] + ')');
     this.defineFilters();
 
-    this.links = this.container.selectAll('path')
-      .data(this.props.characterLinks, (d) => d.id)
-      .enter().append('path')
-      .style('cursor', 'pointer')
-      .on('click', (d) => this.props.onSelectConversation(d.id))
-      .attr('d', this.calcualteLinkPath)
-      .attr('fill', 'none')
-      .attr('stroke', (d) => d.color)
-      .attr('stroke-width', (d) => d.weight)
-      .attr('opacity', .75);
-
-    this.images = this.container.selectAll('g')
-      .data(this.props.characterNodes, (d) => d.id)
-      .enter().append('g')
-      .style('cursor', 'pointer')
-      .attr('transform', (d, i) => 'translate(' + [d.x, d.y] + ')')
-      .on('click', (d) => this.props.onSelectCharacter(d.id));
-    this.images.append('circle')
-      .attr('r', (d) => d.radius)
-      .attr('fill', '#fff');
-    this.images.filter((d) => d.image)
-      .append('image')
-      .attr('width', (d) => d.radius * 2)
-      .attr('height', (d) => d.radius * 2)
-      .attr('x', (d) => -d.radius)
-      .attr('y', (d) => -d.radius)
-      .attr('xlink:href', (d) => d.image);
-    this.images.filter((d) => !d.image)
-      .append('text')
-      .attr('text-anchor', 'middle')
-      .attr('dy', '.35em')
-      .attr('fill', (d) => d.color)
-      .text((d) => d.initials)
-    this.images.append('circle')
-      .attr('r', (d) => d.radius)
-      .attr('fill', 'none')
-      .attr('stroke', (d) => d.color)
-      .attr('stroke-width', 2);
+    this.updateLinks();
+    this.updateImages();
 
   },
 
   componentDidUpdate() {
-    this.images.attr('filter', (d) => d.selected ? '' : 'url(#gray)')
-      .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
+    this.updateLinks();
+    this.updateImages();
+  },
 
-    this.links.attr('stroke', (d) => d.color);
+  updateImages() {
+    this.images = this.container.selectAll('g')
+      .data(this.props.characterNodes, (d) => d.id);
+
+    this.images.exit().remove();
+
+    var enter = this.images.enter().append('g')
+      .style('cursor', 'pointer');
+
+    enter.append('circle')
+      .classed('bg', true)
+      .attr('fill', '#fff');
+    enter.append('image');
+    enter.append('circle')
+      .classed('ring', true)
+      .attr('fill', 'none')
+      .attr('stroke-width', 2);
+
+    this.images = enter.merge(this.images)
+      .attr('transform', (d, i) => 'translate(' + [d.x, d.y] + ')')
+      .on('click', (d) => this.props.onSelectCharacter(d.id));
+
+    this.images.selectAll('.bg')
+      .attr('r', (d) => d.radius);
+    this.images.selectAll('image')
+      .attr('width', (d) => d.radius * 2)
+      .attr('height', (d) => d.radius * 2)
+      .attr('x', (d) => -d.radius)
+      .attr('y', (d) => -d.radius)
+      .attr('xlink:href', (d) => d.image)
+      .attr('filter', (d) => !d.selected && !d.filtered ? 'url(#gray)' : '')
+      .attr('opacity', (d) => !d.selected && d.filtered ? .5 : 1);
+    this.images.selectAll('.ring')
+      .attr('r', (d) => d.radius)
+      .attr('stroke', (d) => !d.selected && !d.filtered ? this.props.gray : d.color)
+      .attr('opacity', (d) => !d.selected && d.filtered ? .5 : 1);
+  },
+
+  updateLinks() {
+      this.links = this.container.selectAll('path')
+        .data(this.props.characterLinks, (d) => d.id);
+
+      this.links.exit().remove();
+
+      this.links = this.links.enter().append('path')
+          .style('cursor', 'pointer')
+          .on('click', (d) => this.props.onSelectConversation(d.id))
+          .attr('fill', 'none')
+        .merge(this.links)
+          .attr('d', this.calcualteLinkPath)
+          .attr('stroke', (d) => d.selected || d.filtered ? d.color : this.props.gray)
+          .attr('stroke-width', (d) => d.weight)
+          .attr('opacity', d => {
+            if (d.selected) return .9;
+            if (!d.selected && d.filtered) return .25;
+            return .75;
+          });
   },
 
   calcualteLinkPath(link) {

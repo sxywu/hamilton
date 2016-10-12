@@ -12,7 +12,6 @@ var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([3, 8]);
 var themeScale = d3.scaleLinear().range([8, 12]);
 
-var gray = '#eee';
 var PositionGraph = {
   processLinesSongs() {
     // duplicate any of the lines sung by multiple characters
@@ -35,7 +34,6 @@ var PositionGraph = {
             conversing: null,
             themes: [],
             fill: charList[character][4],
-            trueFill: charList[character][4],
             selected: true,
             data: line,
           };
@@ -104,6 +102,7 @@ var PositionGraph = {
         return {
           id: conversing,
           color: source.color,
+          selected: true,
           source, target, weight
         };
       }).filter().value();
@@ -177,6 +176,7 @@ var PositionGraph = {
             fill: themeColor(theme),
             keys: lineKey[0],
             lines: lineKey[1],
+            selected: true,
           }
         });
       }).filter().flatten()
@@ -193,7 +193,6 @@ var PositionGraph = {
               lines: diamonds[0].themeLines,
               length: diamonds.length,
               fill: diamonds[0].fill,
-              trueFill: diamonds[0].fill,
             }
           }).sortBy(diamond => -diamond.length).value();
 
@@ -203,32 +202,36 @@ var PositionGraph = {
     return {diamonds, groupedThemes};
   },
 
-  updateOpacity(lines, diamonds, characterNodes, characterLinks, groupedThemes) {
+  updateOpacity(lines, diamonds, selectedCharacters, selectedConversation, selectedThemes,
+    characterNodes, characterLinks, groupedThemes) {
+    var nonSelected = _.isEmpty(selectedCharacters)
+      && _.isEmpty(selectedConversation) && _.isEmpty(selectedThemes);
     var selectedLines = _.filter(lines, line => line.selected);
-    var selectedCharacters = _.chain(selectedLines)
+    var filteredCharacters = _.chain(selectedLines)
       .map('characterId')
       .uniq().value();
-    var selectedConversation = _.chain(selectedLines)
+    var filteredConversation = _.chain(selectedLines)
       .map('conversing').flatten()
       .uniq().value();
 
     _.each(characterNodes, (node) => {
-      node.selected = _.includes(selectedCharacters, node.id);
+      node.selected = nonSelected || _.includes(selectedCharacters, node.id);
+      node.filtered = _.includes(filteredCharacters, node.id);
     });
     _.each(characterLinks, (link) => {
-      link.selected = _.includes(selectedConversation, link.id);
-      link.color = link.selected ? link.source.color : gray;
+      link.selected = nonSelected || _.includes(selectedConversation, link.id);
+      link.filtered = _.includes(filteredConversation, link.id);
     });
 
-    var selectedDiamonds = _.chain(diamonds).map('themeId').uniq().value();
+    var filteredDiamonds = _.chain(diamonds).map('themeId').uniq().value();
     var countedDiamonds = _.countBy(diamonds, 'themeId');
     var maxDiamonds = _.chain(diamonds).countBy('themeId').values().max().value();
     themeScale.domain([0, maxDiamonds]);
     var svgSize = themeScale(maxDiamonds);
     _.each(groupedThemes, (theme) => {
       _.each(theme.diamonds, diamond => {
-        diamond.selected = _.includes(selectedDiamonds, diamond.id);
-        diamond.fill = diamond.selected ? diamond.trueFill : gray;
+        diamond.selected = nonSelected || _.includes(selectedThemes, diamond.id);
+        diamond.filtered = _.includes(filteredDiamonds, diamond.id);
         diamond.length = countedDiamonds[diamond.id] || 0;
 
         var size = themeScale(diamond.length);
@@ -251,7 +254,6 @@ var PositionGraph = {
           return _.chain(lines)
             .map(line => {
               // also use this chance to update the fill based on selected characters
-              line.fill = _.includes(selectedCharacters, line.characterId) ? line.trueFill : gray;
               line.selected = _.includes(selectedCharacters, line.characterId);
               return line.characterId;
             }).uniq()
@@ -267,7 +269,6 @@ var PositionGraph = {
           var atLeastOne = false;
           _.each(lines, line => {
             line.selected = _.includes(selectedConversation, line.conversing);
-            line.fill = line.selected ? line.trueFill : gray;
 
             atLeastOne = atLeastOne || line.selected;
           });
@@ -276,7 +277,6 @@ var PositionGraph = {
     } else {
       filteredLines = _.map(lines, line => {
         line.selected = true;
-        line.fill = line.trueFill;
         return line;
       });
     }
@@ -313,7 +313,6 @@ var PositionGraph = {
           _.each(lines, line => {
             line.selected = line.selected && _.some(line.themes, theme =>
               _.includes(selectedThemes, theme));
-            line.fill = line.selected ? line.trueFill : gray;
 
             atLeastOne = atLeastOne || line.selected;
           });
