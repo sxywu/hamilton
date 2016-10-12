@@ -29,8 +29,12 @@ var Themes = React.createClass({
     this.diamonds = enter.merge(this.diamonds)
       .attr('fill', '#fff')
       .attr('stroke-width', 2)
-      .attr('stroke', (d) => d.selected ? d.fill : this.props.gray)
-      .style('cursor', this.props.cursor || 'default')
+      .attr('stroke', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
+      .attr('opacity', d => {
+        if (d.selected) return 1;
+        if (d.filtered) return .5;
+        return 1;
+      }).style('cursor', this.props.cursor || 'default')
       .on('mouseenter', (d) => this.props.hover(d))
       .on('mouseleave', (d) => this.props.hover(null))
       .on('click', (d) => this.props.click(d.id));

@@ -251,6 +251,7 @@ var PositionGraph = {
         return link;
       }).value();
 
+    var availableDiamonds = _.chain(diamonds).map('themeId').uniq().value();
     var filteredDiamonds = _.chain(diamonds).filter('selected').map('themeId').uniq().value();
     var countedDiamonds = _.countBy(diamonds, 'themeId');
     var maxDiamonds = _.chain(diamonds).countBy('themeId').values().max().value();
@@ -259,13 +260,14 @@ var PositionGraph = {
     _.each(groupedThemes, (theme) => {
       theme.svgWidth = svgSize * theme.diamonds.length;
       theme.svgHeight = svgSize;
-      _.each(theme.diamonds, (diamond, i) => {
+      theme.diamonds = _.filter(theme.diamonds, (diamond, i) => {
         diamond.selected = nonSelected || _.includes(selectedThemes, diamond.id);
         diamond.filtered = _.includes(filteredDiamonds, diamond.id);
         diamond.length = countedDiamonds[diamond.id] || 0;
 
         var size = themeScale(diamond.length);
-        diamond.positions = [{x: (i + .5) * svgSize, y: svgSize / 2, size: size / 2}]
+        diamond.positions = [{x: (i + .5) * svgSize, y: svgSize / 2, size: size / 2}];
+        return _.includes(availableDiamonds, diamond.id);
       });
     });
 
