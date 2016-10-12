@@ -294,13 +294,12 @@ var PositionGraph = {
     }
 
     var linesById = _.keyBy(filteredLines, 'lineId');
-    var filteredDiamonds = diamonds;
-    filteredDiamonds = _.filter(diamonds, diamond => {
+    var filteredDiamonds = _.filter(diamonds, diamond => {
       var startLine = linesById[diamond.startLineId];
       var endLine = linesById[diamond.endLineId];
       // keep a theme if either its start or end is in a selected character's line
       diamond.selected = (startLine && startLine.selected) || (endLine && endLine.selected);
-      return diamond.selected;
+      return startLine || endLine;
     });
 
     return {filteredLines, filteredDiamonds};

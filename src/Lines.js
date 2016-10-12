@@ -43,12 +43,10 @@ var Lines = React.createClass({
   },
 
   mouseEnter(line) {
-    if (!line.selected) return;
     this.props.hover(line);
   },
 
   mouseLeave(line) {
-    if (!line.selected) return;
     this.props.hover(null);
   },
 

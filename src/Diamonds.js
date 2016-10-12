@@ -27,7 +27,8 @@ var Themes = React.createClass({
       .classed('diamond', true);
 
     this.diamonds = enter.merge(this.diamonds)
-      .attr('fill', (d) => d.fill)
+      .attr('fill', (d) => d.selected ? d.fill : this.props.gray)
+      .attr('stroke', (d) => d.selected? d.fill : this.props.gray)
       .on('mouseenter', (d) => this.props.hover(d))
       .on('mouseleave', (d) => this.props.hover(null));
 
@@ -46,7 +47,6 @@ var Themes = React.createClass({
 
     // only draw lines for those with two positions
     this.diamonds.selectAll('line')
-      .attr('stroke', (d) => d.fill)
       .attr('x1', (d) => d.positions[0].x)
       .attr('x2', (d) => d.positions[1].x)
       .attr('y1', (d) => d.positions[0].y)
