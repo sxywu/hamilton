@@ -27,7 +27,8 @@ var Themes = React.createClass({
       .classed('diamond', true);
 
     this.diamonds = enter.merge(this.diamonds)
-      .attr('fill', (d) => d.selected ? d.fill : this.props.gray)
+      .attr('fill', '#fff')
+      .attr('stroke-width', 2)
       .attr('stroke', (d) => d.selected? d.fill : this.props.gray)
       .on('mouseenter', (d) => this.props.hover(d))
       .on('mouseleave', (d) => this.props.hover(null));
@@ -36,11 +37,14 @@ var Themes = React.createClass({
       .data((d) => d.positions)
       .enter().append('path');
     this.diamonds.filter((d) => d.positions.length > 1)
-      .append('line');
+      .insert('line', 'path');
 
     this.diamonds.selectAll('path')
+      .attr('stroke-width', 2)
       .attr('transform', (d) => 'translate(' + [d.x, d.y]+ ')')
-      .attr('d', (d) => 'M0,-' + d.size + ' L' + d.size + ',0 L0,' + d.size + ' L-' + d.size + ',0 Z')
+      .attr('d', (d) => 'M-' + d.size + ',-' + (d.size / 2) + // left
+        'L' + d.size + ',-' + (d.size / 2) + // right
+        'L0,' + d.size + 'Z') // bottom
       .transition().duration(duration)
       .ease(d3.easeSin)
       .attr('transform', (d) => 'translate(' + [d.x, d.y]+ ')');
