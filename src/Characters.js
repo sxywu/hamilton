@@ -73,18 +73,19 @@ var Characters = React.createClass({
       this.links.exit().remove();
 
       this.links = this.links.enter().insert('path', '.image')
-          .style('cursor', 'pointer')
-          .on('click', (d) => this.props.onSelectConversation(d.id))
           .attr('fill', 'none')
         .merge(this.links)
           .attr('d', this.calcualteLinkPath)
           .attr('stroke', (d) => d.selected || d.filtered ? d.color : this.props.gray)
-          .attr('stroke-width', (d) => d.weight)
+          .on('click', (d) => d.available && this.props.onSelectConversation(d.id))
+          .style('cursor', (d) => d.available ? 'pointer' : 'default')
           .attr('opacity', d => {
             if (d.selected) return 1;
             if (!d.selected && d.filtered) return .25;
             return .75;
-          });
+          }).attr('stroke-dasharray', d => !d.available ? '5 2' : '')
+          .transition().duration(500)
+          .attr('stroke-width', (d) => d.available ? d.weight : 2);
   },
 
   calcualteLinkPath(link) {

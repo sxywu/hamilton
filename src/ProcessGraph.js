@@ -244,8 +244,8 @@ var PositionGraph = {
         return node;
       }).value();
     characterLinks = _.chain(characterLinks)
-      .filter(link => _.includes(availableConversations, link.id))
       .map((link) => {
+        link.available = _.includes(availableConversations, link.id);
         link.selected = nonSelected || _.includes(selectedConversation, link.id);
         link.filtered = _.includes(filteredConversation, link.id);
         return link;
