@@ -92,16 +92,16 @@ var App = React.createClass({
 
   filterAndPosition(selectedCharacters, selectedConversation, selectedThemes,
     characters, conversations, lines, songs, diamonds, themes) {
-    var {filteredLines, filteredDiamonds} = ProcessGraph.filterBySelectedCharacter(
-      selectedCharacters, selectedConversation, lines, diamonds);
-    var {filteredLines2, filteredDiamonds2} = ProcessGraph.filterBySelectedThemes(
-      selectedThemes, filteredLines, filteredDiamonds);
+    var {filteredLines} = ProcessGraph.filterLinesBySelectedCharacter(
+      selectedCharacters, selectedConversation, lines);
+    var {filteredLines2} = ProcessGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
+    var {filteredDiamonds} = ProcessGraph.filterDiamondsByRemainingLines(filteredLines2, diamonds);
     var {characterNodes, characterLinks, groupedThemes} =
-      ProcessGraph.updateOpacity(filteredLines2, filteredDiamonds2,
+      ProcessGraph.updateFilterOpacities(filteredLines2, filteredDiamonds,
         selectedCharacters, selectedConversation, selectedThemes,
         characters, conversations, themes);
     var {linePositions, songPositions, diamondPositions} =
-      ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds2, songs, width);
+      ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds, songs, width);
 
     this.setState({
       update: true,

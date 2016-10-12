@@ -202,13 +202,13 @@ var PositionGraph = {
     return {diamonds, groupedThemes};
   },
 
-  updateOpacity(lines, diamonds, selectedCharacters, selectedConversation, selectedThemes,
+  updateFilterOpacities(lines, diamonds, selectedCharacters, selectedConversation, selectedThemes,
     characterNodes, characterLinks, groupedThemes) {
     var nonSelected = _.isEmpty(selectedCharacters)
       && _.isEmpty(selectedConversation) && _.isEmpty(selectedThemes);
     var availableCharacters = _.chain(lines).map('characterId').uniq().value();
     var availableConversations = _.chain(lines).map('conversing').uniq().value();
-    var selectedLines = _.filter(lines, line => line.selected);
+    var selectedLines = _.filter(lines, 'selected');
     var filteredCharacters = _.chain(selectedLines)
       .map('characterId')
       .uniq().value();
@@ -231,27 +231,28 @@ var PositionGraph = {
         return link;
       }).value();
 
-    var filteredDiamonds = _.chain(diamonds).map('themeId').uniq().value();
+    var filteredDiamonds = _.chain(diamonds).filter('selected').map('themeId').uniq().value();
     var countedDiamonds = _.countBy(diamonds, 'themeId');
     var maxDiamonds = _.chain(diamonds).countBy('themeId').values().max().value();
     themeScale.domain([0, maxDiamonds]);
     var svgSize = themeScale(maxDiamonds);
     _.each(groupedThemes, (theme) => {
-      _.each(theme.diamonds, diamond => {
+      theme.svgWidth = svgSize * theme.diamonds.length;
+      theme.svgHeight = svgSize;
+      _.each(theme.diamonds, (diamond, i) => {
         diamond.selected = nonSelected || _.includes(selectedThemes, diamond.id);
         diamond.filtered = _.includes(filteredDiamonds, diamond.id);
         diamond.length = countedDiamonds[diamond.id] || 0;
 
         var size = themeScale(diamond.length);
-        diamond.size = svgSize;
-        diamond.positions = [{x: svgSize / 2, y: svgSize / 2, size: size / 2}]
+        diamond.positions = [{x: (i + .5) * svgSize, y: svgSize / 2, size: size / 2}]
       });
     });
 
     return {characterNodes, characterLinks, groupedThemes};
   },
 
-  filterBySelectedCharacter(selectedCharacters, selectedConversation, lines, diamonds) {
+  filterLinesBySelectedCharacter(selectedCharacters, selectedConversation, lines) {
     var filteredLines = lines;
     if (!_.isEmpty(selectedCharacters)) {
       filteredLines = _.chain(lines)
@@ -293,30 +294,13 @@ var PositionGraph = {
       });
     }
 
-    var linesById = _.keyBy(filteredLines, 'lineId');
-    var filteredDiamonds = _.filter(diamonds, diamond => {
-      var startLine = linesById[diamond.startLineId];
-      var endLine = linesById[diamond.endLineId];
-      // keep a theme if either its start or end is in a selected character's line
-      diamond.selected = (startLine && startLine.selected) || (endLine && endLine.selected);
-      return startLine || endLine;
-    });
-
-    return {filteredLines, filteredDiamonds};
+    return {filteredLines};
   },
 
-  filterBySelectedThemes(selectedThemes, lines, diamonds) {
+  filterLinesBySelectedThemes(selectedThemes, lines) {
     // first take out the themes
-    var filteredDiamonds2 = diamonds;
     var filteredLines2 = lines;
-
     if (!_.isEmpty(selectedThemes)) {
-      filteredDiamonds2 = _.filter(diamonds, (diamond) => {
-        diamond.selected = _.includes(selectedThemes, diamond.themeId);
-        return diamond.selected;
-      });
-
-      // then go through the diamonds and only keep the lines with those themes
       filteredLines2 = _.chain(lines)
         .groupBy(line => line.songId)
         .filter(lines => {
@@ -331,7 +315,20 @@ var PositionGraph = {
         }).flatten().value();
     }
 
-    return {filteredDiamonds2, filteredLines2};
+    return {filteredLines2};
+  },
+
+  filterDiamondsByRemainingLines(lines, diamonds) {
+    var linesById = _.keyBy(lines, 'lineId');
+    var filteredDiamonds = _.filter(diamonds, diamond => {
+      var startLine = linesById[diamond.startLineId];
+      var endLine = linesById[diamond.endLineId];
+      // keep a theme if either its start or end is in a selected character's line
+      diamond.selected = (startLine && startLine.selected) || (endLine && endLine.selected);
+      return startLine || endLine;
+    });
+
+    return {filteredDiamonds}
   },
 
   positionLinesBySong(lines, diamonds, songs, width) {

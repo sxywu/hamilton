@@ -6,10 +6,6 @@ var Characters = React.createClass({
   shouldComponentUpdate(nextProps) {
     return nextProps.update;
   },
-  
-  selectTheme(diamond) {
-    this.props.onSelectTheme(diamond.id);
-  },
 
   render() {
     var style = {
@@ -24,25 +20,21 @@ var Characters = React.createClass({
       padding: '0 15px',
     };
     var diamondStyle = {
-      padding: '0 5px',
+      gray: this.props.gray,
       cursor: 'pointer',
     };
     var themes = _.map(this.props.groupedThemes, theme => {
-      var diamonds = _.map(theme.diamonds, diamond => {
-        var props = {update: true, diamondPositions: [diamond]};
-        return (
-          <svg style={diamondStyle} onClick={this.selectTheme.bind(this, diamond)}
-            width={diamond.size} height={diamond.size}>
-            <Diamonds {...props} hover={this.props.onHoverTheme} />
-          </svg>
-        );
-      });
+      var props = {update: true, diamondPositions: theme.diamonds};
+      var diamonds = (<Diamonds {...props} {...diamondStyle}
+        hover={this.props.onHoverTheme} click={this.props.onSelectTheme} />);
 
       return (
         <h3 style={groupStyle}>
           {theme.name}
           <br />
-          {diamonds}
+          <svg width={theme.svgWidth} height={theme.svgHeight}>
+            {diamonds}
+          </svg>
         </h3>
       );
     });
