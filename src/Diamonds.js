@@ -30,14 +30,15 @@ var Themes = React.createClass({
       .attr('fill', '#fff')
       .attr('stroke-width', 2)
       .attr('stroke', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
+      .attr('stroke-dasharray', d => !d.available ? '3 3' : '')
       .attr('opacity', d => {
         if (d.selected) return 1;
-        if (d.filtered) return .5;
+        if (d.filtered || !d.available) return .5;
         return 1;
-      }).style('cursor', this.props.cursor || 'default')
-      .on('mouseenter', (d) => this.props.hover(d))
-      .on('mouseleave', (d) => this.props.hover(null))
-      .on('click', (d) => this.props.click(d.id));
+      }).style('cursor', (d) => d.available && this.props.cursor || 'default')
+      .on('mouseenter', (d) => d.available && this.props.hover(d))
+      .on('mouseleave', (d) => d.available && this.props.hover(null))
+      .on('click', (d) => d.available && this.props.click(d.id));
 
     this.diamonds.selectAll('path')
       .data((d) => d.positions)

@@ -10,7 +10,7 @@ import rawThemes from './data/themes.json';
 
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([3, 8]);
-var themeScale = d3.scaleLinear().range([8, 12]);
+var themeScale = d3.scaleLinear().range([10, 20]);
 
 var PositionGraph = {
   processLinesSongs() {
@@ -185,6 +185,7 @@ var PositionGraph = {
             keys: lineKey[0],
             lines: lineKey[1],
             selected: true,
+            available: true,
           }
         });
       }).filter().flatten()
@@ -260,14 +261,14 @@ var PositionGraph = {
     _.each(groupedThemes, (theme) => {
       theme.svgWidth = svgSize * theme.diamonds.length;
       theme.svgHeight = svgSize;
-      theme.diamonds = _.filter(theme.diamonds, (diamond, i) => {
+      _.each(theme.diamonds, (diamond, i) => {
+        diamond.available = _.includes(availableDiamonds, diamond.id);
         diamond.selected = nonSelected || _.includes(selectedThemes, diamond.id);
         diamond.filtered = _.includes(filteredDiamonds, diamond.id);
         diamond.length = countedDiamonds[diamond.id] || 0;
 
         var size = themeScale(diamond.length);
         diamond.positions = [{x: (i + .5) * svgSize, y: svgSize / 2, size: size / 2}];
-        return _.includes(availableDiamonds, diamond.id);
       });
     });
 
