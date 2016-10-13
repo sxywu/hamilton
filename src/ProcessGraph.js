@@ -41,33 +41,21 @@ var PositionGraph = {
       }).flatten().value();
 
     var i = 0;
-    var padding = 50;
-    var songWidth = (width - 2 * padding) / _.size(songList);
-    var songs = _.map(songList, (name, id) => {
-      var x = i * songWidth + padding;
-      var color = _.chain(lines)
-        .filter(line => line.songId === id)
-        .groupBy('songId').value();
-      color = _.chain(color[id])
-        .groupBy('fill')
-        .map((lines, fill) => {
-          var length = _.reduce(lines, (sum, line) => {
-            return sum + line.data[2].length;
-          }, 0);
-          return [fill, length];
-        }).maxBy(1).value()[0];
+    var radius = 6;
+    var songWidth = (3 * radius) * _.size(songList);
+    var songs = _.map(songList, (song, id) => {
+      var x = (width / 2 - songWidth / 2) + i * (radius * 3);
       i += 1;
 
       return {
         id,
-        name: name[0],
-        color,
+        name: song[0],
+        color: song[1],
         x,
         width: songWidth - 2,
         selected: true,
       }
     });
-
     return {songs, lines};
   },
 
