@@ -18,6 +18,7 @@ var Characters = React.createClass({
     var groupStyle = {
       display: 'inline-block',
       padding: '0 15px',
+      margin: '0 0 20px 0',
     };
     var diamondStyle = {
       gray: this.props.gray,
