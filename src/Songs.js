@@ -4,17 +4,36 @@ import * as d3 from "d3";
 var duration = 1000;
 var Visualization = React.createClass({
   componentDidMount() {
-    this.container = d3.select(this.refs.songs);
-    this.updateRender();
+    this.textContainer = d3.select(this.refs.text);
+    this.rectContainer = d3.select(this.refs.rect);
+    this.updateText();
+    this.updateRect();
   },
 
   componentDidUpdate() {
-    this.updateRender();
+    this.updateText();
+    this.updateRect();
   },
 
-  updateRender() {
+  updateRect() {
+    this.rect = this.rectContainer
+      .attr('transform', 'translate(0, 15)')
+      .selectAll('rect').data(this.props.songs, d => d.id);
+    this.rect.exit().remove();
 
-    this.text = this.container.selectAll('text')
+    this.rect = this.rect.enter()
+      .append('rect')
+      .attr('x', d => d.x)
+      .attr('width', d => d.width)
+      .attr('height', 10)
+      .merge(this.rect)
+      .attr('fill', d => d.selected ? d.color : this.props.gray);
+
+  },
+
+  updateText() {
+
+    this.text = this.textContainer.selectAll('text')
       .data(this.props.songPositions, d => d.id);
 
     this.text.exit().remove();
@@ -41,7 +60,10 @@ var Visualization = React.createClass({
 
   render() {
     return (
-      <g ref='songs' className='songs' />
+      <g className='songs'>
+        <g ref='rect' className='rect' />
+        <g ref='text' className='text' />
+      </g>
     );
   }
 });

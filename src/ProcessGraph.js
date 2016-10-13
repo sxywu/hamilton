@@ -13,7 +13,7 @@ var linkScale = d3.scaleLinear().range([3, 8]);
 var themeScale = d3.scaleLinear().range([10, 20]);
 
 var PositionGraph = {
-  processLinesSongs() {
+  processLinesSongs(width) {
     // duplicate any of the lines sung by multiple characters
     var lines = _.chain(rawLines)
       .map((line, lineId) => {
@@ -40,14 +40,33 @@ var PositionGraph = {
         });
       }).flatten().value();
 
-    var songs = _.reduce(songList, (obj, name, id) => {
-      obj[id] = {
+    var i = 0;
+    var padding = 50;
+    var songWidth = (width - 2 * padding) / _.size(songList);
+    var songs = _.map(songList, (name, id) => {
+      var x = i * songWidth + padding;
+      var color = _.chain(lines)
+        .filter(line => line.songId === id)
+        .groupBy('songId').value();
+      color = _.chain(color[id])
+        .groupBy('fill')
+        .map((lines, fill) => {
+          var length = _.reduce(lines, (sum, line) => {
+            return sum + line.data[2].length;
+          }, 0);
+          return [fill, length];
+        }).maxBy(1).value()[0];
+      i += 1;
+
+      return {
         id,
         name: name[0],
+        color,
+        x,
+        width: songWidth - 2,
         selected: true,
       }
-      return obj;
-    }, {});
+    });
 
     return {songs, lines};
   },
@@ -211,7 +230,7 @@ var PositionGraph = {
     return {diamonds, groupedThemes};
   },
 
-  updateFilterOpacities(lines, diamonds,
+  updateFilterOpacities(lines, diamonds, songs,
     selectedCharacters, selectedConversation, selectedThemes,
     characterNodes, characterLinks, groupedThemes) {
     var nonSelected = _.isEmpty(selectedCharacters)
@@ -270,6 +289,11 @@ var PositionGraph = {
         var size = themeScale(diamond.length);
         diamond.positions = [{x: (i + .5) * svgSize, y: svgSize / 2, size: size / 2}];
       });
+    });
+
+    var availableSongs = _.chain(lines).map('songId').uniq().value();
+    _.each(songs, song => {
+      song.selected = _.includes(availableSongs, song.id);
     });
 
     return {characterNodes, characterLinks, groupedThemes};
@@ -361,9 +385,10 @@ var PositionGraph = {
     var songWidth = 170;
     var s = 1;
     var x = songWidth;
-    var y = lineSize * 6;
+    var y = lineSize * 8;
     var lastLineId = null;
     var songPositions = [];
+    var songsById = _.keyBy(songs, 'id');
     // make it an object keyed by lineId for the sake of diamondPositions
     var linePositions = _.map(lines, (line, i) => {
       var songNum = line.songId;
@@ -378,9 +403,12 @@ var PositionGraph = {
         y += padding.y;
 
         // also add song position
-        songPositions.push(Object.assign(songs[songNum], {
-          x, y
-        }));
+        var song = songsById[songNum];
+        songPositions.push({
+          id: song.id,
+          name: song.name,
+          x, y,
+        });
       }
       // and if a song has gone over the width
       // bring it to next line

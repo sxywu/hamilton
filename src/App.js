@@ -39,7 +39,7 @@ var App = React.createClass({
   },
 
   componentWillMount() {
-    var {lines, songs} = ProcessGraph.processLinesSongs();
+    var {lines, songs} = ProcessGraph.processLinesSongs(width);
 
     var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines, characterWidth, filterHeight);
 
@@ -107,7 +107,7 @@ var App = React.createClass({
     var {filteredLines2} = ProcessGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
     var {filteredDiamonds} = ProcessGraph.filterDiamondsByRemainingLines(filteredLines2, diamonds);
     var {characterNodes, characterLinks, groupedThemes} =
-      ProcessGraph.updateFilterOpacities(filteredLines2, filteredDiamonds,
+      ProcessGraph.updateFilterOpacities(filteredLines2, filteredDiamonds, songs,
         selectedCharacters, selectedConversation, selectedThemes,
         characters, conversations, themes);
     var {linePositions, songPositions, diamondPositions} =
