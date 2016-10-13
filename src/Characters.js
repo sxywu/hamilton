@@ -51,7 +51,7 @@ var Characters = React.createClass({
       .attr('height', (d) => d.radius * 2)
       .attr('x', (d) => -d.radius)
       .attr('y', (d) => -d.radius)
-      .attr('xlink:href', (d) => d.image)
+      .attr('xlink:href', (d) => this.props.images[d.id])
       .attr('filter', (d) => !d.selected && !d.filtered ? 'url(#gray)' : '')
       .attr('opacity', (d) => {
         if (d.selected) return 1;

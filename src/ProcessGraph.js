@@ -76,7 +76,6 @@ var PositionGraph = {
           name,
           initials,
           color: character[4],
-          image: character[3] && require('./images/' + id + '.png'),
           selected: true,
           numLines: lines.length,
         };

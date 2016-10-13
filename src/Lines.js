@@ -46,7 +46,7 @@ var Lines = React.createClass({
   },
 
   mouseLeave(line) {
-    this.props.hover(null);
+    // this.props.hover(null);
   },
 
   drawPath(d, showLength) {

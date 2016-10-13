@@ -11,43 +11,63 @@ var LineSummary = React.createClass({
 
     var margin = 10;
     var padding = 10;
+    var borderRadius = 3;
+    var headerHeight = 40;
+    var imageSize = 50;
+    var gray = '#999';
     var style = {
       position: 'absolute',
-      top: this.props.y + 2 * margin,
+      top: this.props.y + margin,
       left: this.props.x + margin,
-      padding,
-      width: 300,
-      backgroundColor: 'rgba(255, 255, 255, .85)',
-      border: '1px solid',
+      backgroundColor: '#fff',
+      border: '1px solid ' + gray,
+      borderRadius,
+      boxShadow: '0 0 5px ' + gray,
+      textAlign: 'center',
+      minWidth: 300,
+      maxWidth: 600,
     };
     var dotSize = 8;
     var headerStyle = {
-      fontSize: dotSize * 2,
-      lineHeight: dotSize * 2 + 'px',
+      backgroundColor: this.props.color,
+      borderTopRightRadius: borderRadius,
+      borderTopLeftRadius: borderRadius,
+      height: headerHeight,
+      borderBottom: '1px solid ' + gray,
     };
-    // var dotStyle = {
-    //   backgroundColor: this.props.fill,
-    //   width: dotSize,
-    //   height: dotSize,
-    //   borderRadius: dotSize,
-    //   margin: dotSize / 2 + 'px',
-    //   marginLeft: 0,
-    //   display: 'inline-block',
-    // };
+    var titleStyle = {
+      marginTop: imageSize / 2 + 10,
+    };
+    var imageStyle = {
+      width: imageSize,
+      marginTop: headerHeight - imageSize / 2,
+    };
     var linesStyle = {
       fontSize: 12,
+      lineHeight: '22px',
+      padding: '0 10px 10px 10px',
+      textAlign: 'left',
+      maxHeight: 300,
+      overflowY: 'scroll',
     };
 
     var lines = _.map(this.props.lines, (line, i) => {
-      return (<div key={i}>{line}</div>);
+      return (
+        <div key={i}>
+          {line}
+        </div>
+      );
     });
 
     return (
       <div style={style}>
         <div style={headerStyle}>
-          {this.props.title}
+          <img style={imageStyle} src={this.props.image} />
         </div>
-        <div style={linesStyle}>{lines}</div>
+        <h3 style={titleStyle}>{this.props.title}</h3>
+        <div style={linesStyle}>
+          {lines}
+        </div>
       </div>
     );
   }

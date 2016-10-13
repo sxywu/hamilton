@@ -8,6 +8,8 @@ import Themes from './Themes';
 import LineSummary from './LineSummary';
 import ProcessGraph from './ProcessGraph';
 
+import charList from './data/char_list.json';
+
 var width = 1000;
 var characterWidth = 620;
 var themeWidth = width - characterWidth;
@@ -16,6 +18,15 @@ var filterHeight = 220;
 var App = React.createClass({
 
   getInitialState() {
+    var images = _.reduce(charList, (obj, character, id) => {
+      try {
+        // load image
+        obj[id] = require('./images/' + id + '.png');
+      } catch(e) {
+        console.log(e);
+      }
+      return obj;
+    }, {});
     return {
       update: true,
       hovered: null,
@@ -34,6 +45,7 @@ var App = React.createClass({
       selectedCharacters: [],
       selectedConversation: [],
       selectedThemes: [],
+      images,
       gray: '#eee',
     };
   },
@@ -129,6 +141,8 @@ var App = React.createClass({
       lines: hoveredLine.data[2],
       x: hoveredLine.focusX,
       y: hoveredLine.focusY,
+      color: hoveredLine.fill,
+      image: this.state.images[hoveredLine.characterId],
     };
     this.setState({hovered, update: false});
   },
