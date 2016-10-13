@@ -5,7 +5,7 @@ var duration = 1000;
 var Visualization = React.createClass({
   componentDidMount() {
     this.textContainer = d3.select(this.refs.text);
-    this.rectContainer = d3.select(this.refs.rect);
+    this.circleContainer = d3.select(this.refs.circle);
     this.updateText();
     this.updateRect();
   },
@@ -16,17 +16,16 @@ var Visualization = React.createClass({
   },
 
   updateRect() {
-    this.rect = this.rectContainer
+    this.circle = this.circleContainer
       .attr('transform', 'translate(0, 15)')
-      .selectAll('rect').data(this.props.songs, d => d.id);
-    this.rect.exit().remove();
+      .selectAll('circle').data(this.props.songs, d => d.id);
+    this.circle.exit().remove();
 
-    this.rect = this.rect.enter()
-      .append('rect')
-      .attr('x', d => d.x)
-      .attr('width', d => d.width)
-      .attr('height', 10)
-      .merge(this.rect)
+    this.circle = this.circle.enter()
+      .append('circle')
+      .attr('cx', d => d.x)
+      .attr('r', d => d.radius)
+      .merge(this.circle)
       .attr('fill', d => d.selected ? d.color : this.props.gray);
 
   },
@@ -61,7 +60,7 @@ var Visualization = React.createClass({
   render() {
     return (
       <g className='songs'>
-        <g ref='rect' className='rect' />
+        <g ref='circle' className='circle' />
         <g ref='text' className='text' />
       </g>
     );

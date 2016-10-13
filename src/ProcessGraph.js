@@ -52,7 +52,7 @@ var PositionGraph = {
         name: song[0],
         color: song[1],
         x,
-        width: songWidth - 2,
+        radius,
         selected: true,
       }
     });
