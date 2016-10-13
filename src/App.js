@@ -90,6 +90,16 @@ var App = React.createClass({
       this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
   },
 
+  resetFilters() {
+    var selectedCharacters = [];
+    var selectedConversation = [];
+    var selectedThemes = [];
+
+    this.filterAndPosition(selectedCharacters, selectedConversation,
+      selectedThemes, this.state.characters, this.state.conversations,
+      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
+  },
+
   filterAndPosition(selectedCharacters, selectedConversation, selectedThemes,
     characters, conversations, lines, songs, diamonds, themes) {
     var {filteredLines} = ProcessGraph.filterLinesBySelectedCharacter(
@@ -167,10 +177,20 @@ var App = React.createClass({
       height: vizHeight,
       position: 'relative',
       display: 'inline-block',
-    }
+    };
+    var resetFilter = this.state.selectedCharacters.length ||
+      this.state.selectedConversation.length || this.state.selectedThemes.length;
+    var resetFilterStyle = {
+      color: resetFilter ? '#000' : this.state.gray,
+      cursor: resetFilter ? 'pointer' : 'default',
+    };
 
     return (
       <div className="App" style={style}>
+        <div style={{textAlign: 'center'}}>
+          <h1>Filters</h1>
+          <h3 style={resetFilterStyle} onClick={this.resetFilters}>(reset filters)</h3>
+        </div>
         <div style={sideStyle}>
           <Characters {...this.state} {...this.props} {...characterStyle}
             onSelectCharacter={this.filterByCharacter}
