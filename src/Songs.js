@@ -52,7 +52,6 @@ var Visualization = React.createClass({
         return name;
       }).merge(this.text)
       .transition().duration(duration)
-      .ease(d3.easeSin)
       .attr('x', d => d.x - 10)
       .attr('y', d => d.y);
   },

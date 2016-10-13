@@ -38,7 +38,6 @@ var Lines = React.createClass({
       .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
       .transition().duration(duration)
       .attr('d', (d) => this.drawPath(d, true))
-      .ease(d3.easeSin)
       .attr('transform', (d) => 'translate(' + [d.focusX, d.focusY] + ')');
   },
 

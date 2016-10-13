@@ -53,7 +53,6 @@ var Themes = React.createClass({
         'L' + d.size + ',-' + (d.size / 2) + // right
         'L0,' + d.size + 'Z') // bottom
       .transition().duration(duration)
-      .ease(d3.easeSin)
       .attr('transform', (d) => 'translate(' + [d.x, d.y]+ ')');
 
     // only draw lines for those with two positions
@@ -63,7 +62,6 @@ var Themes = React.createClass({
       .attr('y1', (d) => d.positions[0].y)
       .attr('y2', (d) => d.positions[1].y)
       .transition().duration(duration)
-      .ease(d3.easeSin)
       .attr('x1', (d) => d.positions[0].x)
       .attr('x2', (d) => d.positions[1].x)
       .attr('y1', (d) => d.positions[0].y)
