@@ -35,7 +35,7 @@ var Themes = React.createClass({
         if (d.selected) return 1;
         if (d.filtered || !d.available) return .5;
         return 1;
-      }).style('cursor', (d) => d.available && this.props.cursor || 'default')
+      }).style('cursor', (d) => (d.available && this.props.cursor) || 'default')
       .on('mouseenter', (d) => d.available && this.props.hover(d))
       .on('mouseleave', (d) => d.available && this.props.hover(null))
       .on('click', (d) => d.available && this.props.click(d.id));

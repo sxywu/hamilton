@@ -81,7 +81,7 @@ var Characters = React.createClass({
           .style('cursor', (d) => d.available ? 'pointer' : 'default')
           .attr('opacity', d => {
             if (d.selected) return 1;
-            if (!d.selected && d.filtered || !d.available) return .25;
+            if ((!d.selected && d.filtered) || !d.available) return .25;
             return .75;
           }).attr('stroke-dasharray', d => !d.available ? '10 2' : '')
           .transition().duration(500)

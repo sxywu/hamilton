@@ -10,11 +10,10 @@ var LineSummary = React.createClass({
     }
 
     var margin = 10;
-    var padding = 10;
     var borderRadius = 3;
     var headerHeight = 40;
     var imageSize = 50;
-    var gray = '#999';
+    var gray = '#aaa';
     var style = {
       position: 'absolute',
       top: this.props.y + margin,
@@ -27,7 +26,6 @@ var LineSummary = React.createClass({
       minWidth: 300,
       maxWidth: 600,
     };
-    var dotSize = 8;
     var headerStyle = {
       backgroundColor: this.props.color,
       borderTopRightRadius: borderRadius,
@@ -62,7 +60,7 @@ var LineSummary = React.createClass({
     return (
       <div style={style}>
         <div style={headerStyle}>
-          <img style={imageStyle} src={this.props.image} />
+          <img style={imageStyle} src={this.props.image} role="presentation" />
         </div>
         <h3 style={titleStyle}>{this.props.title}</h3>
         <div style={linesStyle}>
