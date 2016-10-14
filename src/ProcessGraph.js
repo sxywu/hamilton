@@ -464,8 +464,6 @@ var PositionGraph = {
   },
 
   positionLinesAsImage(lines) {
-    var lineSize = 5;
-    var imageWidth = 71;
     var dotSize = 10;
     var linePositions = [];
 
@@ -475,6 +473,8 @@ var PositionGraph = {
 
     _.each(lineImagePositions, (positions, i) => {
       var {x, y} = positions;
+      x = (x - 0.5) * dotSize;
+      y = (y - 0.5) * dotSize;
       var line = lines[i];
       var radius = Math.floor(imageScale(line.lineLength));
 
