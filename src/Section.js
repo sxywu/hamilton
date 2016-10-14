@@ -7,12 +7,14 @@ var Section = React.createClass({
 
   render() {
     var style = {
-      width: '100%',
-      paddingTop: '25vh',
+      width: this.props.width,
+      paddingTop: '40vh',
       paddingBottom: '25vh',
       fontSize: 16,
       lineHeight: 1.6,
       paddingLeft: 20,
+      marginLeft: this.props.vizAlign === 'left' ? this.props.left : 0,
+      pointerEvents: 'auto',
     };
     var rawMarkup = { __html: md.render(this.props.text)};
 

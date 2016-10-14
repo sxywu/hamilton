@@ -18,6 +18,26 @@ The second time I heard about Hamilton, I was in New York.  I was having coffee 
 
 After that glowing review, I knew I had to at least give it a try.
     `
+  },
+  {
+    id: 'intro2',
+    vizAlign: 'right',
+    text: `
+The first few times I listened, I accidentally had the soundtrack on shuffle.  I was tuning in and out of the lyrics when I suddenly heard:
+
+*When you’re gone, I’ll go mad<br />
+So don’t throw away this thing we had<br />
+Cuz when push comes to shove<br />
+I will kill your friends and family to remind you of my love*
+
+And I was like, holy crap what is this super abusive relationship?!  To which my boyfriend had to reassure me that it was just King George singing to America (does that make things better?  I’m still not sure).  After that, I decided to actually listen to all the lyrics the whole way through.
+
+The first time, I was sobbing by the end.  It was that f*cking transformative.
+
+I had it on repeat for months.  It was all I listened to in my waking hours.  I was obsessed.  My boyfriend and I listened so much we started to analyze the lyrics and musical styles.  We reveled in the layers of complexity, the double entredres, the clever word plays.
+
+We started to wonder what a visualization of Hamilton would look like.
+    `
   }
 ];
 

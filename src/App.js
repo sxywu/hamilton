@@ -159,12 +159,14 @@ var App = React.createClass({
 
   onScroll() {
     var scrollTop = document.body.scrollTop;
-    var section = _.find(sectionPositions, section => {
-      return scrollTop > section.top;
+    var section;
+    _.some(sectionPositions, s => {
+      if (scrollTop <= s.top) return true;
+      section = s;
     });
-    var currentTop = section ? section.top + (window.innerHeight * .2) : 0;
+    var currentTop = section ? section.top + (window.innerHeight * .35) : 0;
     if (currentTop === vizTop) return;
-    
+
     vizTop = currentTop;
     vizAlign = section ? section.vizAlign : 'center';
     this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
@@ -189,11 +191,10 @@ var App = React.createClass({
       backgroundColor: 'rgba(255, 255, 255, 0.75)',
     };
     var sectionStyle = {
-      width: sectionWidth,
-      height: '100%',
+      width: 900,
       position: 'absolute',
       top: width,
-      left: vizWidth,
+      pointerEvents: 'none',
     };
 
 
@@ -231,7 +232,7 @@ var App = React.createClass({
     // </div>
     //
     var sections = _.map(sectionsData, section => {
-      return (<Section {...section} />);
+      return (<Section {...section} width={sectionWidth} left={vizWidth} />);
     });
 
     return (
