@@ -5,6 +5,9 @@ import * as d3 from 'd3';
 import Visualization from './Visualization';
 import Characters from './Characters';
 import Themes from './Themes';
+import Section from './Section';
+
+import sectionsData from './data/sections';
 import ProcessGraph from './ProcessGraph';
 
 import charList from './data/char_list.json';
@@ -128,7 +131,7 @@ var App = React.createClass({
     // var {linePositions, songPositions, diamondPositions} =
     //   ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds, songs, width);
     var {linePositions, songPositions, diamondPositions} =
-      ProcessGraph.positionLinesAsImage(filteredLines2, width, vizWidth, vizAlign);
+      ProcessGraph.positionLinesAsImage(filteredLines2, width, vizAlign);
 
     this.setState({
       update: true,
@@ -144,28 +147,41 @@ var App = React.createClass({
       width,
       height: 30000,
       margin: 'auto',
-    }
-    var sideStyle = {
+    };
+    var headerStyle = {
       width,
-      height: filterHeight,
-      verticalAlign: 'top',
+      top: 0,
+      textAlign: 'center',
+      marginTop: '25vh',
+      marginBottom: '40vh',
+      position: 'absolute',
+      padding: '40px 0',
+      backgroundColor: 'rgba(255, 255, 255, 0.75)',
     };
-    var characterStyle = {
-      width: characterWidth,
-      height: filterHeight,
+    var sectionStyle = {
+      width: '100%',
+      height: '100%',
     };
-    var themeStyle = {
-      width: themeWidth,
-      height: filterHeight,
-      display: 'inline-block',
-    };
-    var resetFilter = this.state.selectedCharacters.length ||
-      this.state.selectedConversation.length || this.state.selectedThemes.length;
-    var resetFilterStyle = {
-      color: resetFilter ? '#000' : this.state.gray,
-      cursor: resetFilter ? 'pointer' : 'default',
-    };
-
+    // var sideStyle = {
+    //   width,
+    //   height: filterHeight,
+    //   verticalAlign: 'top',
+    // };
+    // var characterStyle = {
+    //   width: characterWidth,
+    //   height: filterHeight,
+    // };
+    // var themeStyle = {
+    //   width: themeWidth,
+    //   height: filterHeight,
+    //   display: 'inline-block',
+    // };
+    // var resetFilter = this.state.selectedCharacters.length ||
+    //   this.state.selectedConversation.length || this.state.selectedThemes.length;
+    // var resetFilterStyle = {
+    //   color: resetFilter ? '#000' : this.state.gray,
+    //   cursor: resetFilter ? 'pointer' : 'default',
+    // };
 
     // <div style={{textAlign: 'center'}}>
     //   <h1>Filters</h1>
@@ -179,9 +195,22 @@ var App = React.createClass({
     //     onSelectTheme={this.filterByThemes} />
     // </div>
     //
+    var sections = _.map(sectionsData, section => {
+      return (<Section {...section} />);
+    });
+
     return (
       <div className="App" style={style}>
         <Visualization {...this.state} />
+        <div className='header' style={headerStyle}>
+          <h1 style={{fontSize: 36, lineHeight: '48px'}}>
+            An Interactive Visualization of<br />
+            Every Line in Hamilton
+          </h1>
+        </div>
+        <div className='sections' style={sectionStyle}>
+          {sections}
+        </div>
       </div>
     );
   }

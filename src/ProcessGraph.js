@@ -463,7 +463,7 @@ var PositionGraph = {
     return {linePositions, songPositions, diamondPositions};
   },
 
-  positionLinesAsImage(lines, width, vizWidth, vizAlign) {
+  positionLinesAsImage(lines, width, vizAlign) {
     var dotSize = 10;
     var linePositions = [];
 
@@ -472,6 +472,7 @@ var PositionGraph = {
     imageScale.domain([minLength, maxLength]);
 
     var left = 0;
+    var vizWidth = dotSize * 71;
     if (vizAlign === 'center') {
       left = (width - vizWidth) / 2;
     } else if (vizAlign === 'right') {
