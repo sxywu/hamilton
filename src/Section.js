@@ -28,10 +28,9 @@ var Section = React.createClass({
   },
 
   render() {
-    var style = {
+    var style = this.props.style || {
       width: this.props.width,
-      marginTop: '40vh',
-      marginBottom: '25vh',
+      marginTop: '80vh',
       fontSize: 16,
       lineHeight: 1.6,
       paddingLeft: 20,

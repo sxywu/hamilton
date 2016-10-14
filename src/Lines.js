@@ -6,8 +6,7 @@ var duration = 500;
 var simulation = d3.forceSimulation()
   .force('collide', d3.forceCollide().radius(d => d.radius))
   .force('x', d3.forceX().x(d => d.focusX))
-  .force('y', d3.forceY().y(d => d.focusY))
-  .alphaMin(.5);
+  .force('y', d3.forceY().y(d => d.focusY));
 
 var Lines = React.createClass({
   shouldComponentUpdate(nextProps) {
@@ -21,6 +20,8 @@ var Lines = React.createClass({
     this.updateRender();
 
     simulation.nodes(this.props.linePositions)
+      .force("charge", this.props.vizType === 'random' ? d3.forceManyBody() : null)
+      .alphaMin(this.props.vizType === 'random' ? 0 : 0.5)
       .on('tick', this.forceTick.bind(this))
       .on('end', this.forceEnd.bind(this));
   },
@@ -29,6 +30,8 @@ var Lines = React.createClass({
     this.updateRender();
 
     simulation.nodes(this.props.linePositions)
+      .force("charge", this.props.vizType === 'random' ? d3.forceManyBody() : null)
+      .alphaMin(this.props.vizType === 'random' ? 0 : 0.5)
       .alpha(1).restart();
   },
 

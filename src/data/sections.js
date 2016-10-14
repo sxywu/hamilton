@@ -1,6 +1,25 @@
 
 var sections = [
   {
+    id: 'header',
+    vizAlign: 'center',
+    style: {
+      width: '100%',
+      top: 0,
+      textAlign: 'center',
+      marginTop: '20vh',
+      marginBottom: '75vh',
+      padding: '40px 0',
+      backgroundColor: 'rgba(255, 255, 255, 0.75)',
+    },
+    text: `
+<h1 style='font-size: 36px; line-height: 1.6'>
+  An Interactive Visualization of<br />
+  Every Line in Hamilton
+</h1>
+    `
+  },
+  {
     id: 'intro1',
     vizAlign: 'left',
     text: `

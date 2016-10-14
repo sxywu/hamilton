@@ -14,7 +14,7 @@ import charList from './data/char_list.json';
 
 var width = 1200;
 var vizWidth = 800;
-var vizTop = 0;
+var vizTop = null;
 var vizAlign = 'center';
 var sectionWidth = width - vizWidth;
 var characterWidth = 620;
@@ -51,6 +51,8 @@ var App = React.createClass({
       selectedThemes: [],
       images,
       gray: '#eee',
+      fontColor: '#333',
+      vizType: 'image',
     };
   },
 
@@ -60,9 +62,8 @@ var App = React.createClass({
     var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines, characterWidth, filterHeight);
 
     var {diamonds, groupedThemes} = ProcessGraph.processThemes(lines);
-    this.filterAndPosition(this.state.selectedCharacters,
-      this.state.selectedConversation, this.state.selectedThemes,
-      characterNodes, characterLinks, lines, songs, diamonds, groupedThemes);
+
+    this.setState({lines, songs, characterNodes, characterLinks, diamonds, groupedThemes});
   },
 
   filterByCharacter(character) {
@@ -125,13 +126,10 @@ var App = React.createClass({
       ProcessGraph.updateFilterOpacities(filteredLines2, filteredDiamonds, songs,
         selectedCharacters, selectedConversation, selectedThemes,
         characters, conversations, themes);
-    // var {linePositions, songPositions, diamondPositions} =
-    //   ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds, songs, width);
     var {linePositions, songPositions, diamondPositions} =
-      ProcessGraph.positionLinesAsImage(filteredLines2, width, vizTop, vizAlign);
+      ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds, songs, width);
 
     this.setState({
-      update: true,
       selectedCharacters, selectedConversation, selectedThemes,
       linePositions, songPositions, diamondPositions,
       characters, conversations, characterNodes, characterLinks,
@@ -141,7 +139,8 @@ var App = React.createClass({
 
   componentDidMount() {
     this.updateSectionPositions();
-    window.addEventListener('scroll', _.debounce(this.onScroll.bind(this), 200));
+    this.onScroll();
+    window.addEventListener('scroll', _.debounce(this.onScroll.bind(this), 100));
   },
 
   componentDidUpdate() {
@@ -151,27 +150,57 @@ var App = React.createClass({
   updateSectionPositions() {
     var bodyRect = document.body.getBoundingClientRect();
     sectionPositions = _.map(sectionsData, section => {
-      var top = d3.select('.section#' + section.id).node().getBoundingClientRect();
-      top = top.top - bodyRect.top;
-      return Object.assign(section, {top});
+      var sectionRect = d3.select('.section#' + section.id).node().getBoundingClientRect();
+
+      if (section.id === 'header') {
+        return Object.assign(section, {
+          top: -window.innerHeight * 0.25,
+          bottom: sectionRect.height + window.innerHeight * 0.25,
+        });
+      }
+
+      var top = (sectionRect.top - bodyRect.top) - window.innerHeight * 0.35;
+      var bottom = top + window.innerHeight * 0.35 + sectionRect.height * 0.85;
+      return Object.assign(section, {top, bottom});
     });
   },
 
   onScroll() {
     var scrollTop = document.body.scrollTop;
-    var section;
-    _.some(sectionPositions, s => {
-      if (scrollTop <= s.top) return true;
-      section = s;
+    var prevSection;
+    var vizType = 'image';
+    var currentTop = vizTop;
+    var currentAlign = vizAlign;
+    _.some(sectionPositions, section => {
+      // if it's within section's top and bottom return that section
+      if (section.top <= scrollTop && scrollTop < section.bottom) {
+        currentTop = section.top + window.innerHeight * 0.25;
+        currentAlign = section.vizAlign;
+        return true;
+      }
+      // if scrollTop is between previous section's bottom
+      // and this section's top, then return
+      if (prevSection && prevSection.bottom <= scrollTop && scrollTop < section.top) {
+        currentTop = prevSection.bottom;
+        vizType = 'random';
+        return true;
+      }
+      prevSection = section;
     });
-    var currentTop = section ? section.top + (window.innerHeight * .35) : 0;
-    if (currentTop === vizTop) return;
+
+    if (vizTop && currentTop === vizTop) return;
 
     vizTop = currentTop;
-    vizAlign = section ? section.vizAlign : 'center';
-    this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
-      this.state.selectedThemes, this.state.characters, this.state.conversations,
-      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
+    vizAlign = currentAlign;
+
+    var linePositions;
+    if (vizType === 'image') {
+      linePositions = ProcessGraph.positionLinesAsImage(this.state.lines, width, vizTop, vizAlign);
+    } else if (vizType === 'random') {
+      linePositions = ProcessGraph.positionLinesRandomly(
+        this.state.lines, width, scrollTop - window.innerHeight, scrollTop + 2 * window.innerHeight);
+    }
+    this.setState({linePositions, vizType});
   },
 
   render() {
@@ -179,21 +208,12 @@ var App = React.createClass({
       width,
       height: 30000,
       margin: 'auto',
-    };
-    var headerStyle = {
-      width,
-      top: 0,
-      textAlign: 'center',
-      marginTop: '25vh',
-      marginBottom: '40vh',
-      position: 'absolute',
-      padding: '40px 0',
-      backgroundColor: 'rgba(255, 255, 255, 0.75)',
+      color: this.state.fontColor,
     };
     var sectionStyle = {
-      width: 900,
+      top: 0,
+      width,
       position: 'absolute',
-      top: width,
       pointerEvents: 'none',
     };
 
@@ -232,18 +252,13 @@ var App = React.createClass({
     // </div>
     //
     var sections = _.map(sectionsData, section => {
-      return (<Section {...section} width={sectionWidth} left={vizWidth} />);
+      return (<Section {...section} fontColor={this.state.fontColor}
+        width={sectionWidth} left={vizWidth} />);
     });
 
     return (
       <div ref='app' style={style}>
         <Visualization {...this.state} />
-        <div className='header' style={headerStyle}>
-          <h1 style={{fontSize: 36, lineHeight: '48px'}}>
-            An Interactive Visualization of<br />
-            Every Line in Hamilton
-          </h1>
-        </div>
         <div className='sections' style={sectionStyle}>
           {sections}
         </div>

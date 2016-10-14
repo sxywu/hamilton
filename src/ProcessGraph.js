@@ -12,7 +12,7 @@ import lineImagePositions from './data/line_image_positions.json';
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([3, 8]);
 var themeScale = d3.scaleLinear().range([10, 20]);
-var imageScale = d3.scaleLinear().range([6, 10]);
+var radiusScale = d3.scaleLinear();
 
 var PositionGraph = {
   processLinesSongs(width) {
@@ -469,7 +469,7 @@ var PositionGraph = {
 
     var minLength = _.minBy(lines, 'lineLength').lineLength;
     var maxLength = _.maxBy(lines, 'lineLength').lineLength;
-    imageScale.domain([minLength, maxLength]);
+    radiusScale.domain([minLength, maxLength]).range([6, 10]);
 
     var left = 0;
     var vizWidth = dotSize * 71;
@@ -484,7 +484,7 @@ var PositionGraph = {
       x = (x - 0.5) * dotSize + left;
       y = (y - 0.5) * dotSize + vizTop;
       var line = lines[i];
-      var radius = Math.floor(imageScale(line.lineLength));
+      var radius = Math.floor(radiusScale(line.lineLength));
 
       linePositions.push(Object.assign(line, {
         focusX: x,
@@ -495,7 +495,29 @@ var PositionGraph = {
       }));
     });
 
-    return {linePositions, songPositions: [], diamondPositions: []};
+    return linePositions;
+  },
+
+  positionLinesRandomly(lines, width, top, bottom) {
+    var minLength = _.minBy(lines, 'lineLength').lineLength;
+    var maxLength = _.maxBy(lines, 'lineLength').lineLength;
+    radiusScale.domain([minLength, maxLength]).range([6, 12]);
+
+    var linePositions = _.map(lines, line => {
+      var x = _.random(0, width);
+      var y = _.random(top, bottom);
+      var radius = Math.floor(radiusScale(line.lineLength));
+
+      return Object.assign(line, {
+        focusX: x,
+        focusY: y,
+        radius: radius / 2,
+        fullRadius: radius / 2,
+        length: radius,
+      });
+    });
+
+    return linePositions;
   },
 }
 
