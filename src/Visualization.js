@@ -32,11 +32,15 @@ var Visualization = React.createClass({
   },
 
   render() {
+    var diamonds = this.props.diamondPositions.length && (
+      <Diamonds {...this.props} hover={this.props.onHoverTheme} />);
+    var songs = this.props.songPositions.length && (<Songs {...this.props} />);
+
     return (
       <svg ref='svg' width={this.props.width} height={this.props.height}>
         <Lines {...this.props} hover={this.props.onHoverLine} />
-        <Diamonds {...this.props} hover={this.props.onHoverTheme} />
-        <Songs {...this.props} />
+        {diamonds}
+        {songs}
       </svg>
     );
   }
