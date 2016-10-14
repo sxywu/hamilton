@@ -14,7 +14,7 @@ import charList from './data/char_list.json';
 
 var width = 1200;
 var vizWidth = 800;
-var sectionWidth = width - sectionWidth;
+var sectionWidth = width - vizWidth;
 var characterWidth = 620;
 var themeWidth = width - characterWidth;
 var filterHeight = 220;
@@ -159,8 +159,11 @@ var App = React.createClass({
       backgroundColor: 'rgba(255, 255, 255, 0.75)',
     };
     var sectionStyle = {
-      width: '100%',
+      width: sectionWidth,
       height: '100%',
+      position: 'absolute',
+      top: '80vh',
+      left: vizWidth,
     };
     // var sideStyle = {
     //   width,
