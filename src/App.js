@@ -9,7 +9,9 @@ import ProcessGraph from './ProcessGraph';
 
 import charList from './data/char_list.json';
 
-var width = 1000;
+var width = 1200;
+var vizWidth = 800;
+var sectionWidth = width - sectionWidth;
 var characterWidth = 620;
 var themeWidth = width - characterWidth;
 var filterHeight = 220;
@@ -41,6 +43,7 @@ var App = React.createClass({
       selectedCharacters: [],
       selectedConversation: [],
       selectedThemes: [],
+      vizAlign: 'center',
       images,
       gray: '#eee',
     };
@@ -54,7 +57,8 @@ var App = React.createClass({
     var {diamonds, groupedThemes} = ProcessGraph.processThemes(lines);
     this.filterAndPosition(this.state.selectedCharacters,
       this.state.selectedConversation, this.state.selectedThemes,
-      characterNodes, characterLinks, lines, songs, diamonds, groupedThemes);
+      characterNodes, characterLinks, lines, songs, diamonds, groupedThemes,
+      this.state.vizAlign);
   },
 
   filterByCharacter(character) {
@@ -68,7 +72,8 @@ var App = React.createClass({
 
     this.filterAndPosition(selectedCharacters, this.state.selectedConversation,
       this.state.selectedThemes, this.state.characters, this.state.conversations,
-      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
+      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes,
+      this.state.vizAlign);
   },
 
   filterByConversation(id) {
@@ -81,7 +86,8 @@ var App = React.createClass({
 
     this.filterAndPosition(this.state.selectedCharacters, selectedConversation,
       this.state.selectedThemes, this.state.characters, this.state.conversations,
-      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
+      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes,
+      this.state.vizAlign);
   },
 
   filterByThemes(id) {
@@ -94,7 +100,8 @@ var App = React.createClass({
 
     this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
       selectedThemes, this.state.characters, this.state.conversations,
-      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
+      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes,
+      this.state.vizAlign);
   },
 
   resetFilters() {
@@ -104,11 +111,12 @@ var App = React.createClass({
 
     this.filterAndPosition(selectedCharacters, selectedConversation,
       selectedThemes, this.state.characters, this.state.conversations,
-      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
+      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes,
+      this.state.vizAlign);
   },
 
   filterAndPosition(selectedCharacters, selectedConversation, selectedThemes,
-    characters, conversations, lines, songs, diamonds, themes) {
+    characters, conversations, lines, songs, diamonds, themes, vizAlign) {
     var {filteredLines} = ProcessGraph.filterLinesBySelectedCharacter(
       selectedCharacters, selectedConversation, lines);
     var {filteredLines2} = ProcessGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
@@ -120,23 +128,23 @@ var App = React.createClass({
     // var {linePositions, songPositions, diamondPositions} =
     //   ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds, songs, width);
     var {linePositions, songPositions, diamondPositions} =
-      ProcessGraph.positionLinesAsImage(filteredLines2);
+      ProcessGraph.positionLinesAsImage(filteredLines2, width, vizWidth, vizAlign);
 
     this.setState({
       update: true,
       selectedCharacters, selectedConversation, selectedThemes,
       linePositions, songPositions, diamondPositions,
       characters, conversations, characterNodes, characterLinks,
-      lines, songs, diamonds, groupedThemes,
+      lines, songs, diamonds, groupedThemes, vizAlign,
     });
   },
 
   render() {
     var style = {
       width,
+      height: 30000,
       margin: 'auto',
     }
-    var vizHeight = 2400;
     var sideStyle = {
       width,
       height: filterHeight,
@@ -151,12 +159,6 @@ var App = React.createClass({
       height: filterHeight,
       display: 'inline-block',
     };
-    var vizStyle = {
-      width,
-      height: vizHeight,
-      position: 'relative',
-      display: 'inline-block',
-    };
     var resetFilter = this.state.selectedCharacters.length ||
       this.state.selectedConversation.length || this.state.selectedThemes.length;
     var resetFilterStyle = {
@@ -164,22 +166,22 @@ var App = React.createClass({
       cursor: resetFilter ? 'pointer' : 'default',
     };
 
+
+    // <div style={{textAlign: 'center'}}>
+    //   <h1>Filters</h1>
+    //   <h3 style={resetFilterStyle} onClick={this.resetFilters}>(reset filters)</h3>
+    // </div>
+    // <div style={sideStyle}>
+    //   <Characters {...this.state} {...this.props} {...characterStyle}
+    //     onSelectCharacter={this.filterByCharacter}
+    //     onSelectConversation={this.filterByConversation} />
+    //   <Themes {...this.state} {...this.props} {...themeStyle}
+    //     onSelectTheme={this.filterByThemes} />
+    // </div>
+    //
     return (
       <div className="App" style={style}>
-        <div style={{textAlign: 'center'}}>
-          <h1>Filters</h1>
-          <h3 style={resetFilterStyle} onClick={this.resetFilters}>(reset filters)</h3>
-        </div>
-        <div style={sideStyle}>
-          <Characters {...this.state} {...this.props} {...characterStyle}
-            onSelectCharacter={this.filterByCharacter}
-            onSelectConversation={this.filterByConversation} />
-          <Themes {...this.state} {...this.props} {...themeStyle}
-            onSelectTheme={this.filterByThemes} />
-        </div>
-        <div style={vizStyle}>
-          <Visualization {...this.state} {...vizStyle} />
-        </div>
+        <Visualization {...this.state} />
       </div>
     );
   }

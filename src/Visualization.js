@@ -64,13 +64,18 @@ var Visualization = React.createClass({
   },
 
   render() {
+    var style = {
+      width: '100%',
+      height: '100%',
+      position: 'absolute',
+    };
     var diamonds = this.props.diamondPositions.length && (
       <Diamonds {...this.props} hover={this.hoverTheme} />);
     var songs = this.props.songPositions.length && (<Songs {...this.props} />);
 
     return (
-      <div>
-        <svg ref='svg' width={this.props.width} height={this.props.height}>
+      <div style={style}>
+        <svg ref='svg' style={style}>
           <Lines {...this.props} hover={this.hoverLine} />
           {diamonds}
           {songs}

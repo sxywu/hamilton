@@ -463,7 +463,7 @@ var PositionGraph = {
     return {linePositions, songPositions, diamondPositions};
   },
 
-  positionLinesAsImage(lines) {
+  positionLinesAsImage(lines, width, vizWidth, vizAlign) {
     var dotSize = 10;
     var linePositions = [];
 
@@ -471,9 +471,16 @@ var PositionGraph = {
     var maxLength = _.maxBy(lines, 'lineLength').lineLength;
     imageScale.domain([minLength, maxLength]);
 
+    var left = 0;
+    if (vizAlign === 'center') {
+      left = (width - vizWidth) / 2;
+    } else if (vizAlign === 'right') {
+      left = width - vizWidth;
+    }
+
     _.each(lineImagePositions, (positions, i) => {
       var {x, y} = positions;
-      x = (x - 0.5) * dotSize;
+      x = (x - 0.5) * dotSize + left;
       y = (y - 0.5) * dotSize;
       var line = lines[i];
       var radius = Math.floor(imageScale(line.lineLength));
