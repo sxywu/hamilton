@@ -1,6 +1,7 @@
 
 var sections = [
   {
+    id: 'intro1',
     vizAlign: 'left',
     text: `
 I first heard Hamilton while visiting my friend in St. Louis for her birthday.  For that entire weekend, I heard the same songs from the soundtrack on repeat.  She kept humming the same lines over and over:

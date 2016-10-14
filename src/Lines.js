@@ -2,10 +2,12 @@ import React from 'react';
 import * as d3 from 'd3';
 import './fisheye';
 
-var duration = 1000;
-var fisheye = d3.fisheye.circular()
-  .radius(50)
-  .distortion(2);
+var duration = 500;
+var simulation = d3.forceSimulation()
+  .force('collide', d3.forceCollide().radius(d => d.radius))
+  .force('x', d3.forceX().x(d => d.focusX))
+  .force('y', d3.forceY().y(d => d.focusY))
+  .alphaMin(.5);
 
 var Lines = React.createClass({
   shouldComponentUpdate(nextProps) {
@@ -17,10 +19,17 @@ var Lines = React.createClass({
     this.container = d3.select(this.refs.circles)
       .style("filter", "url(#gooey)");
     this.updateRender();
+
+    simulation.nodes(this.props.linePositions)
+      .on('tick', this.forceTick.bind(this))
+      .on('end', this.forceEnd.bind(this));
   },
 
   componentDidUpdate() {
     this.updateRender();
+
+    simulation.nodes(this.props.linePositions)
+      .alpha(1).restart();
   },
 
   updateRender() {
@@ -33,12 +42,9 @@ var Lines = React.createClass({
       .on('mouseenter', this.mouseEnter)
       .on('mouseleave', this.mouseLeave)
       .attr('d', (d) => this.drawPath(d))
-      .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')')
       .merge(this.circles)
       .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
-      .transition().duration(duration)
-      .attr('d', (d) => this.drawPath(d, true))
-      .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
+      .attr('d', (d) => this.drawPath(d, true));
   },
 
   mouseEnter(line) {
@@ -62,12 +68,18 @@ var Lines = React.createClass({
     return result;
   },
 
-  applyFisheye() {
-    fisheye.focus(d3.mouse(this.refs.circles));
-    this.circles
+  forceTick() {
+    this.circles.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
+  },
+
+  forceEnd() {
+    this.circles.transition()
+      .duration(duration)
       .attr('transform', (d) => {
-        d.fisheye = fisheye(d)
-        return 'translate(' + [d.fisheye.x, d.fisheye.y] + ')scale(' + d.fisheye.z + ')';
+        // set the x and y to its focus (where it should be)
+        d.x = d.focusX;
+        d.y = d.focusY;
+        return 'translate(' + [d.x, d.y] + ')';
       });
   },
 

@@ -431,8 +431,8 @@ var PositionGraph = {
       lastLineId = line.lineId;
 
     	return Object.assign(line, {
-        x: focusX,
-        y: focusY,
+        focusX,
+        focusY,
         trueY: y,
         radius,
         fullRadius: lineSize,
@@ -463,7 +463,7 @@ var PositionGraph = {
     return {linePositions, songPositions, diamondPositions};
   },
 
-  positionLinesAsImage(lines, width, vizAlign) {
+  positionLinesAsImage(lines, width, vizTop, vizAlign) {
     var dotSize = 10;
     var linePositions = [];
 
@@ -482,13 +482,13 @@ var PositionGraph = {
     _.each(lineImagePositions, (positions, i) => {
       var {x, y} = positions;
       x = (x - 0.5) * dotSize + left;
-      y = (y - 0.5) * dotSize;
+      y = (y - 0.5) * dotSize + vizTop;
       var line = lines[i];
       var radius = Math.floor(imageScale(line.lineLength));
 
       linePositions.push(Object.assign(line, {
-        x,
-        y,
+        focusX: x,
+        focusY: y,
         radius: radius / 2,
         fullRadius: radius / 2,
         length: radius,
