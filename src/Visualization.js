@@ -67,7 +67,7 @@ var Visualization = React.createClass({
     var style = {
       width: '100%',
       height: '100%',
-      position: 'absolute',
+      position: 'relative',
     };
     var diamonds = this.props.diamondPositions.length && (
       <Diamonds {...this.props} hover={this.hoverTheme} />);
