@@ -1,10 +1,29 @@
 import React from 'react';
 import _ from 'lodash';
+import * as d3 from 'd3';
+
 import Diamonds from './Diamonds';
+import LineSummary from './LineSummary';
 
 var Characters = React.createClass({
+  getInitialState() {
+    return {
+      update: true,
+      sideHovered: null,
+    };
+  },
+
   shouldComponentUpdate(nextProps) {
     return nextProps.update;
+  },
+
+  hoverSideTheme(hoveredTheme) {
+    var sideHovered = hoveredTheme && {
+      lines: hoveredTheme.lines,
+      x: d3.event.x,
+      y: d3.event.y,
+    }
+    this.setState({sideHovered, update: false});
   },
 
   render() {
@@ -27,7 +46,7 @@ var Characters = React.createClass({
     var themes = _.map(this.props.groupedThemes, theme => {
       var props = {update: true, diamondPositions: theme.diamonds};
       var diamonds = (<Diamonds {...props} {...diamondStyle}
-        hover={this.props.onHoverTheme} click={this.props.onSelectTheme} />);
+        hover={this.hoverSideTheme} click={this.props.onSelectTheme} />);
 
       return (
         <h3 style={groupStyle}>
@@ -43,6 +62,7 @@ var Characters = React.createClass({
     return (
       <div style={style}>
         {themes}
+        <LineSummary {...this.state.sideHovered} />
       </div>
     );
   }

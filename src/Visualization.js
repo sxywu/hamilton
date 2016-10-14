@@ -4,16 +4,46 @@ import * as d3 from "d3";
 import Lines from './Lines';
 import Diamonds from './Diamonds';
 import Songs from './Songs';
+import LineSummary from './LineSummary';
 
 var Visualization = React.createClass({
+  getInitialState() {
+    return {
+      hovered: null,
+      update: true,
+    };
+  },
+
   componentWillReceiveProps(nextProps) {
-    // if getting update from parent, make sure Lines and Characters get updated
-    return nextProps.update;
+    this.setState({update: nextProps.update});
   },
 
   componentDidMount() {
     this.svg = d3.select(this.refs.svg);
     this.defineFilters();
+  },
+
+  hoverLine(hoveredLine) {
+    // TODO: fix x-position to not be hardcoded
+    var hovered = hoveredLine && {
+      title: hoveredLine.characterName,
+      lines: hoveredLine.data[2],
+      x: hoveredLine.x,
+      y: hoveredLine.y,
+      color: hoveredLine.fill,
+      image: this.props.images[hoveredLine.characterId],
+    };
+    this.setState({hovered, update: false});
+  },
+
+  hoverTheme(hoveredTheme) {
+    var hovered = hoveredTheme && {
+      title: hoveredTheme.themeType,
+      lines: hoveredTheme.lines,
+      x: hoveredTheme.positions[0].x,
+      y: hoveredTheme.positions[0].y,
+    }
+    this.setState({hovered, update: false});
   },
 
   defineFilters() {
@@ -33,15 +63,18 @@ var Visualization = React.createClass({
 
   render() {
     var diamonds = this.props.diamondPositions.length && (
-      <Diamonds {...this.props} hover={this.props.onHoverTheme} />);
+      <Diamonds {...this.props} hover={this.hoverTheme} />);
     var songs = this.props.songPositions.length && (<Songs {...this.props} />);
 
     return (
-      <svg ref='svg' width={this.props.width} height={this.props.height}>
-        <Lines {...this.props} hover={this.props.onHoverLine} />
-        {diamonds}
-        {songs}
-      </svg>
+      <div>
+        <svg ref='svg' width={this.props.width} height={this.props.height}>
+          <Lines {...this.props} hover={this.hoverLine} />
+          {diamonds}
+          {songs}
+        </svg>
+        <LineSummary {...this.state.hovered} />
+      </div>
     );
   }
 });
