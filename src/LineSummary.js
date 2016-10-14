@@ -1,11 +1,19 @@
 import React from 'react';
 import _ from 'lodash';
-// import * as d3 from "d3";
+import * as d3 from "d3";
 
 var LineSummary = React.createClass({
 
+  mouseEnter() {
+    this.props.hover(this.props.data);
+  },
+
+  mouseLeave() {
+    this.props.hover(null);
+  },
+
   render() {
-    if (_.isEmpty(this.props)) {
+    if (_.isEmpty(this.props.data)) {
       return (<div></div>);
     }
 
@@ -14,17 +22,24 @@ var LineSummary = React.createClass({
     var headerHeight = 40;
     var imageSize = 50;
     var gray = '#aaa';
+    var width = 300;
     var style = {
       position: 'absolute',
-      top: this.props.y + margin,
-      left: this.props.x + margin,
+      left: this.props.x - (width / 2),
+      top: this.props.y - this.props.hoverHeight,
+    };
+    var hoverStyle = {
+      width: this.props.hoverWidth,
+      height: margin,
+      margin: 'auto',
+    };
+    var contentStyle = {
       backgroundColor: '#fff',
       border: '1px solid ' + gray,
       borderRadius,
       boxShadow: '0 0 5px ' + gray,
       textAlign: 'center',
-      minWidth: 300,
-      maxWidth: 600,
+      width,
     };
     var headerStyle = {
       backgroundColor: this.props.color,
@@ -45,7 +60,7 @@ var LineSummary = React.createClass({
       lineHeight: '22px',
       padding: '0 10px 10px 10px',
       textAlign: 'left',
-      maxHeight: 300,
+      maxHeight: 200,
       overflowY: 'scroll',
     };
 
@@ -58,13 +73,16 @@ var LineSummary = React.createClass({
     });
 
     return (
-      <div style={style}>
-        <div style={headerStyle}>
-          <img style={imageStyle} src={this.props.image} role="presentation" />
-        </div>
-        <h3 style={titleStyle}>{this.props.title}</h3>
-        <div style={linesStyle}>
-          {lines}
+      <div ref='summary' style={style}>
+        <div style={hoverStyle} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} />
+        <div style={contentStyle} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
+          <div style={headerStyle}>
+            <img style={imageStyle} src={this.props.image} role="presentation" />
+          </div>
+          <h3 style={titleStyle}>{this.props.title}</h3>
+          <div style={linesStyle}>
+            {lines}
+          </div>
         </div>
       </div>
     );

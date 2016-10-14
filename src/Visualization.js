@@ -24,7 +24,6 @@ var Visualization = React.createClass({
   },
 
   hoverLine(hoveredLine) {
-    // TODO: fix x-position to not be hardcoded
     var hovered = hoveredLine && {
       title: hoveredLine.characterName,
       lines: hoveredLine.data[2],
@@ -32,6 +31,9 @@ var Visualization = React.createClass({
       y: hoveredLine.y,
       color: hoveredLine.fill,
       image: this.props.images[hoveredLine.characterId],
+      hoverWidth: hoveredLine.length,
+      hoverHeight: hoveredLine.radius,
+      data: hoveredLine,
     };
     this.setState({hovered, update: false});
   },
@@ -73,7 +75,7 @@ var Visualization = React.createClass({
           {diamonds}
           {songs}
         </svg>
-        <LineSummary {...this.state.hovered} />
+        <LineSummary {...this.state.hovered} hover={this.hoverLine} />
       </div>
     );
   }

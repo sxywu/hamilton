@@ -45,10 +45,6 @@ var Lines = React.createClass({
     this.props.hover(line);
   },
 
-  mouseLeave(line) {
-    // this.props.hover(null);
-  },
-
   drawPath(d, showLength) {
     var x1 = d.radius - d.fullRadius;
     var y1 = -d.radius;
