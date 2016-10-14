@@ -15,7 +15,7 @@ var Visualization = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    this.setState({update: nextProps.update});
+    this.setState({update: true});
   },
 
   componentDidMount() {
@@ -76,7 +76,7 @@ var Visualization = React.createClass({
     return (
       <div style={style}>
         <svg ref='svg' style={style}>
-          <Lines {...this.props} hover={this.hoverLine} />
+          <Lines {...this.props} {...this.state} hover={this.hoverLine} />
           {diamonds}
           {songs}
         </svg>
