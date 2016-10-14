@@ -33,12 +33,12 @@ var Lines = React.createClass({
       .on('mouseenter', this.mouseEnter)
       .on('mouseleave', this.mouseLeave)
       .attr('d', (d) => this.drawPath(d))
-      .attr('transform', (d) => 'translate(' + [d.focusX, d.focusY] + ')')
+      .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')')
       .merge(this.circles)
       .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
       .transition().duration(duration)
       .attr('d', (d) => this.drawPath(d, true))
-      .attr('transform', (d) => 'translate(' + [d.focusX, d.focusY] + ')');
+      .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
   },
 
   mouseEnter(line) {

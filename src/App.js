@@ -56,7 +56,6 @@ var App = React.createClass({
     var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines, characterWidth, filterHeight);
 
     var {diamonds, groupedThemes} = ProcessGraph.processThemes(lines);
-
     this.filterAndPosition(this.state.selectedCharacters,
       this.state.selectedConversation, this.state.selectedThemes,
       characterNodes, characterLinks, lines, songs, diamonds, groupedThemes);
@@ -122,8 +121,10 @@ var App = React.createClass({
       ProcessGraph.updateFilterOpacities(filteredLines2, filteredDiamonds, songs,
         selectedCharacters, selectedConversation, selectedThemes,
         characters, conversations, themes);
+    // var {linePositions, songPositions, diamondPositions} =
+    //   ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds, songs, width);
     var {linePositions, songPositions, diamondPositions} =
-      ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds, songs, width);
+      ProcessGraph.positionLinesAsImage(filteredLines2);
 
     this.setState({
       update: true,
@@ -139,8 +140,8 @@ var App = React.createClass({
     var hovered = hoveredLine && {
       title: hoveredLine.characterName,
       lines: hoveredLine.data[2],
-      x: hoveredLine.focusX,
-      y: hoveredLine.focusY,
+      x: hoveredLine.x,
+      y: hoveredLine.y,
       color: hoveredLine.fill,
       image: this.state.images[hoveredLine.characterId],
     };

@@ -7,10 +7,12 @@ import rawLines from './data/lines.json';
 import themeList from './data/theme_list.json';
 import rawCharacters from './data/characters.json';
 import rawThemes from './data/themes.json';
+import lineImagePositions from './data/line_image_positions.json';
 
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([3, 8]);
 var themeScale = d3.scaleLinear().range([10, 20]);
+var imageScale = d3.scaleLinear().range([6, 10]);
 
 var PositionGraph = {
   processLinesSongs(width) {
@@ -31,6 +33,7 @@ var PositionGraph = {
             songName: songList[songId],
             numSingers: line[1][0].length,
             singerIndex: i,
+            lineLength: line[2].length,
             conversing: null,
             themes: [],
             fill: charList[character][4],
@@ -39,7 +42,6 @@ var PositionGraph = {
           };
         });
       }).flatten().value();
-
     var i = 0;
     var radius = 6;
     var songWidth = (3 * radius) * _.size(songList);
@@ -429,8 +431,8 @@ var PositionGraph = {
       lastLineId = line.lineId;
 
     	return Object.assign(line, {
-        focusX,
-        focusY,
+        x: focusX,
+        y: focusY,
         trueY: y,
         radius,
         fullRadius: lineSize,
@@ -459,6 +461,33 @@ var PositionGraph = {
     });
 
     return {linePositions, songPositions, diamondPositions};
+  },
+
+  positionLinesAsImage(lines) {
+    var lineSize = 5;
+    var imageWidth = 71;
+    var dotSize = 10;
+    var linePositions = [];
+
+    var minLength = _.minBy(lines, 'lineLength').lineLength;
+    var maxLength = _.maxBy(lines, 'lineLength').lineLength;
+    imageScale.domain([minLength, maxLength]);
+
+    _.each(lineImagePositions, (positions, i) => {
+      var {x, y} = positions;
+      var line = lines[i];
+      var radius = Math.floor(imageScale(line.lineLength));
+
+      linePositions.push(Object.assign(line, {
+        x,
+        y,
+        radius: radius / 2,
+        fullRadius: radius / 2,
+        length: radius,
+      }));
+    });
+
+    return {linePositions, songPositions: [], diamondPositions: []};
   },
 }
 
