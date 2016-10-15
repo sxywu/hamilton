@@ -24,16 +24,19 @@ var sections = [
     id: 'intro1',
     vizAlign: 'left',
     vizType: 'character',
+    clips: ['/music/ouioui.mp3'],
     text: `
 I first heard Hamilton while visiting my friend in St. Louis for her birthday.  For that entire weekend, I heard the same songs from the soundtrack on repeat.  She kept humming the same lines over and over:
 
-<div class='music' data-char='5'>
-  <span>Oui oui, mon ami, je m’apelle Lafeyette!</span><br />
-  <span>The Lancelot of the Revolutionary set!</span><br />
-  <span>I came from afar, just to say “Bonsoir!”</span><br />
-  <span>Tell the King, “Casse toi!” Who’s the best?</span><br />
-  <span>C’est moi!</span>
-</div>
+<span class='music' data-char='5' data-clip='0'>
+  <span class='control'></span>
+  Oui oui, mon ami, je m’apelle Lafeyette! &nbsp;<br />
+  &nbsp; The Lancelot of the Revolutionary set! &nbsp;<br />
+  &nbsp; I came from afar, just to say “Bonsoir!” &nbsp;<br />
+  &nbsp; Tell the King, “Casse toi!” Who’s the best? &nbsp;<br />
+  &nbsp; C’est moi! &nbsp;
+</span>
+
 
 Catchy as it was, I hated the song by day two, and was ready to throttle her by day three; I flew back to San Francisco cursing Hamilton.
 
@@ -46,15 +49,16 @@ After that glowing review, I knew I had to at least give it a try.
     id: 'intro2',
     vizAlign: 'right',
     vizType: 'song',
+    clips: ['/music/ouioui.mp3'],
     text: `
 The first few times I listened, I accidentally had the soundtrack on shuffle.  I was tuning in and out of the lyrics when I suddenly heard:
 
-<div class='music' data-char='12'>
-  <span>When you’re gone, I’ll go mad</span><br />
-  <span>So don’t throw away this thing we had</span><br />
-  <span>Cuz when push comes to shove</span><br />
-  <span>I will kill your friends and family to remind you of my love</span>
-</div>
+<span class='music' data-char='12' data-clip='0'>
+  When you’re gone, I’ll go mad<br />
+  So don’t throw away this thing we had<br />
+  Cuz when push comes to shove<br />
+  I will kill your friends and family to remind you of my love
+</span>
 
 And I was like, holy crap what is this super abusive relationship?!  To which my boyfriend had to clarify that it was just King George singing to America (does that make things better?  I’m still not sure).  After that, I decided to actually listen to all the lyrics the whole way through.
 

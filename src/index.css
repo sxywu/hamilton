@@ -2,3 +2,10 @@ body {
   font-family: 'Libre Baskerville', serif;
   font-size: 12px;
 }
+
+.music {
+  padding: 3px 0;
+  font-weight: 400;
+  line-height: 1.8;
+  cursor: pointer;
+}
