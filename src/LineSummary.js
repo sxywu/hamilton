@@ -51,6 +51,7 @@ var LineSummary = React.createClass({
     var titleStyle = {
       marginTop: imageSize / 2 + 10,
       fontSize: 15,
+      padding: '0 40px',
     };
     var imageStyle = {
       width: imageSize,
@@ -82,7 +83,7 @@ var LineSummary = React.createClass({
           </div>
           <h3 style={titleStyle}>
             {this.props.title}
-            <div style={{fontSize: 12}}>in {this.props.data.songName}</div>
+            <div style={{fontSize: 12}}>in "{this.props.data.songName}"</div>
           </h3>
           <div style={linesStyle}>
             {lines}

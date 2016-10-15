@@ -26,7 +26,7 @@ var sections = [
     vizType: 'character',
     clips: ['/music/ouioui.mp3'],
     text: `
-I first heard Hamilton while visiting my friend in St. Louis for her birthday.  For that entire weekend, I heard the same songs from the soundtrack on repeat.  She kept humming the same lines over and over:
+I first heard Hamilton while visiting my friend in St. Louis for her birthday.  For that entire weekend, I heard the same song on repeat:
 
 <span class='music' data-char='5' data-clip='0'>
   <span class='control'></span>
@@ -40,7 +40,7 @@ I first heard Hamilton while visiting my friend in St. Louis for her birthday.  
 
 Catchy as it was, I hated the song by day two, and was ready to throttle her by day three; I flew back to San Francisco cursing Hamilton.
 
-The second time I heard about Hamilton, I was in New York.  I was having coffee with a friend when he told me about being in a car with Hamilton for two hours.  He was doubtful at first (“a hip-hop musical?”), but as it went on, he couldn’t get over how unexpectedly transformative it was (“why am I crying over some guy I don’t even know?”).
+The second time I heard about Hamilton, I was in New York.  I was having coffee with a friend when he told me about being in a car with Hamilton for two hours.  He was doubtful at first (“a hip-hop musical?”), but as it went on, he was overwhelmed by how transformative it was (“why am I crying over some guy I don’t even know?”).
 
 After that glowing review, I knew I had to at least give it a try.
     `
@@ -67,7 +67,7 @@ That first time, I was sobbing by the end.
 
 I had it on repeat for months.  It was all I listened to in my waking hours.  I was obsessed.  We listened so much we started to analyze the lyrics and musical styles.  We reveled in the layers of complexity, the double entredres, the clever word plays.
 
-### We started to wonder what a visualization of Hamilton would look like.
+#### We started to wonder what a visualization of Hamilton would look like.
     `
   }
 ];
