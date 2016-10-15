@@ -49,7 +49,7 @@ After that glowing review, I knew I had to at least give it a try.
     id: 'intro2',
     vizAlign: 'right',
     vizType: 'song',
-    clips: ['/music/whenyouregone.mp3'],
+    clips: [['/music/whenyouregone.mp3', ['12/7:1-40']]],
     text: `
 The first few times I listened, I accidentally had the soundtrack on shuffle.  I was tuning in and out of the lyrics when I suddenly heard:
 
