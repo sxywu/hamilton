@@ -3,8 +3,8 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import Visualization from './Visualization';
-import Characters from './Characters';
-import Themes from './Themes';
+// import Characters from './Characters';
+// import Themes from './Themes';
 import Section from './Section';
 
 import sectionsData from './data/sections';
@@ -18,7 +18,7 @@ var vizTop = null;
 var vizAlign = 'center';
 var sectionWidth = width - vizWidth;
 var characterWidth = 620;
-var themeWidth = width - characterWidth;
+// var themeWidth = width - characterWidth;
 var filterHeight = 220;
 var sectionPositions = [];
 
@@ -127,7 +127,7 @@ var App = React.createClass({
         selectedCharacters, selectedConversation, selectedThemes,
         characters, conversations, themes);
     var {linePositions, songPositions, diamondPositions} =
-      ProcessGraph.positionLinesBySong(filteredLines2, filteredDiamonds, songs, width);
+      ProcessGraph.positionLinesForFilter(filteredLines2, filteredDiamonds, songs, width);
 
     this.setState({
       selectedCharacters, selectedConversation, selectedThemes,

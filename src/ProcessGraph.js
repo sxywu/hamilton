@@ -376,7 +376,7 @@ var PositionGraph = {
     return {filteredDiamonds}
   },
 
-  positionLinesBySong(lines, diamonds, songs, width) {
+  positionLinesForFilter(lines, diamonds, songs, width) {
     var lineSize = 5;
     var padding = {x: 1, y: lineSize * 5, right: 50};
     var songWidth = 170;
@@ -531,7 +531,7 @@ var PositionGraph = {
 
   positionLinesBySong(lines, width, vizTop, vizAlign, vizWidth) {
     radiusScale.range([6, 30]);
-    
+
     var left = 0;
     if (vizAlign === 'center') {
       left = (width - vizWidth) / 2;
@@ -556,8 +556,6 @@ var PositionGraph = {
   },
 
   positionLinesRandomly(lines, width, top, bottom) {
-    var minLength = _.minBy(lines, 'lineLength').lineLength;
-    var maxLength = _.maxBy(lines, 'lineLength').lineLength;
     radiusScale.range([6, 15]);
 
     var linePositions = _.map(lines, line => {
