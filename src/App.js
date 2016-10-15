@@ -154,13 +154,13 @@ var App = React.createClass({
 
       if (section.id === 'header') {
         return Object.assign(section, {
-          top: -window.innerHeight * 0.25,
-          bottom: sectionRect.height + window.innerHeight * 0.25,
+          top: -window.innerHeight * 0.2,
+          bottom: sectionRect.height + window.innerHeight * 0.2,
         });
       }
 
       var top = (sectionRect.top - bodyRect.top) - window.innerHeight * 0.35;
-      var bottom = top + window.innerHeight * 0.35 + sectionRect.height * 0.85;
+      var bottom = top + window.innerHeight * 0.35 + sectionRect.height * 0.8;
       return Object.assign(section, {top, bottom});
     });
   },

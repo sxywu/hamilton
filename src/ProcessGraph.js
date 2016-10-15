@@ -531,28 +531,7 @@ var PositionGraph = {
 
   positionLinesBySong(lines, width, vizTop, vizAlign, vizWidth) {
     radiusScale.range([6, 30]);
-    // width = 800;
-    // var perRow = 6;
-    // var rowWidth = width / perRow;
-    // var linePositions = _.chain(lines)
-    //   .groupBy(line => line.songId)
-    //   .sortBy((lines, id) => id)
-    //   .map((lines, i) => {
-    //     var focusX = (i % perRow + .5) * rowWidth;
-    //     var focusY = (Math.floor(i / perRow) + .5) * (rowWidth);
-    //
-    //     return _.map(lines, line => {
-    //       var radius = Math.floor(radiusScale(line.lineLength));
-    //
-    //       return Object.assign(line, {
-    //         focusX: focusX,
-    //         focusY: focusY,
-    //         radius: radius / 2,
-    //         fullRadius: radius / 2,
-    //         length: radius,
-    //       });
-    //     });
-    //   }).flatten().value();
+    
     var left = 0;
     if (vizAlign === 'center') {
       left = (width - vizWidth) / 2;
