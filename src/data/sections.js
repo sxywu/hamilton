@@ -24,7 +24,7 @@ var sections = [
     id: 'intro1',
     vizAlign: 'left',
     vizType: 'character',
-    clips: ['/music/ouioui.mp3'],
+    clips: [['/music/ouioui.mp3', ['5/2:40-44']]],
     text: `
 I first heard Hamilton while visiting my friend in St. Louis for her birthday.  For that entire weekend, I heard the same song on repeat:
 

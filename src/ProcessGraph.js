@@ -471,6 +471,40 @@ var PositionGraph = {
     return {linePositions, songPositions, diamondPositions};
   },
 
+  positionSelectLines(lineIds, linePositions, width, vizTop, vizAlign, vizWidth) {
+    var left = 0;
+    if (vizAlign === 'center') {
+      left = (width - vizWidth) / 2;
+    } else if (vizAlign === 'right') {
+      left = width - vizWidth;
+    }
+
+    var centerLine = lineIds && _.find(linePositions, line => lineIds[0] === line.id);
+    var centerX, centerY;
+    var translateX;
+    var scale = 5;
+    if (centerLine) {
+      centerX = centerLine.focusX;
+      centerY = centerLine.focusY;
+      translateX = left + (vizWidth / 2) - centerX;
+    }
+
+    return _.map(linePositions, line => {
+      line.selected = _.isEmpty(lineIds) || _.includes(lineIds, line.id);
+      if (centerLine) {
+        line.focusX += translateX;
+        line.focusX = line.focusX - (centerX + translateX - line.focusX) * scale;
+        line.focusY = line.focusY - (centerY - line.focusY) * scale;
+
+        line.radius *= scale;
+        line.fullRadius *= scale;
+        line.length *= scale;
+      }
+
+      return line;
+    });
+  },
+
   positionLinesAsImage(lines, width, vizTop, vizAlign) {
     var dotSize = 10;
     var linePositions = [];

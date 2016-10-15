@@ -17,8 +17,11 @@ var Section = React.createClass({
     this.duration = 0;
     this.clip = null;
 
-    this.clips = _.map(this.props.clips, clipUrl => {
-      return {url: process.env.PUBLIC_URL + clipUrl};
+    this.clips = _.map(this.props.clips, clip => {
+      return {
+        url: process.env.PUBLIC_URL + clip[0],
+        lineIds: clip[1],
+      };
     });
     this.audio = new Audio();
     this.audio.addEventListener('play', this.playMusic);
@@ -55,6 +58,7 @@ var Section = React.createClass({
       }
       if (!playing) {
         this.setPlay();
+        this.props.selectLines(null);
         clearInterval(intervalId);
       }
     }, 50);
@@ -108,6 +112,9 @@ var Section = React.createClass({
 
         d3.select(this).select('.control')
           .html('&nbsp; &#10073; &#10073; &nbsp;');
+
+        // when starting song, highlight the right lines
+        that.props.selectLines(that.clip.lineIds);
       });
   },
 

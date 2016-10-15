@@ -66,6 +66,16 @@ var App = React.createClass({
     this.setState({lines, songs, characterNodes, characterLinks, diamonds, groupedThemes});
   },
 
+  componentDidMount() {
+    this.updateSectionPositions();
+    this.onScroll();
+    window.addEventListener('scroll', _.debounce(this.onScroll.bind(this), 100));
+  },
+
+  componentDidUpdate() {
+    this.updateSectionPositions();
+  },
+
   filterByCharacter(character) {
     var selectedCharacters = this.state.selectedCharacters;
     if (_.includes(selectedCharacters, character)) {
@@ -137,14 +147,32 @@ var App = React.createClass({
     });
   },
 
-  componentDidMount() {
-    this.updateSectionPositions();
-    this.onScroll();
-    window.addEventListener('scroll', _.debounce(this.onScroll.bind(this), 100));
+  selectLines(lineIds) {
+    var linePositions = ProcessGraph.positionSelectLines(
+      lineIds, this.state.linePositions, width, vizTop, vizAlign, vizWidth);
+    if (!lineIds) {
+      linePositions = this.positionByVizType(this.state.vizType);
+    };
+    this.setState({linePositions});
   },
 
-  componentDidUpdate() {
-    this.updateSectionPositions();
+  positionByVizType(vizType) {
+    var linePositions = [];
+    var scrollTop = document.body.scrollTop;
+    if (vizType === 'image') {
+      linePositions = ProcessGraph.positionLinesAsImage(this.state.lines, width, vizTop, vizAlign);
+    } else if (vizType === 'character') {
+      linePositions = ProcessGraph.positionLinesByCharacter(
+        this.state.lines, width, vizTop, vizAlign, vizWidth);
+    } else if (vizType === 'song') {
+      linePositions = ProcessGraph.positionLinesBySong(
+        this.state.lines, width, vizTop, vizAlign, vizWidth);
+    } else if (vizType === 'random') {
+      linePositions = ProcessGraph.positionLinesRandomly(
+        this.state.lines, width, scrollTop - window.innerHeight, scrollTop + 2 * window.innerHeight);
+    }
+
+    return linePositions;
   },
 
   updateSectionPositions() {
@@ -193,20 +221,8 @@ var App = React.createClass({
 
     vizTop = currentTop;
     vizAlign = currentAlign;
+    var linePositions = this.positionByVizType(vizType);
 
-    var linePositions = [];
-    if (vizType === 'image') {
-      linePositions = ProcessGraph.positionLinesAsImage(this.state.lines, width, vizTop, vizAlign);
-    } else if (vizType === 'character') {
-      linePositions = ProcessGraph.positionLinesByCharacter(
-        this.state.lines, width, vizTop, vizAlign, vizWidth);
-    } else if (vizType === 'song') {
-      linePositions = ProcessGraph.positionLinesBySong(
-        this.state.lines, width, vizTop, vizAlign, vizWidth);
-    } else if (vizType === 'random') {
-      linePositions = ProcessGraph.positionLinesRandomly(
-        this.state.lines, width, scrollTop - window.innerHeight, scrollTop + 2 * window.innerHeight);
-    }
     this.setState({linePositions, vizType});
   },
 
@@ -260,7 +276,7 @@ var App = React.createClass({
     //
     var sections = _.map(sectionsData, section => {
       return (<Section {...section} fontColor={this.state.fontColor}
-        width={sectionWidth} left={vizWidth} />);
+        width={sectionWidth} left={vizWidth} selectLines={this.selectLines} />);
     });
 
     return (

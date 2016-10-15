@@ -42,8 +42,8 @@ var Lines = React.createClass({
       .on('mouseleave', this.mouseLeave)
       .attr('d', (d) => this.drawPath(d))
       .merge(this.circles)
-      .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
-      .attr('d', (d) => this.drawPath(d, true));
+      .attr('d', (d) => this.drawPath(d, true))
+      .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray);
 
     simulation.nodes(this.props.linePositions)
       .force("charge", this.props.vizType === 'random' ? d3.forceManyBody() : null)
