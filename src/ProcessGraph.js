@@ -471,7 +471,7 @@ var PositionGraph = {
     return {linePositions, songPositions, diamondPositions};
   },
 
-  positionSelectLines(lineIds, linePositions, width, vizTop, vizAlign, vizWidth) {
+  positionSelectLines(lineIds, linePositions, scale, width, vizTop, vizAlign, vizWidth) {
     var left = 0;
     if (vizAlign === 'center') {
       left = (width - vizWidth) / 2;
@@ -482,7 +482,6 @@ var PositionGraph = {
     var centerLine = lineIds && _.find(linePositions, line => lineIds[0] === line.id);
     var centerX, centerY;
     var translateX;
-    var scale = 5;
     if (centerLine) {
       centerX = centerLine.focusX;
       centerY = centerLine.focusY;
