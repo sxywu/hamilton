@@ -49,15 +49,16 @@ After that glowing review, I knew I had to at least give it a try.
     id: 'intro2',
     vizAlign: 'right',
     vizType: 'song',
-    clips: ['/music/ouioui.mp3'],
+    clips: ['/music/whenyouregone.mp3'],
     text: `
 The first few times I listened, I accidentally had the soundtrack on shuffle.  I was tuning in and out of the lyrics when I suddenly heard:
 
 <span class='music' data-char='12' data-clip='0'>
-  When you’re gone, I’ll go mad<br />
-  So don’t throw away this thing we had<br />
-  Cuz when push comes to shove<br />
-  I will kill your friends and family to remind you of my love
+  <span class='control'></span>
+  When you’re gone, I’ll go mad &nbsp;<br />
+  &nbsp; So don’t throw away this thing we had &nbsp;<br />
+  &nbsp; Cuz when push comes to shove &nbsp;<br />
+  &nbsp; I will kill your friends and family to remind you of my love &nbsp;
 </span>
 
 And I was like, holy crap what is this super abusive relationship?!  To which my boyfriend had to clarify that it was just King George singing to America (does that make things better?  I’m still not sure).  After that, I decided to actually listen to all the lyrics the whole way through.
