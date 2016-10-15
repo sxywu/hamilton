@@ -491,8 +491,9 @@ var PositionGraph = {
     return _.map(linePositions, line => {
       line.selected = _.isEmpty(lineIds) || _.includes(lineIds, line.id);
       if (centerLine) {
-        line.focusX += translateX;
-        line.focusX = line.focusX - (centerX + translateX - line.focusX) * scale;
+        // line.focusX += translateX;
+        // line.focusX = line.focusX - (centerX + translateX - line.focusX) * scale;
+        line.focusX = line.focusX - (centerX - line.focusX) * scale;
         line.focusY = line.focusY - (centerY - line.focusY) * scale;
 
         line.radius *= scale;

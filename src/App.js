@@ -149,7 +149,7 @@ var App = React.createClass({
 
   selectLines(lineIds) {
     var linePositions = ProcessGraph.positionSelectLines(
-      lineIds, this.state.linePositions, 1.5, width, vizTop, vizAlign, vizWidth);
+      lineIds, this.state.linePositions, 2, width, vizTop, vizAlign, vizWidth);
     if (!lineIds) {
       linePositions = this.positionByVizType(this.state.vizType);
     };
