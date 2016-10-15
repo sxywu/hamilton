@@ -45,7 +45,7 @@ After that glowing review, I knew I had to at least give it a try.
   {
     id: 'intro2',
     vizAlign: 'right',
-    vizType: 'character',
+    vizType: 'song',
     text: `
 The first few times I listened, I accidentally had the soundtrack on shuffle.  I was tuning in and out of the lyrics when I suddenly heard:
 

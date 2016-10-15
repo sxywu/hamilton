@@ -76,15 +76,6 @@ var Lines = React.createClass({
   },
 
   forceEnd() {
-    // if (this.props.vizType === 'song') {
-    //   var positions = _.reduce(this.props.linePositions, (obj, line) => {
-    //     obj[line.id] = {x: _.round(line.x, 2), y: _.round(line.y, 2)};
-    //     return obj;
-    //   }, {});
-    //   console.log(JSON.stringify(positions))
-    //   return;
-    // }
-
     this.circles.transition()
       .duration(duration)
       .attr('transform', (d) => {

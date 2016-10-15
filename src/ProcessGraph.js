@@ -9,6 +9,7 @@ import rawCharacters from './data/characters.json';
 import rawThemes from './data/themes.json';
 import lineImagePositions from './data/line_image_positions.json';
 import lineCharPositions from './data/line_char_positions.json';
+import lineSongPositions from './data/line_song_positions.json';
 
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([3, 8]);
@@ -31,7 +32,7 @@ var PositionGraph = {
             songId,
             characterId: character,
             characterName: charList[character][0],
-            songName: songList[songId],
+            songName: songList[songId][0],
             numSingers: line[1][0].length,
             singerIndex: i,
             lineLength: line[2].length,
@@ -525,34 +526,52 @@ var PositionGraph = {
         length: radius,
       });
     });
+    return linePositions;
+  },
 
-    // var perRow = 5;
+  positionLinesBySong(lines, width, vizTop, vizAlign, vizWidth) {
+    radiusScale.range([6, 30]);
+    // width = 800;
+    // var perRow = 6;
     // var rowWidth = width / perRow;
     // var linePositions = _.chain(lines)
-    //   .groupBy(line => line.characterId)
-    //   .sortBy(lines => -lines.length)
+    //   .groupBy(line => line.songId)
+    //   .sortBy((lines, id) => id)
     //   .map((lines, i) => {
-    //     var focusX = width / 3 * (i + .5);
-    //     var focusY = width / 3 * .5;
-    //     if (i >= 3) {
-    //       i -= 3;
-    //       focusX = (i % perRow + .5) * rowWidth;
-    //       focusY = (Math.floor(i / perRow) + .5) * (rowWidth);
-    //       focusY += width / 3; // offset the top two
-    //     }
+    //     var focusX = (i % perRow + .5) * rowWidth;
+    //     var focusY = (Math.floor(i / perRow) + .5) * (rowWidth);
     //
     //     return _.map(lines, line => {
     //       var radius = Math.floor(radiusScale(line.lineLength));
     //
     //       return Object.assign(line, {
-    //         focusX,
-    //         focusY,
+    //         focusX: focusX,
+    //         focusY: focusY,
     //         radius: radius / 2,
     //         fullRadius: radius / 2,
     //         length: radius,
     //       });
     //     });
     //   }).flatten().value();
+    var left = 0;
+    if (vizAlign === 'center') {
+      left = (width - vizWidth) / 2;
+    } else if (vizAlign === 'right') {
+      left = width - vizWidth;
+    }
+
+    var linePositions = _.map(lines, line => {
+      var position = lineSongPositions[line.id];
+      var radius = Math.floor(radiusScale(line.lineLength));
+
+      return Object.assign(line, {
+        focusX: position.x + left,
+        focusY: position.y + vizTop,
+        radius: radius / 2,
+        fullRadius: radius / 2,
+        length: radius,
+      });
+    });
 
     return linePositions;
   },

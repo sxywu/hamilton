@@ -22,18 +22,20 @@ var Section = React.createClass({
         d3.select(this).selectAll('span')
           .style('background', background)
           .style('color', color)
-          .style('padding', '0 6px')
-          .style('font-weight', 400);
+          .style('padding', '3px 6px')
+          .style('font-weight', 400)
+          .style('line-height', 1.8);
       });
   },
 
   render() {
+    var padding = 10;
     var style = this.props.style || {
-      width: this.props.width,
+      width: this.props.width - 2 * padding,
       marginTop: '80vh',
       fontSize: 16,
       lineHeight: 1.6,
-      padding: 20,
+      padding,
       marginLeft: this.props.vizAlign === 'left' ? this.props.left : 0,
       pointerEvents: 'auto',
       color: this.props.fontColor,
