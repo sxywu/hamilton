@@ -125,7 +125,7 @@ var Section = React.createClass({
 
   render() {
     var padding = 10;
-    var style = this.props.style || {
+    var style = Object.assign({
       width: this.props.width - 2 * padding,
       marginTop: '80vh',
       fontSize: 16,
@@ -135,7 +135,7 @@ var Section = React.createClass({
       pointerEvents: 'auto',
       color: this.props.fontColor,
       backgroundColor: 'rgba(255, 255, 255, 0.75)',
-    };
+    }, this.props.style);
     var rawMarkup = { __html: md.render(this.props.text)};
 
     return (

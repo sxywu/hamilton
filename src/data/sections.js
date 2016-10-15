@@ -69,6 +69,43 @@ I had it on repeat for months.  It was all I listened to in my waking hours.  I 
 
 #### We started to wonder what a visualization of Hamilton would look like.
     `
+  },
+  {
+    id: 'hamilton',
+    vizAlign: 'center',
+    vizType: 'image',
+    style: {
+      width: '90%',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+    clips: [
+      ['/music/bastardorphan.mp3', ['1/1:1-5']],
+      ['/music/disparaged.mp3', ['15/39:12-15']]
+    ],
+    text: `
+Hamilton: An American Musical is the brain-child of Lin-Manuel Miranda, lovingly crafted over the course of six years.  It’s the story of Alexander Hamilton, the first Secretary of Treasury, most commonly remembered for being on the $10 bill and for dying in a duel (if remembered at all).
+
+Most of us react the same way when we hear of a “hip-hop musical” about a Founding Father; we expect something corny, a desperate history lesson.  And certainly, Hamilton isn’t lacking in history.  The first act takes us through the American Revolution, and the second act the establishment of the Constitution and our current form of government.  (There’s a whole act about running the government - that by itself is absolute amazing.)
+
+But the history is merely a backdrop, and hip-hop merely the medium in which Miranda chooses to tell his story.
+
+Instead, Hamilton is the story of a
+<span class='music' data-char='1' data-clip='0'>
+  <span class='control'></span>
+  bastard, orphan, son of a whore and a Scotsman, dropped in the middle of a forgotten spot in the Caribbean &nbsp;
+</span>; an immigrant who rose up to become George Washington’s right hand, a prominent figure in early American politics, who wrote a whole financial system into existence.  It’s the story of Alexander Hamilton meeting Aaron Burr, his first friend and enemy, the last face he sees.  It’s the story of an ambiguous love triangle, as he marries Eliza Schuyler and flirts with her sister Angelica Schuyler.
+
+We root for him because he is brilliant and he is young, scrappy, and hungry.  He is the underdog; he’s every single one of us that has struggled for our own place in society.  And then he is too confident, too smart for his own good, and too ambitious; he makes too many powerful enemies, and they try to frame him for embezzlement.  In his hubris, he publishes the truth - the nation’s first sex scandal - hoping to clear his name.  He loses his political career and he loses Eliza’s love.  He loses his son, who challenges a man to a duel because he
+<span class='music' data-char='15' data-clip='1'>
+  <span class='control'></span>
+  disparaged my father’s legacy in front of a crowd, I can’t have that, I’m making my father proud. &nbsp;
+</span>
+
+We feel for him, because he has lost everything; he is every single one of us that have made regrettable mistakes.  It is also the story of what comes next: what comes next, when we are at our lowest?
+
+Hamilton is painfully relatable in its humanity.
+    `
   }
 ];
 
