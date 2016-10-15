@@ -8,6 +8,7 @@ import themeList from './data/theme_list.json';
 import rawCharacters from './data/characters.json';
 import rawThemes from './data/themes.json';
 import lineImagePositions from './data/line_image_positions.json';
+import lineCharPositions from './data/line_char_positions.json';
 
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([3, 8]);
@@ -42,6 +43,12 @@ var PositionGraph = {
           };
         });
       }).flatten().value();
+
+    // radius scale for the lines
+    var minLength = _.minBy(lines, 'lineLength').lineLength;
+    var maxLength = _.maxBy(lines, 'lineLength').lineLength;
+    radiusScale.domain([minLength, maxLength]);
+
     var i = 0;
     var radius = 6;
     var songWidth = (3 * radius) * _.size(songList);
@@ -467,9 +474,7 @@ var PositionGraph = {
     var dotSize = 10;
     var linePositions = [];
 
-    var minLength = _.minBy(lines, 'lineLength').lineLength;
-    var maxLength = _.maxBy(lines, 'lineLength').lineLength;
-    radiusScale.domain([minLength, maxLength]).range([6, 10]);
+    radiusScale.range([6, 10]);
 
     var left = 0;
     var vizWidth = dotSize * 71;
@@ -498,10 +503,64 @@ var PositionGraph = {
     return linePositions;
   },
 
+  positionLinesByCharacter(lines, width, vizTop, vizAlign, vizWidth) {
+    radiusScale.range([6, 30]);
+
+    var left = 0;
+    if (vizAlign === 'center') {
+      left = (width - vizWidth) / 2;
+    } else if (vizAlign === 'right') {
+      left = width - vizWidth;
+    }
+
+    var linePositions = _.map(lines, line => {
+      var position = lineCharPositions[line.id];
+      var radius = Math.floor(radiusScale(line.lineLength));
+
+      return Object.assign(line, {
+        focusX: position.x + left,
+        focusY: position.y + vizTop,
+        radius: radius / 2,
+        fullRadius: radius / 2,
+        length: radius,
+      });
+    });
+
+    // var perRow = 5;
+    // var rowWidth = width / perRow;
+    // var linePositions = _.chain(lines)
+    //   .groupBy(line => line.characterId)
+    //   .sortBy(lines => -lines.length)
+    //   .map((lines, i) => {
+    //     var focusX = width / 3 * (i + .5);
+    //     var focusY = width / 3 * .5;
+    //     if (i >= 3) {
+    //       i -= 3;
+    //       focusX = (i % perRow + .5) * rowWidth;
+    //       focusY = (Math.floor(i / perRow) + .5) * (rowWidth);
+    //       focusY += width / 3; // offset the top two
+    //     }
+    //
+    //     return _.map(lines, line => {
+    //       var radius = Math.floor(radiusScale(line.lineLength));
+    //
+    //       return Object.assign(line, {
+    //         focusX,
+    //         focusY,
+    //         radius: radius / 2,
+    //         fullRadius: radius / 2,
+    //         length: radius,
+    //       });
+    //     });
+    //   }).flatten().value();
+
+    return linePositions;
+  },
+
   positionLinesRandomly(lines, width, top, bottom) {
     var minLength = _.minBy(lines, 'lineLength').lineLength;
     var maxLength = _.maxBy(lines, 'lineLength').lineLength;
-    radiusScale.domain([minLength, maxLength]).range([6, 12]);
+    radiusScale.range([6, 15]);
 
     var linePositions = _.map(lines, line => {
       var x = _.random(0, width);

@@ -168,7 +168,7 @@ var App = React.createClass({
   onScroll() {
     var scrollTop = document.body.scrollTop;
     var prevSection;
-    var vizType = 'image';
+    var vizType = this.state.vizType;
     var currentTop = vizTop;
     var currentAlign = vizAlign;
     _.some(sectionPositions, section => {
@@ -176,6 +176,7 @@ var App = React.createClass({
       if (section.top <= scrollTop && scrollTop < section.bottom) {
         currentTop = section.top + window.innerHeight * 0.25;
         currentAlign = section.vizAlign;
+        vizType = section.vizType;
         return true;
       }
       // if scrollTop is between previous section's bottom
@@ -193,9 +194,12 @@ var App = React.createClass({
     vizTop = currentTop;
     vizAlign = currentAlign;
 
-    var linePositions;
+    var linePositions = [];
     if (vizType === 'image') {
       linePositions = ProcessGraph.positionLinesAsImage(this.state.lines, width, vizTop, vizAlign);
+    } else if (vizType === 'character') {
+      linePositions = ProcessGraph.positionLinesByCharacter(
+        this.state.lines, width, vizTop, vizAlign, vizWidth);
     } else if (vizType === 'random') {
       linePositions = ProcessGraph.positionLinesRandomly(
         this.state.lines, width, scrollTop - window.innerHeight, scrollTop + 2 * window.innerHeight);

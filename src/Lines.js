@@ -4,7 +4,7 @@ import './fisheye';
 
 var duration = 500;
 var simulation = d3.forceSimulation()
-  .force('collide', d3.forceCollide().radius(d => d.radius))
+  .force('collide', d3.forceCollide().radius(d => d.radius + 3))
   .force('x', d3.forceX().x(d => d.focusX))
   .force('y', d3.forceY().y(d => d.focusY));
 
@@ -15,27 +15,23 @@ var Lines = React.createClass({
 
   componentDidMount() {
     // add in the circles, the number of them shouldn't change
-    this.container = d3.select(this.refs.circles)
-      .style("filter", "url(#gooey)");
+    this.container = d3.select(this.refs.circles);
     this.updateRender();
 
-    simulation.nodes(this.props.linePositions)
-      .force("charge", this.props.vizType === 'random' ? d3.forceManyBody() : null)
-      .alphaMin(this.props.vizType === 'random' ? 0 : 0.5)
-      .on('tick', this.forceTick.bind(this))
+    simulation.on('tick', this.forceTick.bind(this))
       .on('end', this.forceEnd.bind(this));
   },
 
   componentDidUpdate() {
     this.updateRender();
 
-    simulation.nodes(this.props.linePositions)
-      .force("charge", this.props.vizType === 'random' ? d3.forceManyBody() : null)
-      .alphaMin(this.props.vizType === 'random' ? 0 : 0.5)
-      .alpha(1).restart();
+    simulation.alpha(1).restart();
   },
 
   updateRender() {
+    this.container
+      .style("filter", this.props.vizType === 'filter' ? 'url(#gooey)' : 'none');
+
     this.circles = this.container.selectAll('path')
       .data(this.props.linePositions, (d) => d.id);
 
@@ -48,6 +44,10 @@ var Lines = React.createClass({
       .merge(this.circles)
       .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
       .attr('d', (d) => this.drawPath(d, true));
+
+    simulation.nodes(this.props.linePositions)
+      .force("charge", this.props.vizType === 'random' ? d3.forceManyBody() : null)
+      .alphaMin(this.props.vizType === 'random' ? 0 : 0.5);
   },
 
   mouseEnter(line) {
@@ -76,6 +76,15 @@ var Lines = React.createClass({
   },
 
   forceEnd() {
+    // if (this.props.vizType === 'song') {
+    //   var positions = _.reduce(this.props.linePositions, (obj, line) => {
+    //     obj[line.id] = {x: _.round(line.x, 2), y: _.round(line.y, 2)};
+    //     return obj;
+    //   }, {});
+    //   console.log(JSON.stringify(positions))
+    //   return;
+    // }
+
     this.circles.transition()
       .duration(duration)
       .attr('transform', (d) => {

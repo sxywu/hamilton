@@ -33,7 +33,7 @@ var Section = React.createClass({
       marginTop: '80vh',
       fontSize: 16,
       lineHeight: 1.6,
-      paddingLeft: 20,
+      padding: 20,
       marginLeft: this.props.vizAlign === 'left' ? this.props.left : 0,
       pointerEvents: 'auto',
       color: this.props.fontColor,
