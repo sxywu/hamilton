@@ -16,16 +16,17 @@ var Lines = React.createClass({
   componentDidMount() {
     // add in the circles, the number of them shouldn't change
     this.container = d3.select(this.refs.circles);
-    this.updateRender();
-
     simulation.on('tick', this.forceTick.bind(this))
-      .on('end', this.forceEnd.bind(this));
+      .on('end', this.forceEnd.bind(this))
+      .stop();
+
+    this.updateRender();
   },
 
   componentDidUpdate() {
     this.updateRender();
 
-    simulation.alpha(1).restart();
+
   },
 
   updateRender() {
@@ -37,17 +38,26 @@ var Lines = React.createClass({
 
     this.circles.exit().remove();
 
+    var finished = 0;
     this.circles = this.circles.enter().append('path')
       .on('mouseenter', this.mouseEnter)
       .on('mouseleave', this.mouseLeave)
       .attr('d', (d) => this.drawPath(d))
-      .merge(this.circles)
-      .attr('d', (d) => this.drawPath(d, true))
-      .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray);
+      .merge(this.circles);
 
-    simulation.nodes(this.props.linePositions)
-      .force("charge", this.props.vizType === 'random' ? d3.forceManyBody() : null)
-      .alphaMin(this.props.vizType === 'random' ? 0 : 0.5);
+    this.circles.transition().duration(duration)
+        .attr('d', (d) => this.drawPath(d))
+        .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
+        .on('end', (d, i) => {
+          finished += 1;
+          if (finished === this.props.linePositions.length) {
+            simulation.nodes(this.props.linePositions)
+              .force("charge", this.props.vizType === 'random' ? d3.forceManyBody() : null)
+              .alphaMin(this.props.vizType === 'random' ? 0 : 0.5)
+              .alpha(1).restart();
+          }
+        });
+
   },
 
   mouseEnter(line) {
@@ -78,6 +88,7 @@ var Lines = React.createClass({
   forceEnd() {
     this.circles.transition()
       .duration(duration)
+      .attr('d', (d) => this.drawPath(d, true))
       .attr('transform', (d) => {
         // set the x and y to its focus (where it should be)
         d.x = d.focusX;

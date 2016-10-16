@@ -376,17 +376,18 @@ var PositionGraph = {
     return {filteredDiamonds}
   },
 
-  positionLinesForFilter(lines, diamonds, songs, width) {
+  positionLinesForFilter(lines, diamonds, songs, width, vizTop) {
     var lineSize = 5;
     var padding = {x: 1, y: lineSize * 5, right: 50};
-    var songWidth = 170;
+    var songWidth = songs.length ? 170 : lineSize * 8;
     var s = 1;
     var x = songWidth;
-    var y = lineSize * 8;
+    var y = lineSize * 8 + vizTop;
     var lastLineId = null;
     var songPositions = [];
     var songsById = _.keyBy(songs, 'id');
-    // make it an object keyed by lineId for the sake of diamondPositions
+
+    // position all the lines
     var linePositions = _.map(lines, (line, i) => {
       var songNum = line.songId;
       var startLine = parseInt(line.lineId.split(':')[1].split('-')[0], 10);
@@ -400,16 +401,18 @@ var PositionGraph = {
         y += padding.y;
 
         // also add song position
-        var song = songsById[songNum];
-        songPositions.push({
-          id: song.id,
-          name: song.name,
-          x, y,
-        });
+        if (songs.length) {
+          var song = songsById[songNum];
+          songPositions.push({
+            id: song.id,
+            name: song.name,
+            x, y,
+          });
+        }
       }
       // and if a song has gone over the width
       // bring it to next line
-      if (x > width - padding.right && lastLineId !== line.lineId) {
+      if (x > width - lineSize * 8 && lastLineId !== line.lineId) {
         x = songWidth;
         y += 4 * lineSize;
       }
@@ -450,23 +453,27 @@ var PositionGraph = {
       });
     });
 
-    var linePositionsByLineId = _.keyBy(linePositions, 'lineId');
-    var diamondPositions = _.map(diamonds, (theme) => {
-      var startLine = linePositionsByLineId[theme.startLineId];
+    // position theme diamonds only if we've passed them in
+    if (diamonds.length) {
+      var linePositionsByLineId = _.keyBy(linePositions, 'lineId');
+      var diamondPositions = _.map(diamonds, (theme) => {
+        var startLine = linePositionsByLineId[theme.startLineId];
 
-      var x = startLine.focusX + (theme.startLine - startLine.startLine) * lineSize;
-      var y = startLine.trueY - 2 * startLine.fullRadius;
-      theme.positions = [{x, y, size: lineSize * .8}];
+        var x = startLine.focusX + (theme.startLine - startLine.startLine) * lineSize;
+        var y = startLine.trueY - 2 * startLine.fullRadius;
+        theme.positions = [{x, y, size: lineSize * .8}];
 
-      if (theme.startLine !== theme.endLine) {
-        var endLine = linePositionsByLineId[theme.startLineId];
-        x = endLine.focusX + (theme.endLine - endLine.startLine) * lineSize;
-        y = endLine.trueY - 2 * endLine.fullRadius;
-        theme.positions.push({x, y, size: lineSize * .8});
-      }
+        if (theme.startLine !== theme.endLine) {
+          var endLine = linePositionsByLineId[theme.startLineId];
+          x = endLine.focusX + (theme.endLine - endLine.startLine) * lineSize;
+          y = endLine.trueY - 2 * endLine.fullRadius;
+          theme.positions.push({x, y, size: lineSize * .8});
+        }
 
-      return theme;
-    });
+        return theme;
+      });
+    }
+
 
     return {linePositions, songPositions, diamondPositions};
   },

@@ -73,7 +73,7 @@ I had it on repeat for months.  It was all I listened to in my waking hours.  I 
   {
     id: 'hamilton',
     vizAlign: 'center',
-    vizType: 'image',
+    vizType: 'line',
     style: {
       width: '90%',
       marginLeft: 'auto',

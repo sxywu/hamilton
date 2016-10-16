@@ -167,6 +167,9 @@ var App = React.createClass({
     } else if (vizType === 'song') {
       linePositions = ProcessGraph.positionLinesBySong(
         this.state.lines, width, vizTop, vizAlign, vizWidth);
+    } else if (vizType === 'line') {
+      var positions = ProcessGraph.positionLinesForFilter(this.state.lines, [], [], width, vizTop);
+      linePositions = positions.linePositions;
     } else if (vizType === 'random') {
       linePositions = ProcessGraph.positionLinesRandomly(
         this.state.lines, width, scrollTop - window.innerHeight, scrollTop + 2 * window.innerHeight);
