@@ -160,7 +160,7 @@ var App = React.createClass({
     var linePositions = [];
     var scrollTop = document.body.scrollTop;
     if (vizType === 'image') {
-      linePositions = ProcessGraph.positionLinesAsImage(this.state.lines, width, vizTop, vizAlign);
+      linePositions = ProcessGraph.positionLinesAsImage(this.state.lines, width, width * .85, vizTop, vizAlign);
     } else if (vizType === 'character') {
       linePositions = ProcessGraph.positionLinesByCharacter(
         this.state.lines, width, vizTop, vizAlign, vizWidth);

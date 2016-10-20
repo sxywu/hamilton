@@ -512,14 +512,13 @@ var PositionGraph = {
     });
   },
 
-  positionLinesAsImage(lines, width, vizTop, vizAlign) {
-    var dotSize = 10;
+  positionLinesAsImage(lines, width, vizWidth, vizTop, vizAlign) {
+    var dotSize = vizWidth / 71;
     var linePositions = [];
 
-    radiusScale.range([6, 10]);
+    radiusScale.range([dotSize * .75, dotSize * 1.25]);
 
     var left = 0;
-    var vizWidth = dotSize * 71;
     if (vizAlign === 'center') {
       left = (width - vizWidth) / 2;
     } else if (vizAlign === 'right') {
