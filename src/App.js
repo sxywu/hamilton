@@ -182,16 +182,10 @@ var App = React.createClass({
     var bodyRect = document.body.getBoundingClientRect();
     sectionPositions = _.map(sectionsData, section => {
       var sectionRect = d3.select('.section#' + section.id).node().getBoundingClientRect();
+      var top = (sectionRect.top - bodyRect.top);
+      var bottom = top + sectionRect.height * (section.bottomMultiple || 0.8);
+      top += window.innerHeight * (section.topMultiple || -0.35);
 
-      if (section.id === 'header') {
-        return Object.assign(section, {
-          top: -window.innerHeight * 0.2,
-          bottom: sectionRect.height + window.innerHeight * 0.2,
-        });
-      }
-
-      var top = (sectionRect.top - bodyRect.top) - window.innerHeight * 0.35;
-      var bottom = top + window.innerHeight * 0.35 + sectionRect.height * 0.8;
       return Object.assign(section, {top, bottom});
     });
   },
@@ -205,8 +199,9 @@ var App = React.createClass({
     _.some(sectionPositions, section => {
       // if it's within section's top and bottom return that section
       if (section.top <= scrollTop && scrollTop < section.bottom) {
-        currentTop = section.top + window.innerHeight * 0.25;
         currentAlign = section.vizAlign;
+        currentTop = (currentAlign === 'bottom') ? section.bottom :
+          section.top + window.innerHeight * (section.vizTopMultiple || 0.25);
         vizType = section.vizType;
         return true;
       }
