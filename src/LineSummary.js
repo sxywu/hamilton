@@ -5,11 +5,11 @@ import _ from 'lodash';
 var LineSummary = React.createClass({
 
   mouseEnter() {
-    this.props.hover(this.props.data);
+    // this.props.hover(this.props.data);
   },
 
   mouseLeave() {
-    this.props.hover(null);
+    // this.props.hover(null);
   },
 
   render() {
@@ -26,7 +26,7 @@ var LineSummary = React.createClass({
     var style = {
       position: 'absolute',
       left: this.props.x - (width / 2),
-      top: this.props.y - this.props.hoverHeight,
+      top: this.props.y + this.props.hoverHeight,
     };
     var hoverStyle = {
       width: this.props.hoverWidth,
@@ -76,7 +76,6 @@ var LineSummary = React.createClass({
 
     return (
       <div ref='summary' style={style}>
-        <div style={hoverStyle} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} />
         <div style={contentStyle} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
           <div style={headerStyle}>
             <img style={imageStyle} src={this.props.image} role="presentation" />

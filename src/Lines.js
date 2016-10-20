@@ -31,7 +31,7 @@ var Lines = React.createClass({
 
   updateRender() {
     this.container
-      .style("filter", this.props.vizType === 'filter' ? 'url(#gooey)' : 'none');
+      // .style("filter", this.props.vizType === 'line' ? 'url(#gooey)' : 'none');
 
     this.circles = this.container.selectAll('path')
       .data(this.props.linePositions, (d) => d.id);
@@ -62,6 +62,10 @@ var Lines = React.createClass({
 
   mouseEnter(line) {
     this.props.hover(line);
+  },
+
+  mouseLeave(line) {
+    this.props.hover(null);
   },
 
   drawPath(d, showLength) {

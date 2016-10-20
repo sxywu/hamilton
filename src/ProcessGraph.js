@@ -382,7 +382,7 @@ var PositionGraph = {
     var songWidth = songs.length ? 170 : lineSize * 8;
     var s = 1;
     var x = songWidth;
-    var y = lineSize * 8 + vizTop;
+    var y = vizTop;
     var lastLineId = null;
     var songPositions = [];
     var songsById = _.keyBy(songs, 'id');
@@ -414,7 +414,7 @@ var PositionGraph = {
       // bring it to next line
       if (x > width - lineSize * 8 && lastLineId !== line.lineId) {
         x = songWidth;
-        y += 4 * lineSize;
+        y += padding.y * 0.6;
       }
 
       // x-position
