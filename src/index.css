@@ -1,6 +1,26 @@
 body {
   font-family: 'Libre Baskerville', serif;
-  font-size: 12px;
+  color: #333;
+  font-size: 14px;
+}
+
+h1, h2, h3, h4, .header {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+}
+
+a, a:visited, a:link {
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid;
+}
+
+a:hover {
+  border-bottom: 1px dashed;
+}
+
+text {
+  fill: #333;
 }
 
 .music {
