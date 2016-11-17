@@ -118,6 +118,49 @@ Angelica sings that she's coming home from London for the summer (at Eliza's inv
 And they leave us wondering: did they, or didn't they?
     `
   },
+  {
+    id: 'angelica3',
+    vizAlign: 'left',
+    vizType: 'line',
+    style: {
+      marginTop: '20vh',
+    },
+    clips: [
+      ['/music/whenyouregone.mp3', ['2/37:32-33']],
+      ['/music/whenyouregone.mp3', ['8/37:36-43']],
+      ['/music/whenyouregone.mp3', ['8/11:92-111']],
+    ],
+    text: `
+### As Trusting Or As Kind
+
+The turning point in Angelica and Alexander's relationship comes in *The Reynolds Pamphlet*, after Alexander publishes the details of his affair with Maria Reynolds to save his political reputation.  When Angelica hurries back from London, Alexander is relieved:
+
+<span class='music' data-char='2' data-clip='0'>
+  <span class='control'></span>
+  Angelica, thank God &nbsp;<br />
+  &nbsp; Someone who understands what I’m struggling here to do &nbsp;<br />
+</span>
+
+Angelica instead replies:
+
+<span class='music' data-char='8' data-clip='1'>
+  <span class='control'></span>
+  &nbsp; I know my sister like I know my own mind &nbsp;<br />
+  &nbsp; You will never find anyone as trusting or as kind &nbsp;<br />
+  &nbsp; I love my sister more than anything in this life &nbsp;<br />
+  &nbsp; I will choose her happiness over mine every time &nbsp;<br />
+  &nbsp; Put what we had aside &nbsp;<br />
+  &nbsp; I’m standing at her side &nbsp;<br />
+  &nbsp; You could never be satisfied &nbsp;<br />
+  &nbsp; God, I hope you’re satisfied &nbsp;<br />
+</span>
+
+And here we see that Angelica has matured; when she first introduces Eliza to Alexander, she does so because she knows Eliza is in love with him.  She believes that Eliza (*you will never find anyone as trusting or as kind*) is a better match for Alexander.  But most of all, she does so for herself, because she knows:
+<span class='music' data-char='8' data-clip='1'><span class='control'></span>He will never be satisfied, I will never be satisfied </span>.
+
+But after the Reynolds affair, she *puts what they had aside*, and we know that she does this solely for Eliza's sake; she sings only that Alexander could never be satisfied.
+    `
+  },
 ];
 
 export default sections;
