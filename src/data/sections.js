@@ -77,7 +77,7 @@ Below are **12** of the **18** primary characters with Hamilton at the center.  
       marginTop: '100vh',
     },
     text: `
-As I filtered by different sets of characters, I started to see the nuances, the subplots between each set of characters.  The most widely analyzed relationship is the one between Alexander Hamilton and Aaron Burr, but I want to explore instead the relationship between Alexander and Angelica Schuyler.
+As I filtered by different sets of characters, I started to see the nuances, the stories between each set of characters.  The most widely analyzed relationship is the one between Alexander Hamilton and Aaron Burr, but I want to explore instead the relationship between Alexander and Angelica Schuyler.
     `
   },
   {
