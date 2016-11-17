@@ -161,6 +161,19 @@ And here we see that Angelica has matured; when she first introduces Eliza to Al
 But after the Reynolds affair, she *puts what they had aside*, and we know that she does this solely for Eliza's sake; she sings only that Alexander could never be satisfied.
     `
   },
+  {
+    id: 'angelica4',
+    vizAlign: 'left',
+    vizType: 'line',
+    style: {
+      marginTop: '20vh',
+    },
+    text: `
+### She Takes His Hand
+
+*It's Quiet Uptown* is the only song that starts with Angelica, as she narrates the aftermath of the Hamiltons losing their eldest son.  Angelica watches over as Alexander tries to get through to an unmoving Eliza, and as they reconcile; it is the most beautifully satisfying close to Angelica and Alexander's story.
+    `
+  },
 ];
 
 export default sections;
