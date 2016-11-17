@@ -56,7 +56,6 @@ I've visualized the lines as circles, colored by singer.  <span class='underline
 <sup>**Though I am unconscious of intentional error, I am nevertheless too sensible of my defects not to think it probable that I may have committed many errors.*</sup>
     `
   },
-
   {
     id: 'filter_characters',
     vizAlign: 'right',
@@ -68,6 +67,17 @@ I've visualized the lines as circles, colored by singer.  <span class='underline
 After three days, I had a spectacularly rich dataset of lines, characters, and recurring phrases.  The first thing I did was to explore the lines filtered by characters and their conversations.
 
 Below are **12** of the **18** primary characters with Hamilton at the center.  They are connected by **arcs** denoting the conversations between them.  <span class='underline'>Select any set of characters and conversations</span> to view their corresponding lines.
+    `
+  },
+  {
+    id: 'angelica1',
+    vizAlign: 'left',
+    vizType: 'line',
+    style: {
+      marginTop: '100vh',
+    },
+    text: `
+As I filtered by different sets of characters, I started to see the nuances, the subplots between each set of characters.  The most widely analyzed relationship is the one between Alexander Hamilton and Aaron Burr, but I want to explore instead the relationship between Alexander and Angelica Schuyler.
     `
   },
 ];
