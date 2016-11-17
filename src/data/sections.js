@@ -94,7 +94,7 @@ As I filtered by different sets of characters, I started to see the nuances, the
     text: `
 ### An Ocean Away
 
-Angelica Schuyler is Alexander Hamilton's sister-in-law, the one who introduces Alexander to her sister Eliza Schuyler.  But Angelica and Alexander's relationship is ambiguously flirtateous from the very start, their exchanges in *Satisfied* puntuated by mutual understanding - that they're both never satisfied.
+Angelica Schuyler is Alexander Hamilton's sister-in-law, the one who introduces Alexander to her sister Eliza Schuyler.  Angelica and Alexander's relationship is ambiguously flirtateous from the very start, their exchanges in *Satisfied* puntuated by mutual understanding - that they're both never satisfied.
 
 This flirtation is amplified in *Take A Break*, the only time in the whole musical they sing together:
 
