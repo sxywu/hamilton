@@ -59,46 +59,6 @@ The second time I heard about Hamilton, I was in New York.  I was having coffee 
 After that glowing review, I knew I had to at least give it a try.
     `
   },
-  {
-    id: 'intro2',
-    vizAlign: 'right',
-    vizType: 'song',
-    clips: [['/music/whenyouregone.mp3', ['12/7:1-40']]],
-    text: `
-The first few times I listened, I accidentally had the soundtrack on shuffle.  I was tuning in and out of the lyrics when I suddenly heard:
-
-<span class='music' data-char='12' data-clip='0'>
-  <span class='control'></span>
-  When you’re gone, I’ll go mad &nbsp;<br />
-  &nbsp; So don’t throw away this thing we had &nbsp;<br />
-  &nbsp; Cuz when push comes to shove &nbsp;<br />
-  &nbsp; I will kill your friends and family to remind you of my love &nbsp;
-</span>
-
-And I was like, holy crap what is this super abusive relationship?!  To which my boyfriend had to clarify that it was just King George singing to America (does that make things better?  I’m still not sure).  After that, I decided to actually listen to all the lyrics the whole way through.
-
-That first time, I was sobbing by the end.
-
-I had it on repeat for months.  It was all I listened to in my waking hours.  I was obsessed.  We listened so much we started to analyze the lyrics and musical styles.  We reveled in the layers of complexity, the double entredres, the clever word plays.
-
-#### We started to wonder what a visualization of Hamilton would look like.
-    `
-  },
-  {
-    id: 'hamilton',
-    topMultiple: -0.2,
-    vizAlign: 'bottom',
-    vizType: 'line',
-    style: {
-      width: '90%',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-    clips: [],
-    text: `
-One of the brilliant things (among many) about Hamilton is that the whole musical is in the soundtrack, so if you listen to all the songs, you know everything that happens.  Which means that
-    `
-  }
 ];
 
 export default sections;
