@@ -12,11 +12,11 @@ h1, h2, h3, h4, .header {
 a, a:visited, a:link {
   color: #333;
   text-decoration: none;
-  border-bottom: 1px solid;
+  border-bottom: 1px dashed;
 }
 
 a:hover {
-  border-bottom: 1px dashed;
+  border-bottom: 1px solid;
 }
 
 text {
@@ -28,4 +28,8 @@ text {
   font-weight: 400;
   line-height: 1.8;
   cursor: pointer;
+}
+
+.underline {
+  border-bottom: 1px solid;
 }
