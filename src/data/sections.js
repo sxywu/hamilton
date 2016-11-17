@@ -174,6 +174,30 @@ But after the Reynolds affair, she *puts what they had aside*, and we know that 
 *It's Quiet Uptown* is the only song that starts with Angelica, as she narrates the aftermath of the Hamiltons losing their eldest son.  Angelica watches over as Alexander tries to get through to an unmoving Eliza, and as they reconcile; it is the most beautifully satisfying close to Angelica and Alexander's story.
     `
   },
+  {
+    id: 'filter_themes',
+    vizAlign: 'right',
+    vizType: 'song',
+    style: {
+      marginTop: '100vh',
+    },
+    text: `
+
+    `
+  },
+  {
+    id: 'eliza1',
+    vizAlign: 'left',
+    vizType: 'line',
+    style: {
+      marginTop: '100vh',
+    },
+    text: `
+When I first started listening to the soundtrack, I adored Angelica for her independence and intelligence - not to mention, her rap was *fierce*.  Eliza, on the other hand, was just...there for me.
+
+But the more I listened, and the more I dug through Eliza's most common phrases, the more she grew on me.  I am now convinced that she - not Aaron Burr - is Alexander's best foil; she is the one that matures him, and she in turn comes into her own because of him.
+    `
+  },
 ];
 
 export default sections;
