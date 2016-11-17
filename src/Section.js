@@ -132,7 +132,7 @@ var Section = React.createClass({
       marginLeft: this.props.vizAlign === 'left' ? this.props.left : 0,
       pointerEvents: 'auto',
       color: this.props.fontColor,
-      backgroundColor: 'rgba(255, 255, 255, 0.75)',
+      backgroundColor: 'rgba(255, 255, 255, 0.85)',
     }, this.props.style);
     var rawMarkup = { __html: md.render(this.props.text)};
 
