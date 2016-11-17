@@ -52,8 +52,20 @@ When I started, I was curious about two things: the relationships between the pr
 So I've gone through every single line in Hamilton (twice 😱) to record who sang each line, as well as who that line may have been directed towards.  I've also noted every phrase that was sung more than once across more than one song, and grouped them into broad themes*.
 
 <sup>**Though I am unconscious of intentional error, I am nevertheless too sensible of my defects not to think it probable that I may have committed many errors.*</sup>
+    `
+  },
 
-I've visualized the lines as circles, colored by singer.  **Hover circles to see lyrics.**
+  {
+    id: 'filter_characters',
+    vizAlign: 'right',
+    vizType: 'song',
+    style: {
+      marginTop: '100vh',
+    },
+    text: `
+After three days, I had a spectacularly rich dataset of lines, characters, and recurring phrases.  The first thing I did was to explore the lines filtered by characters and their conversations.
+
+Below are **12** of the **18** primary characters with Hamilton at the center.  They are connected by **arcs** denoting the conversations between them.  <span class='underline'>Select any set of characters and conversations</span> to view their corresponding lines.
     `
   },
 ];
