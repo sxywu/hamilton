@@ -40,30 +40,20 @@ Then my obsession hit a peak and <span style='font-size: 16px'>**I started to wo
   },
   {
     id: 'intro1',
-    vizAlign: 'left',
-    vizType: 'character',
+    vizType: 'random',
     style: {
+      margin: 'auto',
       marginTop: '100vh',
+      width: '50%',
     },
-    clips: [['/music/ouioui.mp3', ['5/2:40-44']]],
     text: `
-I first heard Hamilton while visiting my friend in St. Louis for her birthday.  For that entire weekend, I heard the same song on repeat:
+When I started, I was curious about two things: the relationships between the primary characters, and the recurring phrases associated with those characters.
 
-<span class='music' data-char='5' data-clip='0'>
-  <span class='control'></span>
-  Oui oui, mon ami, je m’apelle Lafeyette! &nbsp;<br />
-  &nbsp; The Lancelot of the Revolutionary set! &nbsp;<br />
-  &nbsp; I came from afar, just to say “Bonsoir!” &nbsp;<br />
-  &nbsp; Tell the King, “Casse toi!” Who’s the best? &nbsp;<br />
-  &nbsp; C’est moi! &nbsp;
-</span>
+So I've gone through every single line in Hamilton (twice 😱) to record who sang each line, as well as who that line may have been directed towards.  I've also noted every phrase that was sung more than once across more than one song, and grouped them into broad themes*.
 
+<sup>**Though I am unconscious of intentional error, I am nevertheless too sensible of my defects not to think it probable that I may have committed many errors.*</sup>
 
-Catchy as it was, I hated the song by day two, and was ready to throttle her by day three; I flew back to San Francisco cursing Hamilton.
-
-The second time I heard about Hamilton, I was in New York.  I was having coffee with a friend when he told me about being in a car with Hamilton for two hours.  He was doubtful at first (“a hip-hop musical?”), but as it went on, he was overwhelmed by how transformative it was (“why am I crying over some guy I don’t even know?”).
-
-After that glowing review, I knew I had to at least give it a try.
+I've visualized the lines as circles, colored by singer.  **Hover circles to see lyrics.**
     `
   },
 ];
