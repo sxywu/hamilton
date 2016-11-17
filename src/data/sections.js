@@ -28,7 +28,14 @@ The [hype](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=
 
 I was obsessed.  I had the soundtrack on repeat for months, it was all I listened to in my waking hours.  I listened so much I had favorite lines and favorite songs.  I analyzed the lyrics; I reveled in the layers of complexity, the double entredres, the clever word plays.
 
-Then my obsession hit a peak: <span style='font-size: 16px'>**I started to wonder what a visualization of Hamilton would look like.**</span>
+Then my obsession hit a peak and <span style='font-size: 16px'>**I started to wonder what a visualization of Hamilton would look like.**</span>
+
+<center>
+  <h3>
+    Start<br />
+    ↓
+  </h3>
+</center>
     `
   },
   {
