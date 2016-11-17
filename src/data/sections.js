@@ -17,7 +17,7 @@ var sections = [
     },
     text: `
 <center>
-  <h1>
+  <h1 style='line-height: 1.25'>
     An Interactive Visualization of<br />
     Every Line in Hamilton
   </h1>
@@ -28,7 +28,7 @@ The [hype](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=
 
 I was obsessed.  I had the soundtrack on repeat for months, it was all I listened to in my waking hours.  I listened so much I had favorite lines and favorite songs.  I analyzed the lyrics; I reveled in the layers of complexity, the double entredres, the clever word plays.
 
-Then my obsession hit a peak and <span style='font-size: 16px'>**I started to wonder what a visualization of Hamilton would look like.**</span>
+Then my obsession hit a peak and <span class='underline'>I started to wonder what a visualization of Hamilton would look like.</span>
 
 <center>
   <h3>
@@ -49,7 +49,9 @@ Then my obsession hit a peak and <span style='font-size: 16px'>**I started to wo
     text: `
 When I started, I was curious about two things: the relationships between the primary characters, and the recurring phrases associated with those characters.
 
-So I've gone through every single line in Hamilton (twice 😱) to record who sang each line, as well as who that line may have been directed towards.  I've also noted every phrase that was sung more than once across more than one song, and grouped them into broad themes*.
+So I've gone through every single line in Hamilton (twice 😱) to record who sang each line, as well as who that line may have been directed towards.  I've noted every phrase that was sung more than once across more than one song, and grouped them into broad themes*.
+
+I've visualized the lines as circles, colored by singer.  <span class='underline'>Hover any circle</span> to see its lyrics.
 
 <sup>**Though I am unconscious of intentional error, I am nevertheless too sensible of my defects not to think it probable that I may have committed many errors.*</sup>
     `
