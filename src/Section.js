@@ -127,7 +127,7 @@ var Section = React.createClass({
     var padding = 10;
     var style = Object.assign({
       width: this.props.width - 2 * padding,
-      lineHeight: 1.6,
+      lineHeight: 2,
       padding,
       marginLeft: this.props.vizAlign === 'left' ? this.props.left : 0,
       pointerEvents: 'auto',
