@@ -80,6 +80,44 @@ Below are **12** of the **18** primary characters with Hamilton at the center.  
 As I filtered by different sets of characters, I started to see the nuances, the subplots between each set of characters.  The most widely analyzed relationship is the one between Alexander Hamilton and Aaron Burr, but I want to explore instead the relationship between Alexander and Angelica Schuyler.
     `
   },
+  {
+    id: 'angelica2',
+    vizAlign: 'left',
+    vizType: 'line',
+    style: {
+      marginTop: '20vh',
+    },
+    clips: [
+      ['/music/whenyouregone.mp3', ['8/26:23-27', '2/26:23-27']],
+      ['/music/whenyouregone.mp3', ['8/26:85-86', '2/26:85-86']],
+    ],
+    text: `
+### An Ocean Away
+
+Angelica Schuyler is Alexander Hamilton's sister-in-law, the one who introduces Alexander to her sister Eliza Schuyler.  But Angelica and Alexander's relationship is ambiguously flirtateous from the very start, their exchanges in *Satisfied* puntuated by mutual understanding - that they're both never satisfied.
+
+This flirtation is amplified in *Take A Break*, the only time in the whole musical they sing together:
+
+<span class='music' data-char='2' data-clip='0'>
+  <span class='control'></span>
+  And there you are, an ocean away &nbsp;<br />
+  &nbsp; Do you have to live an ocean away? &nbsp;<br />
+  &nbsp; Thoughts of you subside &nbsp;<br />
+  &nbsp; Then I get another letter &nbsp;<br />
+  &nbsp; I cannot put the notion away… &nbsp;<br />
+</span>
+
+Angelica sings that she's coming home from London for the summer (at Eliza's invitation), and that she just can't wait:
+
+<span class='music' data-char='8' data-clip='1'>
+  <span class='control'></span>
+  You won’t be an ocean away &nbsp;<br />
+  &nbsp; You will only be a moment away… &nbsp;<br />
+</span>
+
+And they leave us wondering: did they, or didn't they?
+    `
+  },
 ];
 
 export default sections;
