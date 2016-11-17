@@ -13,7 +13,7 @@ import ProcessGraph from './ProcessGraph';
 import charList from './data/char_list.json';
 
 var width = 1200;
-var vizWidth = 800;
+var vizWidth = 700;
 var vizTop = null;
 var vizAlign = 'center';
 var sectionWidth = width - vizWidth;
