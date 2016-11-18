@@ -193,9 +193,9 @@ But after the Reynolds affair, she *puts what they had aside*, and we know that 
       marginTop: '100vh',
     },
     text: `
-When I first started listening to the soundtrack, I adored Angelica for her independence and intelligence - not to mention, her rap was *fierce*.  Eliza, on the other hand, was just...there for me.
+When I first started listening to the soundtrack, I adored Angelica for her independence and intelligence (and her rap was *fierce*).  Eliza, on the other hand, was just...there for me.
 
-But the more I listened, and the more I dug through Eliza's most common phrases, the more she grew on me.  I am now convinced that she - not Aaron Burr - is Alexander's best foil; she is the one that matures him, and she in turn comes into her own because of him.
+But the more I listened, and the more I dug through Eliza's lines, the more she grew on me.  I am now convinced that she - not Aaron Burr - is Alexander's primary foil; she is the one that matures him, and she comes into her own because of him.
     `
   },
   {
