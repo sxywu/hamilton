@@ -241,6 +241,38 @@ And she continues:
 They're newly married with a child on the way, and Eliza knows exactly what she wants from him: not money nor legacy, but for him to stay, and for her to be a part of his story.
     `
   },
+  {
+    id: 'eliza3',
+    vizAlign: 'left',
+    vizType: 'line',
+    style: {
+      marginTop: '20vh',
+    },
+    clips: [
+      ['/music/whenyouregone.mp3', ['7/23:122-128']],
+      ['/music/whenyouregone.mp3', ['2/23:157']],
+    ],
+    text: `
+### They're Asking Me To Lead
+
+The next time Eliza appears with Alexander is in *Non-Stop* after the war.  Alexander works (non-stop) as a lawyer, is invited to the Constitutional Convention, and writes the majority of the Federalist Papers.  Eliza pleads with him:
+
+<span class='music' data-char='7' data-clip='0'>
+  <span class='control'></span>
+  And if your wife could share a fraction of your time &nbsp;<br />
+  &nbsp; If I could grant you peace of mind &nbsp;<br />
+  &nbsp; Would that be enough? &nbsp;<br />
+</span>
+
+Eliza's lines are close to the ones she sung to Alexander in *That Would Be Enough*, but the subtle changes make clear two things: Eliza is starting to realize that Alexander will always place his political ambitions before her, and she is left unsure of her own role.
+
+The most heartbreaking moment comes when George Washington asks Alexander to join his cabinet as Treasury Secretary, and Eliza instead asks Alexander to stay.  Alexander responds with the very lines that Eliza uses to reassure him: <span class='music' data-char='2' data-clip='1'><span class='control'></span>Look around, look around at how lucky we are to be alive right now</span>.
+
+In return, Eliza sings only one word: *helpless*.
+
+It is the last time she sings "helpless" in the whole musical.
+    `
+  },
 ];
 
 export default sections;
