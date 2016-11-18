@@ -198,6 +198,49 @@ When I first started listening to the soundtrack, I adored Angelica for her inde
 But the more I listened, and the more I dug through Eliza's most common phrases, the more she grew on me.  I am now convinced that she - not Aaron Burr - is Alexander's best foil; she is the one that matures him, and she in turn comes into her own because of him.
     `
   },
+  {
+    id: 'eliza2',
+    vizAlign: 'left',
+    vizType: 'line',
+    style: {
+      marginTop: '20vh',
+    },
+    clips: [
+      ['/music/whenyouregone.mp3', ['7/17:18-45']],
+      ['/music/whenyouregone.mp3', ['7/17:18-45']],
+    ],
+    text: `
+### Look Around
+
+Eliza Schuyler is the second daughter of a wealthy New York family; her upbringing has afforded her an innocently idealistic outlook on life.  When she meets Alexander, she lacks Angelica's understanding of Alexander's ambition, and she is helplessly in love.
+
+That confident optimism is highlighted in *That Would Be Enough*, when Alexander is on leave from the war.  Downtrodden that he may never be given command, he asks Eliza if she'll relish being a poor man's wife.  She responds:
+
+<span class='music' data-char='7' data-clip='0'>
+  <span class='control'></span>
+  I relish being your wife &nbsp;<br />
+  &nbsp; Look around, look around… &nbsp;<br />
+  &nbsp; Look at where you are &nbsp;<br />
+  &nbsp; Look at where you started &nbsp;<br />
+  &nbsp; The fact that you’re alive is a miracle &nbsp;<br />
+  &nbsp; Just stay alive, that would be enough &nbsp;<br />
+</span>
+
+And she continues:
+
+<span class='music' data-char='7' data-clip='1'>
+  <span class='control'></span>
+  We don’t need a legacy &nbsp;<br />
+  &nbsp; We don’t need money &nbsp;<br />
+  &nbsp; If I could grant you peace of mind &nbsp;<br />
+  &nbsp; If you could let me inside your heart… &nbsp;<br />
+  &nbsp; Oh, let me be a part of the narrative &nbsp;<br />
+  &nbsp; In the story they will write someday &nbsp;<br />
+</span>
+
+They're newly married with a child on the way, and Eliza knows exactly what she wants from him: not money nor legacy, but for him to stay, and for her to be a part of his story.
+    `
+  },
 ];
 
 export default sections;
