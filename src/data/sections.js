@@ -281,8 +281,6 @@ In return, Eliza sings only one word: *helpless*.  *It is the last time she sing
       marginTop: '20vh',
     },
     clips: [
-      ['/music/whenyouregone.mp3', ['8/41:17-18', '21/41:17-18']],
-      ['/music/whenyouregone.mp3', ['24/41:41-42']],
       ['/music/whenyouregone.mp3', ['2/41:25-40']],
       ['/music/whenyouregone.mp3', ['24/41:56-59']],
     ],
@@ -291,11 +289,9 @@ In return, Eliza sings only one word: *helpless*.  *It is the last time she sing
 
 When Eliza learns of Alexander's affair with Maria Reynolds, she burns their letters, determined to write herself out of the narrative.  But when their eldest son Philip dies in a duel, she is grief-stricken, mute throughout *It's Quiet Uptown*.
 
-The song starts with Alexander working through his grief: <span class='music' data-char='8' data-clip='0'><span class='control'></span>If you see him in the street, walking by himself, talking to himself, have pity &nbsp;</span>.  But as the song progresses, the scene shifts and Alexander is trying to get through to Eliza: <span class='music' data-char='24' data-clip='1'><span class='control'></span>If you see him in the street, walking by her side, talking by her side, have pity &nbsp;</span>.
+The song starts with Alexander working through his grief, but as the song progresses Alexander tries to get through to Eliza instead.  He again mirrors Eliza's lines from *That Would Be Enough*, but this time, it is to reassure her that he will stay by her side:
 
-This time when Alexander mirrors Eliza's lines from *That Would Be Enough*, he uses them to reassure her that he will stay by her side:
-
-<span class='music' data-char='2' data-clip='2'>
+<span class='music' data-char='2' data-clip='0'>
   <span class='control'></span>
   Look at where we are &nbsp;<br />
   &nbsp; Look at where we started &nbsp;<br />
@@ -309,7 +305,7 @@ This time when Alexander mirrors Eliza's lines from *That Would Be Enough*, he u
 
 There is a moment, and Eliza finally takes his hand and sings only one line: *it's quiet uptown*.  The music swells, and the Company asks:
 
-<span class='music' data-char='24' data-clip='3'>
+<span class='music' data-char='24' data-clip='1'>
   <span class='control'></span>
   Forgiveness.  Can you imagine? &nbsp;<br />
   &nbsp; Forgiveness.  Can you imagine? &nbsp;<br />
