@@ -316,6 +316,32 @@ There is a moment, and Eliza finally takes his hand and sings only one line: *it
 And it's heartbreakingly beautiful as they reconcile, and their story comes around full circle: *Alexander finally puts Eliza first, and he promises to stay*.
     `
   },
+  {
+    id: 'eliza5',
+    vizAlign: 'left',
+    vizType: 'line',
+    style: {
+      marginTop: '20vh',
+    },
+    clips: [
+      ['/music/whenyouregone.mp3', ['7/46:70-74']],
+    ],
+    text: `
+### Will They Tell My Story?
+
+At the beginning of their Marriage, Eliza tells Alexander that if he could just stay by her side, that would be enough.  As their marriage progresses and she realizes the extent of his ambition, Eliza starts to doubt herself, asking Alexander what would be enough - if she could be enough.  But as they face the hardest of trials - an affair and the death of a child - their relationship reverses, and Alexander asks if he could stay by her side, that would be enough.
+
+As the musical closes with *Who Lives, Who Dies, Who Tells Your Story*, Eliza comes into her own; after Alexander's death, she puts herself back in the narrative.  She tells his story, his fellow soldiers' stories, Washington's story.  She builds the first private orphanage in New York City - her proudest accomplishment.  And when her time is up, she asks:
+
+<span class='music' data-char='7' data-clip='0'>
+  <span class='control'></span>
+  Have *I* done enough? &nbsp;<br />
+  &nbsp; Will they tell *my* story? &nbsp;<br />
+</span>
+
+That subtle change in wording is amazing; Eliza is no longer concerned about *what would be enough*, but rather if *she* has *done* enough.  She is responsible for her own wants, her own purpose, her own legacy.  She is no longer a secondary character in her husband's story, but *the main character of her own*.
+    `
+  },
 ];
 
 export default sections;
