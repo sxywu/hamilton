@@ -177,17 +177,6 @@ Angelica does not re-appear with Alexander until his death in *The World Was Wid
     `
   },
   {
-    id: 'filter_themes',
-    vizAlign: 'right',
-    vizType: 'song',
-    style: {
-      marginTop: '100vh',
-    },
-    text: `
-
-    `
-  },
-  {
     id: 'eliza1',
     vizAlign: 'left',
     vizType: 'line',
@@ -195,9 +184,7 @@ Angelica does not re-appear with Alexander until his death in *The World Was Wid
       marginTop: '100vh',
     },
     text: `
-When I first started listening to the soundtrack, I adored Angelica for her independence and intelligence (and her rap was *fierce*).  Eliza, on the other hand, was just...there for me.
-
-But the more I listened, and the more I dug through Eliza's lines, the more she grew on me.  I am now convinced that she - not Aaron Burr - is Alexander's primary foil; she is the one that matures him, and she comes into her own because of him.
+When I first started listening to the soundtrack, I adored Angelica for her independence and intelligence (and her rap was *fierce*).  Eliza, on the other hand, was just...there for me.  But the more I listened and the more I dug through Eliza's lines, the more she grew on me; I am now convinced that she - not Alexander - has the most character growth in the musical.
     `
   },
   {
