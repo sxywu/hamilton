@@ -329,6 +329,18 @@ As the musical closes with *Who Lives, Who Dies, Who Tells Your Story*, Eliza co
 That subtle change in wording is amazing; Eliza is no longer concerned about *what would be enough*, but rather if *she* has *done* enough.  She is responsible for her own wants, her own purpose, her own legacy.  She is no longer a secondary character in her husband's story, but *the main character of her own*.
     `
   },
+  {
+    id: 'conclusion',
+    vizType: 'random',
+    style: {
+      margin: 'auto',
+      marginTop: '100vh',
+      width: '50%',
+    },
+    text: `
+Angelica and Eliza are only two of the stories I've found; there are many more.  Filter by any combination of characters, conversations, and themes below to explore more stories.
+    `
+  },
 ];
 
 export default sections;
