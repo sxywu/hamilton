@@ -17,7 +17,6 @@ var LineSummary = React.createClass({
       return (<div></div>);
     }
 
-    var margin = 10;
     var borderRadius = 3;
     var headerHeight = 40;
     var imageSize = 50;
@@ -27,11 +26,6 @@ var LineSummary = React.createClass({
       position: 'absolute',
       left: this.props.x - (width / 2),
       top: this.props.y + this.props.hoverHeight,
-    };
-    var hoverStyle = {
-      width: this.props.hoverWidth,
-      height: margin,
-      margin: 'auto',
     };
     var contentStyle = {
       backgroundColor: '#fff',

@@ -30,7 +30,7 @@ var Lines = React.createClass({
   },
 
   updateRender() {
-    this.container
+    // this.container
       // .style("filter", this.props.vizType === 'line' ? 'url(#gooey)' : 'none');
 
     this.circles = this.container.selectAll('path')

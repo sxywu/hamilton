@@ -479,20 +479,20 @@ var PositionGraph = {
   },
 
   positionSelectLines(lineIds, linePositions, scale, width, vizTop, vizAlign, vizWidth) {
-    var left = 0;
-    if (vizAlign === 'center') {
-      left = (width - vizWidth) / 2;
-    } else if (vizAlign === 'right') {
-      left = width - vizWidth;
-    }
+    // var left = 0;
+    // if (vizAlign === 'center') {
+    //   left = (width - vizWidth) / 2;
+    // } else if (vizAlign === 'right') {
+    //   left = width - vizWidth;
+    // }
 
     var centerLine = lineIds && _.find(linePositions, line => lineIds[0] === line.id);
     var centerX, centerY;
-    var translateX;
+    // var translateX;
     if (centerLine) {
       centerX = centerLine.focusX;
       centerY = centerLine.focusY;
-      translateX = left + (vizWidth / 2) - centerX;
+      // translateX = left + (vizWidth / 2) - centerX;
     }
 
     return _.map(linePositions, line => {
@@ -500,8 +500,8 @@ var PositionGraph = {
       if (centerLine) {
         // line.focusX += translateX;
         // line.focusX = line.focusX - (centerX + translateX - line.focusX) * scale;
-        line.focusX = line.focusX - (centerX - line.focusX) * scale;
-        line.focusY = line.focusY - (centerY - line.focusY) * scale;
+        line.focusX -= (centerX - line.focusX) * scale;
+        line.focusY -= (centerY - line.focusY) * scale;
 
         line.radius *= scale;
         line.fullRadius *= scale;
