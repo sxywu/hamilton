@@ -171,7 +171,9 @@ But after the Reynolds affair, she *puts what they had aside*, and we know that 
     text: `
 ### She Takes His Hand
 
-*It's Quiet Uptown* is the only song that starts with Angelica, as she narrates the aftermath of the Hamiltons losing their eldest son.  Angelica watches over as Alexander tries to get through to an unmoving Eliza, and as they reconcile; it is the most beautifully satisfying close to Angelica and Alexander's story.
+*It's Quiet Uptown* is the only song that starts with Angelica, as she and Alexander take turns narrating the aftermath of the Hamiltons losing their eldest son.  Angelica watches over as Alexander tries to get through to an unmoving Eliza, and as they reconcile; it is the most beautifully satisfying close to Angelica and Alexander's story.
+
+Angelica does not re-appear with Alexander until his death in *The World Was Wide Enough*.
     `
   },
   {
