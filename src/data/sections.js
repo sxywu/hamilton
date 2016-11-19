@@ -271,6 +271,52 @@ The most heartbreaking moment comes when George Washington asks Alexander to joi
 In return, Eliza sings only one word: *helpless*.
 
 It is the last time she sings "helpless" in the whole musical.
+  },
+  {
+    id: 'eliza4',
+    vizAlign: 'left',
+    vizType: 'line',
+    style: {
+      marginTop: '20vh',
+    },
+    clips: [
+      ['/music/whenyouregone.mp3', ['8/41:17-18', '21/41:17-18']],
+      ['/music/whenyouregone.mp3', ['24/41:41-42']],
+      ['/music/whenyouregone.mp3', ['2/41:25-40']],
+      ['/music/whenyouregone.mp3', ['24/41:56-59']],
+    ],
+    text: `
+### Forgiveness
+
+When Eliza learns of Alexander's affair with Maria Reynolds, she burns their letters, determined to write herself out of the narrative.  But when their eldest son Philip dies in a duel, she is grief-stricken, mute throughout *It's Quiet Uptown*.
+
+The song starts with Alexander working through his grief: <span class='music' data-char='8' data-clip='0'><span class='control'></span>If you see him in the street, walking by himself, talking to himself, have pity &nbsp;</span>.  But as the song progresses, the scene shifts and Alexander is trying to get through to Eliza: <span class='music' data-char='24' data-clip='1'><span class='control'></span>If you see him in the street, walking by her side, talking by her side, have pity &nbsp;</span>.
+
+This time when Alexander mirrors Eliza's lines from *That Would Be Enough*, he uses them to reassure her that he will stay by her side:
+
+<span class='music' data-char='2' data-clip='2'>
+  <span class='control'></span>
+  Look at where we are &nbsp;<br />
+  &nbsp; Look at where we started &nbsp;<br />
+  &nbsp; I know I don’t deserve you, Eliza &nbsp;<br />
+  &nbsp; But hear me out. That would be enough &nbsp;<br />
+  &nbsp; If I could spare his life &nbsp;<br />
+  &nbsp; If I could trade his life for mine &nbsp;<br />
+  &nbsp; He’d be standing here right now &nbsp;<br />
+  &nbsp; And you would smile, and that would be enough &nbsp;<br />
+</span>
+
+There is a moment, and Eliza finally takes his hand and sings only one line: *it's quiet uptown*.  The music swells, and the Company asks:
+
+<span class='music' data-char='24' data-clip='3'>
+  <span class='control'></span>
+  Forgiveness.  Can you imagine? &nbsp;<br />
+  &nbsp; Forgiveness.  Can you imagine? &nbsp;<br />
+  &nbsp; If you see him in the street, walking by her side, talking by her side, have pity &nbsp;<br />
+  &nbsp; They are going through the unimaginable &nbsp;<br />
+</span>
+
+And it's heartbreakingly beautiful as they reconcile, and their story comes around full circle: *Alexander finally puts Eliza first, and he promises to stay*.
     `
   },
 ];
