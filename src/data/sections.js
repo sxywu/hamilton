@@ -268,11 +268,10 @@ The next time Eliza appears with Alexander is in *Non-Stop* after the war.  Alex
 
 Eliza's lines are close to the ones she sung to Alexander in *That Would Be Enough*, but the subtle changes make clear two things: Eliza is starting to realize that Alexander will always place his political ambitions before her, and she is left unsure of her own role.
 
-The most heartbreaking moment comes when George Washington asks Alexander to join his cabinet as Treasury Secretary, and Eliza instead asks Alexander to stay.  Alexander responds with the very lines that Eliza uses to reassure him: <span class='music' data-char='2' data-clip='1'><span class='control'></span>Look around, look around at how lucky we are to be alive right now</span>.
+The most heartbreaking moment comes when George Washington asks Alexander to join his cabinet as Treasury Secretary, and Eliza instead asks Alexander to stay.  Alexander responds with the very lines that Eliza uses to reassure him in *That Would Be Enough*, using them instead as his reason to leave: <span class='music' data-char='2' data-clip='1'><span class='control'></span>Look around, look around at how lucky we are to be alive right now &nbsp;</span>.
 
-In return, Eliza sings only one word: *helpless*.
-
-It is the last time she sings "helpless" in the whole musical.
+In return, Eliza sings only one word: *helpless*.  *It is the last time she sings* helpless *in the whole musical.*
+    `
   },
   {
     id: 'eliza4',
