@@ -1,6 +1,7 @@
 var paddingTop = 150;
 var marginBottom = 600;
 
+import FilterGraph from '../FilterGraph';
 import PositionGraph from '../PositionGraph';
 
 function sections(width, vizWidth, sectionWidth) {
@@ -71,8 +72,19 @@ function sections(width, vizWidth, sectionWidth) {
         marginBottom,
         minHeight: 600,
       },
+      filter: ['characters'],
       position(data) {
-        return PositionGraph.positionLinesBySong(data.lines, sectionWidth - 100, paddingTop / 3);
+        if (data.selectedCharacters.length || data.selectedConversation.length) {
+          var {linePositions, characterNodes, characterLinks} =
+            FilterGraph.filterForCharacters(data, data.selectedCharacters, data.selectedConversation);
+          var {linePositions, songPositions} =
+            PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth);
+
+          return {linePositions, songPositions, characterNodes, characterLinks};
+        } else {
+          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 100, paddingTop / 3);
+          return {linePositions, characterNodes: data.characters, characterLinks: data.conversations};
+        }
       },
       text: `
   After three days, I had a spectacularly rich dataset of lines, characters, and recurring phrases.  The first thing I did was to explore the lines filtered by characters and their conversations.

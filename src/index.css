@@ -20,6 +20,10 @@ a:hover {
   border-bottom: 1px solid;
 }
 
+svg {
+  pointer-events: auto;
+}
+
 text {
   fill: #333;
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import _ from 'lodash';
 import * as d3 from "d3";
 
+import Characters from './visualizations/Characters';
+
 import charList from './data/char_list.json';
 import chroma from 'chroma-js';
 var Remarkable = require('remarkable');
@@ -125,7 +127,6 @@ var Section = React.createClass({
 
   render() {
     var padding = 20;
-    console.log(this.props.width)
     var style = Object.assign({
       width: this.props.sectionWidth - 2 * padding,
       lineHeight: 2,
@@ -139,9 +140,15 @@ var Section = React.createClass({
     };
     var rawMarkup = { __html: md.render(this.props.text)};
 
+    var characters;
+    if (_.includes(this.props.filter, 'characters')) {
+      characters = (<Characters {...this.props} />);
+    }
+
     return (
       <div style={style} className='section' id={this.props.id}>
         <div style={contentStyle} ref='section' dangerouslySetInnerHTML={rawMarkup} />
+        {characters}
       </div>
     );
   }

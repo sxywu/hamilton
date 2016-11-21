@@ -3,12 +3,12 @@ import * as d3 from "d3";
 
 var Characters = React.createClass({
   shouldComponentUpdate(nextProps) {
-    return nextProps.update;
+    return !!nextProps.update;
   },
 
   componentDidMount() {
     this.container = d3.select(this.refs.images).attr('transform', 'translate(' +
-      [this.props.width / 2, this.props.height / 2] + ')');
+      [this.props.characterWidth / 2, this.props.characterHeight / 2] + ')');
     this.defineFilters();
 
     this.updateLinks();
@@ -120,7 +120,7 @@ var Characters = React.createClass({
 
   render() {
     return (
-      <svg width={this.props.width} height={this.props.height}>
+      <svg width={this.props.characterWidth} height={this.props.characterHeight}>
         <g ref='images' className='images' />
       </svg>
     );

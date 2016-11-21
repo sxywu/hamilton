@@ -3,9 +3,19 @@ import * as d3 from "d3";
 
 var themeScale = d3.scaleLinear().range([10, 20]);
 var FilterGraph = {
-  updateFilterOpacities(lines, diamonds, songs,
-    selectedCharacters, selectedConversation, selectedThemes,
-    characterNodes, characterLinks, groupedThemes) {
+  filterForCharacters(data, selectedCharacters, selectedConversation) {
+    var {filteredLines} = FilterGraph.filterLinesBySelectedCharacter(
+      selectedCharacters, selectedConversation, data.lines);
+    var {characterNodes, characterLinks} =
+      FilterGraph.updateFilterOpacities(filteredLines, null,
+        data.characters, data.conversations, null,
+        selectedCharacters, selectedConversation, null);
+
+    return {linePositions: filteredLines, characterNodes, characterLinks};
+  },
+
+  updateFilterOpacities(lines, diamonds, characterNodes, characterLinks, groupedThemes,
+    selectedCharacters, selectedConversation, selectedThemes) {
     var nonSelected = _.isEmpty(selectedCharacters)
       && _.isEmpty(selectedConversation) && _.isEmpty(selectedThemes);
 
@@ -62,11 +72,6 @@ var FilterGraph = {
         var size = themeScale(diamond.length);
         diamond.positions = [{x: (i + .5) * svgSize, y: svgSize / 2, size: size / 2}];
       });
-    });
-
-    var availableSongs = _.chain(lines).map('songId').uniq().value();
-    _.each(songs, song => {
-      song.selected = _.includes(availableSongs, song.id);
     });
 
     return {characterNodes, characterLinks, groupedThemes};

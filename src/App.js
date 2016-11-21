@@ -3,7 +3,6 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import Visualization from './visualizations/Visualization';
-// import Characters from './Characters';
 // import Themes from './Themes';
 import Section from './Section';
 import SectionsData from './data/sections';
@@ -17,9 +16,9 @@ import PositionGraph from './PositionGraph';
 var width = 1200;
 var vizWidth = 700;
 var sectionWidth = width - vizWidth;
-var characterWidth = 620;
+var characterWidth = sectionWidth;
 // var themeWidth = width - characterWidth;
-var filterHeight = 220;
+var characterHeight = 220;
 var prevSection = null;
 var sections = SectionsData(width, vizWidth, sectionWidth);
 
@@ -64,7 +63,7 @@ var App = React.createClass({
   componentWillMount() {
     var {lines, songs} = ProcessGraph.processLinesSongs(width);
 
-    var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines, characterWidth, filterHeight);
+    var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines, characterWidth, characterHeight);
 
     var {diamonds, groupedThemes} = ProcessGraph.processThemes(lines);
 
@@ -138,9 +137,9 @@ var App = React.createClass({
     var {filteredLines2} = FilterGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
     var {filteredDiamonds} = FilterGraph.filterDiamondsByRemainingLines(filteredLines2, diamonds);
     var {characterNodes, characterLinks, groupedThemes} =
-      FilterGraph.updateFilterOpacities(filteredLines2, filteredDiamonds, songs,
-        selectedCharacters, selectedConversation, selectedThemes,
-        characters, conversations, themes);
+      FilterGraph.updateFilterOpacities(filteredLines2, filteredDiamonds,
+        characters, conversations, themes,
+        selectedCharacters, selectedConversation, selectedThemes);
     var {linePositions, songPositions, diamondPositions} =
       PositionGraph.positionLinesForFilter(filteredLines2, filteredDiamonds, songs, width);
 
@@ -196,11 +195,13 @@ var App = React.createClass({
       positions.random = positions.random || false;
       positions.prevTop = this.state.top;
       positions.top = section.top;
+      positions.section = section;
     } else if (!section && prevSection && random) {
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
       positions.random = random;
       positions.prevTop = this.state.top;
       positions.top = scrollTop;
+      positions.section = null;
     }
 
     if (_.size(positions)) {
@@ -265,15 +266,22 @@ var App = React.createClass({
       vizWidth,
       sectionWidth,
       width,
+      characterWidth,
+      characterHeight,
+    };
+    var eventProps = {
+      selectLines: this.selectLines,
+      onSelectCharacter: this.filterByCharacter,
+      onSelectConversation: this.filterByConversation,
     };
 
     var sectionsEl = _.map(sections, section => {
-      return (<Section {...section} {...styleProps} selectLines={this.selectLines} />);
+      return (<Section {...this.state} {...section} {...styleProps} {...eventProps} />);
     });
 
     return (
       <div ref='app' style={style}>
-        <Visualization {...this.state} {...styleProps} />
+        <Visualization {...this.state} {...styleProps} {...eventProps} />
         <div className='sections' style={sectionStyle}>
           {sectionsEl}
         </div>
