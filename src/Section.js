@@ -124,22 +124,26 @@ var Section = React.createClass({
   },
 
   render() {
-    var padding = 10;
+    var padding = 20;
+    console.log(this.props.width)
     var style = Object.assign({
-      width: this.props.width - 2 * padding,
+      width: this.props.sectionWidth - 2 * padding,
       lineHeight: 2,
-      padding,
-      marginLeft: this.props.vizAlign === 'left' ? this.props.vizWidth : 0,
-      pointerEvents: 'auto',
+      pointerEvents: 'none',
       color: this.props.fontColor,
-      backgroundColor: 'rgba(255, 255, 255, 0.85)',
+      border: '1px solid',
     }, this.props.style);
+    var contentStyle = {
+      pointerEvents: 'auto',
+      backgroundColor: 'rgba(255, 255, 255, 0.85)',
+      padding,
+    };
     var rawMarkup = { __html: md.render(this.props.text)};
 
     return (
-      <div style={style} ref='section' className='section'
-        id={this.props.id}
-        dangerouslySetInnerHTML={rawMarkup} />
+      <div style={style} className='section' id={this.props.id}>
+        <div style={contentStyle} ref='section' dangerouslySetInnerHTML={rawMarkup} />
+      </div>
     );
   }
 });
