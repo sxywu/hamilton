@@ -14,45 +14,43 @@ import charList from './data/char_list.json';
 
 var width = 1200;
 var vizWidth = 700;
-var vizTop = null;
-var vizAlign = 'center';
 var sectionWidth = width - vizWidth;
 var characterWidth = 620;
 // var themeWidth = width - characterWidth;
 var filterHeight = 220;
 var sectionPositions = [];
 
+var images = _.reduce(charList, (obj, character, id) => {
+  try {
+    // load image
+    obj[id] = require('./images/' + id + '.png');
+  } catch(e) {
+    console.log(e);
+  }
+  return obj;
+}, {});
+
 var App = React.createClass({
 
   getInitialState() {
-    var images = _.reduce(charList, (obj, character, id) => {
-      try {
-        // load image
-        obj[id] = require('./images/' + id + '.png');
-      } catch(e) {
-        console.log(e);
-      }
-      return obj;
-    }, {});
     return {
+      // original data
       lines: [],
       diamonds: [],
       songs: [],
       groupedThemes: [],
       characters: [],
       conversations: [],
+      // filtered data to render
       characterNodes: [],
       characterLinks: [],
       linePositions: [],
       diamondPositions: [],
       songPositions: [],
+      // filters
       selectedCharacters: [],
       selectedConversation: [],
       selectedThemes: [],
-      images,
-      gray: '#eee',
-      fontColor: '#333',
-      vizType: 'image',
     };
   },
 
@@ -149,7 +147,7 @@ var App = React.createClass({
 
   selectLines(lineIds) {
     var linePositions = ProcessGraph.positionSelectLines(
-      lineIds, this.state.linePositions, 2, width, vizTop, vizAlign, vizWidth);
+      lineIds, this.state.linePositions, 2, width, vizWidth);
     if (!lineIds) {
       linePositions = this.positionByVizType(this.state.vizType);
     };
@@ -272,14 +270,22 @@ var App = React.createClass({
     //     onSelectTheme={this.filterByThemes} />
     // </div>
     //
+    var styleProps = {
+      images,
+      gray: '#eee',
+      fontColor: '#333',
+      vizType: 'image',
+      vizWidth,
+      width,
+    };
+
     var sections = _.map(sectionsData, section => {
-      return (<Section {...section} fontColor={this.state.fontColor}
-        width={sectionWidth} left={vizWidth} selectLines={this.selectLines} />);
+      return (<Section {...section} {...styleProps} selectLines={this.selectLines} />);
     });
 
     return (
       <div ref='app' style={style}>
-        <Visualization {...this.state} />
+        <Visualization {...this.state} {...styleProps} />
         <div className='sections' style={sectionStyle}>
           {sections}
         </div>

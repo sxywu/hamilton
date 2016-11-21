@@ -478,7 +478,7 @@ var PositionGraph = {
     return {linePositions, songPositions, diamondPositions};
   },
 
-  positionSelectLines(lineIds, linePositions, scale, width, vizTop, vizAlign, vizWidth) {
+  positionSelectLines(lineIds, linePositions, scale, width, vizWidth) {
     // var left = 0;
     // if (vizAlign === 'center') {
     //   left = (width - vizWidth) / 2;
