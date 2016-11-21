@@ -6,11 +6,13 @@ import Visualization from './visualizations/Visualization';
 // import Characters from './Characters';
 // import Themes from './Themes';
 import Section from './Section';
-
 import sectionsData from './data/sections';
-import ProcessGraph from './ProcessGraph';
-
 import charList from './data/char_list.json';
+
+import ProcessGraph from './ProcessGraph';
+import FilterGraph from './FilterGraph';
+import PositionGraph from './PositionGraph';
+
 
 var width = 1200;
 var vizWidth = 700;
@@ -126,16 +128,16 @@ var App = React.createClass({
 
   filterAndPosition(selectedCharacters, selectedConversation, selectedThemes,
     characters, conversations, lines, songs, diamonds, themes) {
-    var {filteredLines} = ProcessGraph.filterLinesBySelectedCharacter(
+    var {filteredLines} = FilterGraph.filterLinesBySelectedCharacter(
       selectedCharacters, selectedConversation, lines);
-    var {filteredLines2} = ProcessGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
-    var {filteredDiamonds} = ProcessGraph.filterDiamondsByRemainingLines(filteredLines2, diamonds);
+    var {filteredLines2} = FilterGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
+    var {filteredDiamonds} = FilterGraph.filterDiamondsByRemainingLines(filteredLines2, diamonds);
     var {characterNodes, characterLinks, groupedThemes} =
-      ProcessGraph.updateFilterOpacities(filteredLines2, filteredDiamonds, songs,
+      FilterGraph.updateFilterOpacities(filteredLines2, filteredDiamonds, songs,
         selectedCharacters, selectedConversation, selectedThemes,
         characters, conversations, themes);
     var {linePositions, songPositions, diamondPositions} =
-      ProcessGraph.positionLinesForFilter(filteredLines2, filteredDiamonds, songs, width);
+      PositionGraph.positionLinesForFilter(filteredLines2, filteredDiamonds, songs, width);
 
     this.setState({
       selectedCharacters, selectedConversation, selectedThemes,
@@ -146,7 +148,7 @@ var App = React.createClass({
   },
 
   selectLines(lineIds) {
-    var linePositions = ProcessGraph.positionSelectLines(
+    var linePositions = PositionGraph.positionSelectLines(
       lineIds, this.state.linePositions, 2, width, vizWidth);
     if (!lineIds) {
       linePositions = this.positionByVizType(this.state.vizType);
