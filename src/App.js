@@ -55,6 +55,7 @@ var App = React.createClass({
       selectedConversation: [],
       selectedThemes: [],
       // render properties
+      prevTop: 0,
       top: 0,
       random: false,
     };
@@ -191,18 +192,14 @@ var App = React.createClass({
     var positions = {};
     // if we just entered a new section, position
     if (section && section !== prevSection) {
-      positions = section.position(this.state, scrollTop);
-      if (this.state.random && positions.random) {
-        // if positions are already random and the section demands it be random
-        // then leave as is
-        return;
-      }
-
+      positions = section.position(this.state);
       positions.random = positions.random || false;
+      positions.prevTop = this.state.top;
       positions.top = section.top;
-    } else if (!section && prevSection && random && !this.state.random) {
-      positions = PositionGraph.positionLinesRandomly(this.state.lines, width, scrollTop);
+    } else if (!section && prevSection && random) {
+      positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
       positions.random = random;
+      positions.prevTop = this.state.top;
       positions.top = scrollTop;
     }
 

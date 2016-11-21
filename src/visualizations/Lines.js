@@ -24,13 +24,15 @@ var Lines = React.createClass({
 
   componentDidUpdate() {
     this.updateRender();
-
-
   },
 
   updateRender() {
     // this.container
       // .style("filter", this.props.vizType === 'line' ? 'url(#gooey)' : 'none');
+
+    // because we're using alpha which goes towards 0
+    // the top we're going towards must be 0
+    this.interpolateTop = d3.interpolateNumber(this.props.top, this.props.prevTop);
 
     this.circles = this.container.selectAll('path')
       .data(this.props.linePositions, (d) => d.id);
@@ -79,12 +81,14 @@ var Lines = React.createClass({
   },
 
   forceTick() {
+    var interpolate = (simulation.alpha() - simulation.alphaMin()) / (1 - simulation.alphaMin());
+    var top = this.interpolateTop(Math.max(0, interpolate));
+    this.container.attr('transform', 'translate(' + [0, top] + ')');
+
     this.circles.attr('transform', (d) => 'translate(' + [d.x, d.y] + ')');
   },
 
   forceEnd() {
-    this.container.attr('transform', 'translate(' + [0, this.props.top] + ')');
-
     this.circles.transition()
       .duration(duration)
       .attr('d', (d) => this.drawPath(d, true))

@@ -47,8 +47,8 @@ function sections(width, vizWidth, sectionWidth) {
         marginBottom,
         width: '50%',
       },
-      position(data, top) {
-        var positions = PositionGraph.positionLinesRandomly(data.lines, width, top);
+      position(data) {
+        var positions = PositionGraph.positionLinesRandomly(data.lines, width);
         positions.random = true;
 
         return positions;
@@ -69,6 +69,10 @@ function sections(width, vizWidth, sectionWidth) {
       style: {
         paddingTop,
         marginBottom,
+        minHeight: 600,
+      },
+      position(data) {
+        return PositionGraph.positionLinesBySong(data.lines, sectionWidth - 100, paddingTop / 3);
       },
       text: `
   After three days, I had a spectacularly rich dataset of lines, characters, and recurring phrases.  The first thing I did was to explore the lines filtered by characters and their conversations.

@@ -130,7 +130,7 @@ var PositionGraph = {
       // translateX = left + (vizWidth / 2) - centerX;
     }
 
-    return _.map(linePositions, line => {
+    linePositions = _.map(linePositions, line => {
       line.selected = _.isEmpty(lineIds) || _.includes(lineIds, line.id);
       if (centerLine) {
         // line.focusX += translateX;
@@ -145,6 +145,8 @@ var PositionGraph = {
 
       return line;
     });
+
+    return {linePositions};
   },
 
   positionLinesAsImage(lines, width, left) {
@@ -196,18 +198,11 @@ var PositionGraph = {
         length: radius,
       });
     });
-    return linePositions;
+    return {linePositions};
   },
 
-  positionLinesBySong(lines, width, vizTop, vizAlign, vizWidth) {
+  positionLinesBySong(lines, left, top) {
     radiusScale.range([6, 30]);
-
-    var left = 0;
-    if (vizAlign === 'center') {
-      left = (width - vizWidth) / 2;
-    } else if (vizAlign === 'right') {
-      left = width - vizWidth;
-    }
 
     var linePositions = _.map(lines, line => {
       var position = lineSongPositions[line.id];
@@ -215,22 +210,22 @@ var PositionGraph = {
 
       return Object.assign(line, {
         focusX: position.x + left,
-        focusY: position.y + vizTop,
+        focusY: position.y + top,
         radius: radius / 2,
         fullRadius: radius / 2,
         length: radius,
       });
     });
 
-    return linePositions;
+    return {linePositions};
   },
 
-  positionLinesRandomly(lines, width, top) {
+  positionLinesRandomly(lines, width) {
     radiusScale.range([6, 15]);
 
     var linePositions = _.map(lines, line => {
       var x = _.random(0, width);
-      var y = _.random(top - window.innerHeight * 1.5, top + window.innerHeight * 2.5);
+      var y = _.random(-window.innerHeight * 1.5, window.innerHeight * 2.5);
       var radius = Math.floor(radiusScale(line.lineLength));
 
       return Object.assign(line, {
