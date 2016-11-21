@@ -1,4 +1,4 @@
-var paddingTop = 100;
+var paddingTop = 150;
 var marginBottom = 600;
 
 import PositionGraph from '../PositionGraph';
@@ -46,6 +46,12 @@ function sections(width, vizWidth, sectionWidth) {
         paddingTop,
         marginBottom,
         width: '50%',
+      },
+      position(data, top) {
+        var positions = PositionGraph.positionLinesRandomly(data.lines, width, top);
+        positions.random = true;
+
+        return positions;
       },
       text: `
   When I started, I was curious about two things: the relationships between the primary characters, and the recurring phrases associated with those characters.

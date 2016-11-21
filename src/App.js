@@ -191,20 +191,23 @@ var App = React.createClass({
     var positions = {};
     // if we just entered a new section, position
     if (section && section !== prevSection) {
-      positions = section.position(this.state);
-      positions.random = false;
-      positions.top = section.top;
+      positions = section.position(this.state, scrollTop);
+      if (this.state.random && positions.random) {
+        // if positions are already random and the section demands it be random
+        // then leave as is
+        return;
+      }
 
-      prevSection = section;
-    } else if (!section && prevSection && random) {
+      positions.random = positions.random || false;
+      positions.top = section.top;
+    } else if (!section && prevSection && random && !this.state.random) {
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width, scrollTop);
       positions.random = random;
       positions.top = scrollTop;
-
-      prevSection = section;
     }
 
     if (_.size(positions)) {
+      prevSection = section;
       this.setState(positions);
     }
   },
