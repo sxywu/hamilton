@@ -147,27 +147,22 @@ var PositionGraph = {
     });
   },
 
-  positionLinesAsImage(lines, width, vizWidth, vizTop, vizAlign) {
-    var dotSize = vizWidth / 71;
+  positionLinesAsImage(lines, width, left) {
+    var dotSize = width / 71;
     var linePositions = [];
 
     radiusScale.range([dotSize * .75, dotSize * 1.25]);
 
-    var left = 0;
-    if (vizAlign === 'center') {
-      left = (width - vizWidth) / 2;
-    } else if (vizAlign === 'right') {
-      left = width - vizWidth;
-    }
-
     _.each(lineImagePositions, (positions, i) => {
       var {x, y} = positions;
-      x = (x - 0.5) * dotSize + left;
-      y = (y - 0.5) * dotSize + vizTop;
+      x = (x + 0.5) * dotSize + left;
+      y = (y + 0.5) * dotSize;
       var line = lines[i];
       var radius = Math.floor(radiusScale(line.lineLength));
 
       linePositions.push(Object.assign(line, {
+        x: line.x || _.random(window.innerWidth * 1.5),
+        y: line.y || _.random(window.innerHeight),
         focusX: x,
         focusY: y,
         radius: radius / 2,
@@ -176,7 +171,7 @@ var PositionGraph = {
       }));
     });
 
-    return linePositions;
+    return {linePositions};
   },
 
   positionLinesByCharacter(lines, width, vizTop, vizAlign, vizWidth) {

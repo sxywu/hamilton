@@ -1,14 +1,19 @@
 var paddingTop = 100;
 var marginBottom = 600;
 
+import PositionGraph from '../PositionGraph';
+
 function sections(width, vizWidth, sectionWidth) {
   return [
     {
       id: 'header',
       random: true,
       style: {
-        width: '45%',
+        width: '60%',
         marginBottom,
+      },
+      position(data) {
+        return PositionGraph.positionLinesAsImage(data.lines, vizWidth, sectionWidth);
       },
       text: `
   <center>

@@ -20,6 +20,7 @@ var sectionWidth = width - vizWidth;
 var characterWidth = 620;
 // var themeWidth = width - characterWidth;
 var filterHeight = 220;
+var prevSection = null;
 var sections = SectionsData(width, vizWidth, sectionWidth);
 
 var images = _.reduce(charList, (obj, character, id) => {
@@ -156,72 +157,42 @@ var App = React.createClass({
     this.setState({linePositions});
   },
 
-  positionByVizType(vizType) {
-    var linePositions = [];
-    var scrollTop = document.body.scrollTop;
-    if (vizType === 'image') {
-      linePositions = ProcessGraph.positionLinesAsImage(this.state.lines, width, width * .85, vizTop, vizAlign);
-    } else if (vizType === 'character') {
-      linePositions = ProcessGraph.positionLinesByCharacter(
-        this.state.lines, width, vizTop, vizAlign, vizWidth);
-    } else if (vizType === 'song') {
-      linePositions = ProcessGraph.positionLinesBySong(
-        this.state.lines, width, vizTop, vizAlign, vizWidth);
-    } else if (vizType === 'line') {
-      var positions = ProcessGraph.positionLinesForFilter(this.state.lines, [], [], vizWidth, vizTop);
-      linePositions = positions.linePositions;
-    } else if (vizType === 'random') {
-      linePositions = ProcessGraph.positionLinesRandomly(
-        this.state.lines, width, scrollTop - window.innerHeight, scrollTop + 2 * window.innerHeight);
-    }
-
-    return linePositions;
-  },
-
   updateSectionPositions() {
     var bodyRect = document.body.getBoundingClientRect();
     _.each(sections, section => {
       var sectionRect = d3.select('.section#' + section.id).node().getBoundingClientRect();
       var top = (sectionRect.top - bodyRect.top);
-      var bottom = top + sectionRect.height * (section.bottomMultiple || 0.8);
-      top += window.innerHeight * (section.topMultiple || -0.35);
+      var bottom = top + sectionRect.height;
 
       Object.assign(section, {top, bottom});
     });
   },
 
   onScroll() {
-    var scrollTop = document.body.scrollTop;
-    var prevSection;
-    var vizType = this.state.vizType;
-    var currentTop = vizTop;
-    var currentAlign = vizAlign;
-    _.some(sectionPositions, section => {
-      // if it's within section's top and bottom return that section
+    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+    var random = false;
+    var section = _.find(sections, (section, i) => {
       if (section.top <= scrollTop && scrollTop < section.bottom) {
-        currentAlign = section.vizAlign;
-        currentTop = (currentAlign === 'bottom') ? section.bottom :
-          section.top + window.innerHeight * (section.vizTopMultiple || 0.25);
-        vizType = section.vizType;
+        // if within a section, return that
         return true;
+      } else if (section.bottom <= scrollTop &&
+        sections[i + 1] && scrollTop < sections[i + 1].top) {
+        // if between the bottom of a section and top of the next
+        // only concerned about whether to randomly position
+        random = section.random;
       }
-      // if scrollTop is between previous section's bottom
-      // and this section's top, then return
-      if (prevSection && prevSection.bottom <= scrollTop && scrollTop < section.top) {
-        currentTop = prevSection.bottom;
-        vizType = 'random';
-        return true;
-      }
-      prevSection = section;
+      return false;
     });
 
-    if (vizTop && currentTop === vizTop) return;
+    // if we just entered a new section, position
+    if (section && section !== prevSection) {
+      var positions = section.position(this.state);
+      prevSection = section;
+      
+      this.setState(positions);
+    }
 
-    vizTop = currentTop;
-    vizAlign = currentAlign;
-    var linePositions = this.positionByVizType(vizType);
-
-    this.setState({linePositions, vizType});
   },
 
   render() {
@@ -278,6 +249,7 @@ var App = React.createClass({
       fontColor: '#333',
       vizType: 'image',
       vizWidth,
+      sectionWidth,
       width,
     };
 
