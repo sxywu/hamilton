@@ -225,12 +225,12 @@ var PositionGraph = {
     return linePositions;
   },
 
-  positionLinesRandomly(lines, width, top, bottom) {
+  positionLinesRandomly(lines, width, top) {
     radiusScale.range([6, 15]);
 
     var linePositions = _.map(lines, line => {
       var x = _.random(0, width);
-      var y = _.random(top, bottom);
+      var y = _.random(top - window.innerHeight * 1.5, top + window.innerHeight * 2.5);
       var radius = Math.floor(radiusScale(line.lineLength));
 
       return Object.assign(line, {
@@ -242,7 +242,7 @@ var PositionGraph = {
       });
     });
 
-    return linePositions;
+    return {linePositions};
   },
 };
 

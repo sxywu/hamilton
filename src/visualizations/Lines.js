@@ -42,20 +42,14 @@ var Lines = React.createClass({
       .on('mouseenter', this.mouseEnter)
       .on('mouseleave', this.mouseLeave)
       .attr('d', (d) => this.drawPath(d))
-      .merge(this.circles);
+      .merge(this.circles)
+      .attr('d', (d) => this.drawPath(d))
+      .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray);
 
-    this.circles.transition().duration(duration)
-        .attr('d', (d) => this.drawPath(d))
-        .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
-        .on('end', (d, i) => {
-          finished += 1;
-          if (finished === this.props.linePositions.length) {
-            simulation.nodes(this.props.linePositions)
-              .force("charge", this.props.vizType === 'random' ? d3.forceManyBody() : null)
-              .alphaMin(this.props.vizType === 'random' ? 0 : 0.5)
-              .alpha(1).restart();
-          }
-        });
+    simulation.nodes(this.props.linePositions)
+      .force("charge", this.props.random ? d3.forceManyBody() : null)
+      .alphaMin(this.props.random ? 0 : 0.5)
+      .alpha(1).restart();
 
   },
 
@@ -89,6 +83,8 @@ var Lines = React.createClass({
   },
 
   forceEnd() {
+    this.container.attr('transform', 'translate(' + [0, this.props.top] + ')');
+
     this.circles.transition()
       .duration(duration)
       .attr('d', (d) => this.drawPath(d, true))

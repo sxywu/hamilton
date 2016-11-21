@@ -54,6 +54,9 @@ var App = React.createClass({
       selectedCharacters: [],
       selectedConversation: [],
       selectedThemes: [],
+      // render properties
+      top: 0,
+      random: false,
     };
   },
 
@@ -161,7 +164,7 @@ var App = React.createClass({
     var bodyRect = document.body.getBoundingClientRect();
     _.each(sections, section => {
       var sectionRect = d3.select('.section#' + section.id).node().getBoundingClientRect();
-      var top = (sectionRect.top - bodyRect.top);
+      var top = Math.max(0, sectionRect.top - bodyRect.top);
       var bottom = top + sectionRect.height;
 
       Object.assign(section, {top, bottom});
@@ -185,14 +188,25 @@ var App = React.createClass({
       return false;
     });
 
+    var positions = {};
     // if we just entered a new section, position
     if (section && section !== prevSection) {
-      var positions = section.position(this.state);
+      positions = section.position(this.state);
+      positions.random = false;
+      positions.top = section.top;
+
       prevSection = section;
-      
-      this.setState(positions);
+    } else if (!section && prevSection && random) {
+      positions = PositionGraph.positionLinesRandomly(this.state.lines, width, scrollTop);
+      positions.random = random;
+      positions.top = scrollTop;
+
+      prevSection = section;
     }
 
+    if (_.size(positions)) {
+      this.setState(positions);
+    }
   },
 
   render() {
