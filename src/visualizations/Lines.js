@@ -1,6 +1,5 @@
 import React from 'react';
 import * as d3 from 'd3';
-import './fisheye';
 
 var duration = 500;
 var simulation = d3.forceSimulation()

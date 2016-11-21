@@ -4,7 +4,7 @@ import * as d3 from "d3";
 import Lines from './Lines';
 import Diamonds from './Diamonds';
 import Songs from './Songs';
-import LineSummary from './LineSummary';
+import LineSummary from '../LineSummary';
 
 var Visualization = React.createClass({
   getInitialState() {

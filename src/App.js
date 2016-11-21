@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
 
-import Visualization from './Visualization';
+import Visualization from './visualizations/Visualization';
 // import Characters from './Characters';
 // import Themes from './Themes';
 import Section from './Section';
