@@ -6,7 +6,7 @@ import Visualization from './visualizations/Visualization';
 // import Characters from './Characters';
 // import Themes from './Themes';
 import Section from './Section';
-import sectionsData from './data/sections';
+import SectionsData from './data/sections';
 import charList from './data/char_list.json';
 
 import ProcessGraph from './ProcessGraph';
@@ -20,7 +20,7 @@ var sectionWidth = width - vizWidth;
 var characterWidth = 620;
 // var themeWidth = width - characterWidth;
 var filterHeight = 220;
-var sectionPositions = [];
+var sections = SectionsData(width, vizWidth, sectionWidth);
 
 var images = _.reduce(charList, (obj, character, id) => {
   try {
@@ -180,13 +180,13 @@ var App = React.createClass({
 
   updateSectionPositions() {
     var bodyRect = document.body.getBoundingClientRect();
-    sectionPositions = _.map(sectionsData, section => {
+    _.each(sections, section => {
       var sectionRect = d3.select('.section#' + section.id).node().getBoundingClientRect();
       var top = (sectionRect.top - bodyRect.top);
       var bottom = top + sectionRect.height * (section.bottomMultiple || 0.8);
       top += window.innerHeight * (section.topMultiple || -0.35);
 
-      return Object.assign(section, {top, bottom});
+      Object.assign(section, {top, bottom});
     });
   },
 
@@ -281,7 +281,7 @@ var App = React.createClass({
       width,
     };
 
-    var sections = _.map(sectionsData, section => {
+    var sectionsEl = _.map(sections, section => {
       return (<Section {...section} {...styleProps} selectLines={this.selectLines} />);
     });
 
@@ -289,7 +289,7 @@ var App = React.createClass({
       <div ref='app' style={style}>
         <Visualization {...this.state} {...styleProps} />
         <div className='sections' style={sectionStyle}>
-          {sections}
+          {sectionsEl}
         </div>
       </div>
     );
