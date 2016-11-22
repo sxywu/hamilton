@@ -192,8 +192,8 @@ var App = React.createClass({
       positions = section.position(this.state, selectedCharacters,
         selectedConversation, selectedThemes);
       positions.random = positions.random || false;
-      positions.prevTop = this.state.top || scrollTop;
-      positions.top = section.top;
+      positions.prevTop = section.consecutive ? 0 : this.state.top || scrollTop;
+      positions.top = section.consecutive ? 0 : section.top;
       positions.section = section;
     } else if (!section && currentSection && random) {
       // if there's no section, but there was previously a section

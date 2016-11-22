@@ -118,7 +118,7 @@ function sections(width, vizWidth, sectionWidth) {
         var {linePositions, characterNodes, characterLinks} =
           FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
         var {linePositions, songPositions} =
-          PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth, 0, paddingTop);
+          PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth, 0, paddingTop / 4);
 
         return {linePositions, songPositions, characterNodes, characterLinks};
       },
