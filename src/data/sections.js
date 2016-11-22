@@ -1,8 +1,10 @@
-var paddingTop = 150;
-var marginBottom = 600;
+import _ from 'lodash';
 
 import FilterGraph from '../FilterGraph';
 import PositionGraph from '../PositionGraph';
+
+var paddingTop = 150;
+var marginBottom = 600;
 
 function sections(width, vizWidth, sectionWidth) {
   return [
@@ -14,6 +16,7 @@ function sections(width, vizWidth, sectionWidth) {
         marginBottom,
       },
       position(data) {
+        _.each(data.lines, line => line.selected = true);
         return PositionGraph.positionLinesAsImage(data.lines, vizWidth, sectionWidth);
       },
       text: `
@@ -49,6 +52,7 @@ function sections(width, vizWidth, sectionWidth) {
         width: '50%',
       },
       position(data) {
+        _.each(data.lines, line => line.selected = true);
         var positions = PositionGraph.positionLinesRandomly(data.lines, width);
         positions.random = true;
 
