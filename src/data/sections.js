@@ -7,6 +7,21 @@ var paddingTop = 150;
 var marginBottom = 600;
 
 function sections(width, vizWidth, sectionWidth) {
+  function positionAngelica(data, selectedCharacters, selectedConversation) {
+    if (!selectedCharacters.length) {
+      selectedCharacters = ['2', '8'];
+    }
+    if (!selectedConversation.length) {
+      selectedConversation = ['2-8', '8-2'];
+    }
+    var {linePositions, characterNodes, characterLinks} =
+      FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
+    var {linePositions, songPositions} =
+      PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth, 0, paddingTop / 4);
+
+    return {linePositions, songPositions, characterNodes, characterLinks};
+  }
+
   return [
     {
       id: 'header',
@@ -109,18 +124,7 @@ function sections(width, vizWidth, sectionWidth) {
       filter: 'characters',
       characterHeight: 100,
       position(data, selectedCharacters, selectedConversation) {
-        if (!selectedCharacters.length) {
-          selectedCharacters = ['2', '8'];
-        }
-        if (!selectedConversation.length) {
-          selectedConversation = ['2-8', '8-2'];
-        }
-        var {linePositions, characterNodes, characterLinks} =
-          FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
-        var {linePositions, songPositions} =
-          PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth, 0, paddingTop / 4);
-
-        return {linePositions, songPositions, characterNodes, characterLinks};
+        return positionAngelica(data, selectedCharacters, selectedConversation);
       },
       text: `
   As I filtered by different sets of characters, I started to see the nuances, the stories between each set of characters.  The most widely analyzed relationship is the one between Alexander Hamilton and Aaron Burr, but I want to explore instead the relationship between Alexander and Angelica Schuyler.
@@ -137,6 +141,9 @@ function sections(width, vizWidth, sectionWidth) {
         ['/music/whenyouregone.mp3', ['8/26:23-27', '2/26:23-27']],
         ['/music/whenyouregone.mp3', ['8/26:85-86', '2/26:85-86']],
       ],
+      position(data, selectedCharacters, selectedConversation) {
+        return positionAngelica(data, selectedCharacters, selectedConversation);
+      },
       text: `
   ### An Ocean Away
 
@@ -176,6 +183,9 @@ function sections(width, vizWidth, sectionWidth) {
         ['/music/whenyouregone.mp3', ['8/37:36-43']],
         ['/music/whenyouregone.mp3', ['8/11:92-111']],
       ],
+      position(data, selectedCharacters, selectedConversation) {
+        return positionAngelica(data, selectedCharacters, selectedConversation);
+      },
       text: `
   ### As Trusting Or As Kind
 
@@ -215,6 +225,9 @@ function sections(width, vizWidth, sectionWidth) {
         paddingTop,
         marginBottom,
         marginLeft: vizWidth,
+      },
+      position(data, selectedCharacters, selectedConversation) {
+        return positionAngelica(data, selectedCharacters, selectedConversation);
       },
       text: `
   ### She Takes His Hand
