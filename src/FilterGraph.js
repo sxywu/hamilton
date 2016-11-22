@@ -14,6 +14,15 @@ var FilterGraph = {
     return {linePositions: filteredLines, characterNodes, characterLinks};
   },
 
+  filterForThemes(data, selectedThemes) {
+    var {filteredLines2} = FilterGraph.filterLinesBySelectedThemes(selectedThemes, data.lines);
+    var {filteredDiamonds} = FilterGraph.filterDiamondsByRemainingLines(filteredLines2, data.diamonds);
+    var {groupedThemes} = FilterGraph.updateFilterOpacities(filteredLines2, filteredDiamonds,
+        null, null, data.groupedThemes, null, null, selectedThemes);
+
+    return {linePositions: filteredLines2, diamondPositions: filteredDiamonds, groupedThemes};
+  },
+
   updateFilterOpacities(lines, diamonds, characterNodes, characterLinks, groupedThemes,
     selectedCharacters, selectedConversation, selectedThemes) {
     var nonSelected = _.isEmpty(selectedCharacters)

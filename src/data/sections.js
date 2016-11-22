@@ -17,9 +17,23 @@ function sections(width, vizWidth, sectionWidth) {
     var {linePositions, characterNodes, characterLinks} =
       FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
     var {linePositions, songPositions} =
-      PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth, 0, paddingTop / 4);
+      PositionGraph.positionLinesForFilter(linePositions, [],
+      data.songs, vizWidth, 0, paddingTop / 4);
 
     return {linePositions, songPositions, characterNodes, characterLinks};
+  }
+
+  function positionEliza(data, selectedThemes) {
+    if (!selectedThemes.length) {
+      selectedThemes = ['10', '18'];
+    }
+    var {linePositions, diamondPositions, groupedThemes} =
+      FilterGraph.filterForThemes(data, selectedThemes);
+    var {linePositions, diamondPositions, songPositions} =
+      PositionGraph.positionLinesForFilter(linePositions, diamondPositions,
+      data.songs, vizWidth, sectionWidth, paddingTop / 4);
+
+    return {linePositions, diamondPositions, groupedThemes};
   }
 
   return [
@@ -243,6 +257,9 @@ function sections(width, vizWidth, sectionWidth) {
       style: {
         paddingTop,
       },
+      position(data, selectedCharacters, selectedConversation, selectedThemes) {
+        return positionEliza(data, selectedThemes);
+      },
       text: `
   When I first started listening to the soundtrack, I adored Angelica for her independence and intelligence (and her rap was *fierce*).  Eliza, on the other hand, was just...there for me.  But the more I listened and the more I dug through Eliza's lines, the more she grew on me; I am now convinced that she - not Alexander - has the most character growth in the musical.
       `
@@ -252,6 +269,9 @@ function sections(width, vizWidth, sectionWidth) {
       consecutive: true,
       style: {
         paddingTop,
+      },
+      position(data, selectedCharacters, selectedConversation, selectedThemes) {
+        return positionEliza(data, selectedThemes);
       },
       clips: [
         ['/music/whenyouregone.mp3', ['7/17:18-45']],
@@ -295,6 +315,9 @@ function sections(width, vizWidth, sectionWidth) {
       style: {
         paddingTop,
       },
+      position(data, selectedCharacters, selectedConversation, selectedThemes) {
+        return positionEliza(data, selectedThemes);
+      },
       clips: [
         ['/music/whenyouregone.mp3', ['7/23:122-128']],
         ['/music/whenyouregone.mp3', ['2/23:157']],
@@ -328,6 +351,9 @@ function sections(width, vizWidth, sectionWidth) {
         ['/music/whenyouregone.mp3', ['2/41:25-40']],
         ['/music/whenyouregone.mp3', ['24/41:56-59']],
       ],
+      position(data, selectedCharacters, selectedConversation, selectedThemes) {
+        return positionEliza(data, selectedThemes);
+      },
       text: `
   ### Forgiveness
 
@@ -371,6 +397,9 @@ function sections(width, vizWidth, sectionWidth) {
       clips: [
         ['/music/whenyouregone.mp3', ['7/46:70-74']],
       ],
+      position(data, selectedCharacters, selectedConversation, selectedThemes) {
+        return positionEliza(data, selectedThemes);
+      },
       text: `
   ### Will They Tell My Story?
 
