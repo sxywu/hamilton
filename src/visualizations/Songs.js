@@ -6,13 +6,13 @@ var Visualization = React.createClass({
   componentDidMount() {
     this.textContainer = d3.select(this.refs.text);
     this.circleContainer = d3.select(this.refs.circle);
-    this.updateText();
-    this.updateRect();
+    // this.updateText();
+    // this.updateRect();
   },
 
   componentDidUpdate() {
-    this.updateText();
-    this.updateRect();
+    // this.updateText();
+    // this.updateRect();
   },
 
   updateRect() {
