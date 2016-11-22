@@ -195,7 +195,8 @@ var App = React.createClass({
       positions.prevTop = this.state.top || scrollTop;
       positions.top = section.top;
       positions.section = section;
-    } else if (!section && random) {
+    } else if (!section && currentSection && random) {
+      // if there's no section, but there was previously a section
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
       positions.random = random;
       positions.prevTop = this.state.top || scrollTop;
