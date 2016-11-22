@@ -106,6 +106,22 @@ function sections(width, vizWidth, sectionWidth) {
         paddingTop,
         marginLeft: vizWidth,
       },
+      filter: 'characters',
+      characterHeight: 100,
+      position(data, selectedCharacters, selectedConversation) {
+        if (!selectedCharacters.length) {
+          selectedCharacters = ['2', '8'];
+        }
+        if (!selectedConversation.length) {
+          selectedConversation = ['2-8', '8-2'];
+        }
+        var {linePositions, characterNodes, characterLinks} =
+          FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
+        var {linePositions, songPositions} =
+          PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth, 0, paddingTop);
+
+        return {linePositions, songPositions, characterNodes, characterLinks};
+      },
       text: `
   As I filtered by different sets of characters, I started to see the nuances, the stories between each set of characters.  The most widely analyzed relationship is the one between Alexander Hamilton and Aaron Burr, but I want to explore instead the relationship between Alexander and Angelica Schuyler.
       `

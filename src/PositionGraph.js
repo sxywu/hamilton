@@ -16,7 +16,7 @@ var PositionGraph = {
     var padding = {x: 1, y: lineSize * 5, right: 50};
     var songWidth = songs.length ? 170 : lineSize * 8;
     var s = 1;
-    var x = left;
+    var x = left + lineSize;
     var y = top;
     var lastLineId = null;
     var songPositions = [];
@@ -32,7 +32,7 @@ var PositionGraph = {
       if (songNum !== s) {
         s = songNum;
         // set positions back to the left
-        x = left;
+        x = left + lineSize;
         y += padding.y;
 
         // also add song position
@@ -48,7 +48,7 @@ var PositionGraph = {
       // and if a song has gone over the width
       // bring it to next line
       if (x > width + left - lineSize * 8 && lastLineId !== line.lineId) {
-        x = left;
+        x = left + lineSize;
         y += padding.y * 0.6;
       }
 

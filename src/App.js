@@ -278,7 +278,7 @@ var App = React.createClass({
     };
 
     var sectionsEl = _.map(sections, section => {
-      return (<Section {...this.state} {...section} {...styleProps} {...eventProps} />);
+      return (<Section {...this.state} {...styleProps} {...eventProps} {...section} />);
     });
 
     return (
