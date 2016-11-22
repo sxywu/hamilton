@@ -9,7 +9,7 @@ import rawCharacters from './data/characters.json';
 import rawThemes from './data/themes.json';
 
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
-var linkScale = d3.scaleLinear().range([3, 8]);
+var linkScale = d3.scaleLinear().range([3, 10]);
 
 var ProcessGraph = {
   processLinesSongs(width) {
@@ -62,6 +62,7 @@ var ProcessGraph = {
   },
 
   processCharacters(lines, width, height) {
+    var radius = 20;
     var linesById = _.groupBy(lines, 'lineId');
     var filteredCharList = _.pickBy(charList, char => char[3]);
     // character nodes
@@ -77,6 +78,9 @@ var ProcessGraph = {
           id,
           name,
           initials,
+          radius,
+          fx: id === '2' ? 0 : null,
+          fy: id === '2' ? 0 : null,
           color: character[4],
           selected: true,
           numLines: lines.length,
@@ -118,28 +122,14 @@ var ProcessGraph = {
       }).filter().value();
 
     // position them right away
-    var middleRow = Math.ceil(characters.length / 2);
-    var radius = Math.min(20, width / middleRow * 3);
-    var simulation = d3.forceSimulation()
-      .force('collide', d3.forceCollide().radius(d => d.radius * 2))
+    var simulation = d3.forceSimulation(characters)
+      .force('collide', d3.forceCollide().radius(radius * 2.5))
       // .force('y', d3.forceY().y(d => d.focusY))
+      .force('charge', d3.forceManyBody().strength(-radius))
       .force('link', d3.forceLink(conversations).distance(radius))
       .force("center", d3.forceCenter())
       .stop();
 
-    _.chain(characters)
-      .sortBy(character => -character.numLines)
-      .each((character, i) => {
-        if (i < middleRow) {
-          character.fy = 0;
-        } else {
-          character.fy = -radius * 4;
-        }
-
-        character.radius = radius;
-      }).value();
-
-    simulation.nodes(characters);
     _.times(1000, simulation.tick);
 
     return {characters, conversations};
