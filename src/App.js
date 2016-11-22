@@ -59,6 +59,7 @@ var App = React.createClass({
       prevTop: null,
       top: null,
       random: false,
+      update: true,
     };
   },
 
@@ -94,6 +95,7 @@ var App = React.createClass({
     var positions = this.state.section.position(this.state,
       selectedCharacters, this.state.selectedConversation, this.state.selectedThemes);
     positions.selectedCharacters = selectedCharacters;
+    positions.update = true;
     this.setState(positions);
   },
 
@@ -108,6 +110,7 @@ var App = React.createClass({
     var positions = this.state.section.position(this.state,
       this.state.selectedCharacters, selectedConversation, this.state.selectedThemes);
     positions.selectedConversation = selectedConversation;
+    positions.update = true;
     this.setState(positions);
   },
 
@@ -122,6 +125,7 @@ var App = React.createClass({
     var positions = this.state.section.position(this.state,
       this.state.selectedCharacters, this.state.selectedConversation, selectedThemes);
     positions.selectedThemes = selectedThemes;
+    positions.update = true;
     this.setState(positions);
   },
 
@@ -135,6 +139,7 @@ var App = React.createClass({
     positions.selectedCharacters = [];
     positions.selectedConversation = [];
     positions.selectedThemes = [];
+    positions.update = true;
     this.setState(positions);
   },
 
@@ -195,6 +200,7 @@ var App = React.createClass({
       positions.prevTop = section.consecutive ? 0 : this.state.top || scrollTop;
       positions.top = section.consecutive ? 0 : section.top;
       positions.section = section;
+      positions.update = true;
     } else if (!section && currentSection && random) {
       // if there's no section, but there was previously a section
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
@@ -202,6 +208,7 @@ var App = React.createClass({
       positions.prevTop = this.state.top || scrollTop;
       positions.top = scrollTop;
       positions.section = null;
+      positions.update = true;
     }
 
     if (_.size(positions)) {
