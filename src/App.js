@@ -75,7 +75,7 @@ var App = React.createClass({
   componentDidMount() {
     this.updateSectionPositions();
     this.onScroll();
-    window.addEventListener('scroll', _.debounce(this.onScroll.bind(this), 100));
+    window.addEventListener('scroll', _.throttle(this.onScroll.bind(this), 100));
   },
 
   componentDidUpdate() {
