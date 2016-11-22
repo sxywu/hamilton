@@ -11,13 +11,13 @@ var maxLength = _.maxBy(_.values(rawLines), line => line[2].length)[2].length;
 var radiusScale = d3.scaleLinear().domain([1, maxLength]);
 
 var PositionGraph = {
-  positionLinesForFilter(lines, diamonds, songs, width, left) {
+  positionLinesForFilter(lines, diamonds, songs, width, left, top) {
     var lineSize = 5;
     var padding = {x: 1, y: lineSize * 5, right: 50};
     var songWidth = songs.length ? 170 : lineSize * 8;
     var s = 1;
     var x = left;
-    var y = lineSize;
+    var y = top;
     var lastLineId = null;
     var songPositions = [];
     var songsById = _.keyBy(songs, 'id');

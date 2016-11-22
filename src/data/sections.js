@@ -81,11 +81,11 @@ function sections(width, vizWidth, sectionWidth) {
 
         if (selectedCharacters.length || selectedConversation.length) {
           var {linePositions, songPositions} =
-            PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth, sectionWidth);
+            PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth, sectionWidth, paddingTop);
 
           return {linePositions, songPositions, characterNodes, characterLinks};
         } else {
-          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 100, paddingTop / 3);
+          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 100, paddingTop);
           return {linePositions, characterNodes, characterLinks};
         }
       },
