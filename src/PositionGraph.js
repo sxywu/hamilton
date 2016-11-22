@@ -11,13 +11,13 @@ var maxLength = _.maxBy(_.values(rawLines), line => line[2].length)[2].length;
 var radiusScale = d3.scaleLinear().domain([1, maxLength]);
 
 var PositionGraph = {
-  positionLinesForFilter(lines, diamonds, songs, width, vizTop) {
+  positionLinesForFilter(lines, diamonds, songs, width, left) {
     var lineSize = 5;
     var padding = {x: 1, y: lineSize * 5, right: 50};
     var songWidth = songs.length ? 170 : lineSize * 8;
     var s = 1;
-    var x = songWidth;
-    var y = vizTop;
+    var x = left;
+    var y = lineSize;
     var lastLineId = null;
     var songPositions = [];
     var songsById = _.keyBy(songs, 'id');
@@ -32,7 +32,7 @@ var PositionGraph = {
       if (songNum !== s) {
         s = songNum;
         // set positions back to the left
-        x = songWidth;
+        x = left;
         y += padding.y;
 
         // also add song position
@@ -47,8 +47,8 @@ var PositionGraph = {
       }
       // and if a song has gone over the width
       // bring it to next line
-      if (x > width - lineSize * 8 && lastLineId !== line.lineId) {
-        x = songWidth;
+      if (x > width + left - lineSize * 8 && lastLineId !== line.lineId) {
+        x = left;
         y += padding.y * 0.6;
       }
 
@@ -113,7 +113,7 @@ var PositionGraph = {
     return {linePositions, songPositions, diamondPositions};
   },
 
-  positionSelectLines(lineIds, linePositions, scale, width, vizWidth) {
+  positionSelectLines(lineIds, linePositions, scale, width, left) {
     // var left = 0;
     // if (vizAlign === 'center') {
     //   left = (width - vizWidth) / 2;
@@ -163,8 +163,6 @@ var PositionGraph = {
       var radius = Math.floor(radiusScale(line.lineLength));
 
       linePositions.push(Object.assign(line, {
-        x: line.x || _.random(window.innerWidth * 1.5),
-        y: line.y || _.random(window.innerHeight),
         focusX: x,
         focusY: y,
         radius: radius / 2,
@@ -176,15 +174,8 @@ var PositionGraph = {
     return {linePositions};
   },
 
-  positionLinesByCharacter(lines, width, vizTop, vizAlign, vizWidth) {
+  positionLinesByCharacter(lines, width, left) {
     radiusScale.range([6, 30]);
-
-    var left = 0;
-    if (vizAlign === 'center') {
-      left = (width - vizWidth) / 2;
-    } else if (vizAlign === 'right') {
-      left = width - vizWidth;
-    }
 
     var linePositions = _.map(lines, line => {
       var position = lineCharPositions[line.id];
@@ -192,7 +183,7 @@ var PositionGraph = {
 
       return Object.assign(line, {
         focusX: position.x + left,
-        focusY: position.y + vizTop,
+        focusY: position.y,
         radius: radius / 2,
         fullRadius: radius / 2,
         length: radius,

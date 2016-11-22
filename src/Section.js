@@ -141,7 +141,7 @@ var Section = React.createClass({
     var rawMarkup = { __html: md.render(this.props.text)};
 
     var characters;
-    if (_.includes(this.props.filter, 'characters')) {
+    if (this.props.filter === 'characters') {
       characters = (<Characters {...this.props} />);
     }
 

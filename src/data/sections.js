@@ -67,23 +67,26 @@ function sections(width, vizWidth, sectionWidth) {
     {
       id: 'filter_characters',
       random: true,
+      left: sectionWidth,
       style: {
         paddingTop,
         marginBottom,
         minHeight: 600,
       },
-      filter: ['characters'],
-      position(data) {
-        if (data.selectedCharacters.length || data.selectedConversation.length) {
-          var {linePositions, characterNodes, characterLinks} =
-            FilterGraph.filterForCharacters(data, data.selectedCharacters, data.selectedConversation);
+      filter: 'characters',
+      position(data, selectedCharacters, selectedConversation) {
+        // either way, have to reset the colors on everything
+        var {linePositions, characterNodes, characterLinks} =
+          FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
+
+        if (selectedCharacters.length || selectedConversation.length) {
           var {linePositions, songPositions} =
-            PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth);
+            PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth, sectionWidth);
 
           return {linePositions, songPositions, characterNodes, characterLinks};
         } else {
           var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 100, paddingTop / 3);
-          return {linePositions, characterNodes: data.characters, characterLinks: data.conversations};
+          return {linePositions, characterNodes, characterLinks};
         }
       },
       text: `

@@ -36,6 +36,8 @@ var ProcessGraph = {
             fill: charList[character][4],
             selected: true,
             data: line,
+            x: line.x || _.random(window.innerWidth * -0.5, window.innerWidth * 1.5),
+            y: line.y || _.random(window.innerHeight * -0.5, window.innerHeight * 1.5),
           };
         });
       }).flatten().value();
@@ -63,7 +65,7 @@ var ProcessGraph = {
     var linesById = _.groupBy(lines, 'lineId');
     var filteredCharList = _.pickBy(charList, char => char[3]);
     // character nodes
-    var characterNodes = _.chain(rawCharacters.characters)
+    var characters = _.chain(rawCharacters.characters)
       .map((lines, id) => {
         var character = filteredCharList[id];
         if (!character) return null;
@@ -78,16 +80,17 @@ var ProcessGraph = {
           color: character[4],
           selected: true,
           numLines: lines.length,
+          available: true,
         };
       }).filter().value();
-    var charactersById = _.keyBy(characterNodes, 'id');
+    var charactersById = _.keyBy(characters, 'id');
 
     // character links
     var conversingValues = _.values(rawCharacters.conversing);
     var minWidth = _.minBy(conversingValues, (lines) => lines.length).length;
     var maxWidth = _.maxBy(conversingValues, (lines) => lines.length).length;
     linkScale.domain([minWidth, maxWidth]);
-    var characterLinks = _.chain(rawCharacters.conversing)
+    var conversations = _.chain(rawCharacters.conversing)
       .map((lines, conversing) => {
         var source = conversing.split('-');
         var target = charactersById[source[1]];
@@ -109,21 +112,22 @@ var ProcessGraph = {
           id: conversing,
           color: source.color,
           selected: true,
-          source, target, weight
+          available: true,
+          source, target, weight,
         };
       }).filter().value();
 
     // position them right away
-    var middleRow = Math.ceil(characterNodes.length / 2);
+    var middleRow = Math.ceil(characters.length / 2);
     var radius = Math.min(20, width / middleRow * 3);
     var simulation = d3.forceSimulation()
       .force('collide', d3.forceCollide().radius(d => d.radius * 2))
       // .force('y', d3.forceY().y(d => d.focusY))
-      .force('link', d3.forceLink(characterLinks).distance(radius))
+      .force('link', d3.forceLink(conversations).distance(radius))
       .force("center", d3.forceCenter())
       .stop();
 
-    _.chain(characterNodes)
+    _.chain(characters)
       .sortBy(character => -character.numLines)
       .each((character, i) => {
         if (i < middleRow) {
@@ -135,10 +139,10 @@ var ProcessGraph = {
         character.radius = radius;
       }).value();
 
-    simulation.nodes(characterNodes);
+    simulation.nodes(characters);
     _.times(1000, simulation.tick);
 
-    return {characterNodes, characterLinks};
+    return {characters, conversations};
   },
 
   processThemes(lines) {

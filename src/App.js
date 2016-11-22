@@ -20,6 +20,7 @@ var characterWidth = sectionWidth;
 // var themeWidth = width - characterWidth;
 var characterHeight = 220;
 var prevSection = null;
+var currentSection = null;
 var sections = SectionsData(width, vizWidth, sectionWidth);
 
 var images = _.reduce(charList, (obj, character, id) => {
@@ -35,6 +36,7 @@ var images = _.reduce(charList, (obj, character, id) => {
 var App = React.createClass({
 
   getInitialState() {
+
     return {
       // original data
       lines: [],
@@ -54,8 +56,8 @@ var App = React.createClass({
       selectedConversation: [],
       selectedThemes: [],
       // render properties
-      prevTop: 0,
-      top: 0,
+      prevTop: null,
+      top: null,
       random: false,
     };
   },
@@ -63,11 +65,11 @@ var App = React.createClass({
   componentWillMount() {
     var {lines, songs} = ProcessGraph.processLinesSongs(width);
 
-    var {characterNodes, characterLinks} = ProcessGraph.processCharacters(lines, characterWidth, characterHeight);
+    var {characters, conversations} = ProcessGraph.processCharacters(lines, characterWidth, characterHeight);
 
     var {diamonds, groupedThemes} = ProcessGraph.processThemes(lines);
 
-    this.setState({lines, songs, characterNodes, characterLinks, diamonds, groupedThemes});
+    this.setState({lines, songs, characters, conversations, diamonds, groupedThemes});
   },
 
   componentDidMount() {
@@ -89,9 +91,10 @@ var App = React.createClass({
     }
     selectedCharacters = _.sortBy(selectedCharacters);
 
-    this.filterAndPosition(selectedCharacters, this.state.selectedConversation,
-      this.state.selectedThemes, this.state.characters, this.state.conversations,
-      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
+    var positions = this.state.section.position(this.state,
+      selectedCharacters, this.state.selectedConversation, this.state.selectedThemes);
+    positions.selectedCharacters = selectedCharacters;
+    this.setState(positions);
   },
 
   filterByConversation(id) {
@@ -102,9 +105,10 @@ var App = React.createClass({
       selectedConversation.push(id);
     }
 
-    this.filterAndPosition(this.state.selectedCharacters, selectedConversation,
-      this.state.selectedThemes, this.state.characters, this.state.conversations,
-      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
+    var positions = this.state.section.position(this.state,
+      this.state.selectedCharacters, selectedConversation, this.state.selectedThemes);
+    positions.selectedConversation = selectedConversation;
+    this.setState(positions);
   },
 
   filterByThemes(id) {
@@ -115,9 +119,10 @@ var App = React.createClass({
       selectedThemes.push(id);
     }
 
-    this.filterAndPosition(this.state.selectedCharacters, this.state.selectedConversation,
-      selectedThemes, this.state.characters, this.state.conversations,
-      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
+    var positions = this.state.section.position(this.state,
+      this.state.selectedCharacters, this.state.selectedConversation, selectedThemes);
+    positions.selectedThemes = selectedThemes;
+    this.setState(positions);
   },
 
   resetFilters() {
@@ -125,30 +130,12 @@ var App = React.createClass({
     var selectedConversation = [];
     var selectedThemes = [];
 
-    this.filterAndPosition(selectedCharacters, selectedConversation,
-      selectedThemes, this.state.characters, this.state.conversations,
-      this.state.lines, this.state.songs, this.state.diamonds, this.state.groupedThemes);
-  },
-
-  filterAndPosition(selectedCharacters, selectedConversation, selectedThemes,
-    characters, conversations, lines, songs, diamonds, themes) {
-    var {filteredLines} = FilterGraph.filterLinesBySelectedCharacter(
-      selectedCharacters, selectedConversation, lines);
-    var {filteredLines2} = FilterGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
-    var {filteredDiamonds} = FilterGraph.filterDiamondsByRemainingLines(filteredLines2, diamonds);
-    var {characterNodes, characterLinks, groupedThemes} =
-      FilterGraph.updateFilterOpacities(filteredLines2, filteredDiamonds,
-        characters, conversations, themes,
-        selectedCharacters, selectedConversation, selectedThemes);
-    var {linePositions, songPositions, diamondPositions} =
-      PositionGraph.positionLinesForFilter(filteredLines2, filteredDiamonds, songs, width);
-
-    this.setState({
-      selectedCharacters, selectedConversation, selectedThemes,
-      linePositions, songPositions, diamondPositions,
-      characters, conversations, characterNodes, characterLinks,
-      lines, songs, diamonds, groupedThemes,
-    });
+    var positions = this.state.section.position(this.state,
+      selectedCharacters, selectedConversation, selectedThemes);
+    positions.selectedCharacters = [];
+    positions.selectedConversation = [];
+    positions.selectedThemes = [];
+    this.setState(positions);
   },
 
   selectLines(lineIds) {
@@ -189,23 +176,37 @@ var App = React.createClass({
     });
 
     var positions = {};
-    // if we just entered a new section, position
-    if (section && section !== prevSection) {
-      positions = section.position(this.state);
+    // if we just entered a new section (so the prev current section was null), position
+    if (section && !currentSection) {
+      var selectedCharacters = this.state.selectedCharacters;
+      var selectedConversation = this.state.selectedConversation;
+      var selectedThemes = this.state.selectedThemes;
+
+      // if it's new section, reset filters
+      if (section !== prevSection) {
+        selectedCharacters = positions.selectedCharacters = [];
+        selectedConversation = positions.selectedConversation = [];
+        selectedThemes = positions.selectedThemes = [];
+      }
+
+      positions = section.position(this.state, selectedCharacters,
+        selectedConversation, selectedThemes);
       positions.random = positions.random || false;
-      positions.prevTop = this.state.top;
+      positions.prevTop = this.state.top || scrollTop;
       positions.top = section.top;
       positions.section = section;
-    } else if (!section && prevSection && random) {
+    } else if (!section && random) {
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
       positions.random = random;
-      positions.prevTop = this.state.top;
+      positions.prevTop = this.state.top || scrollTop;
       positions.top = scrollTop;
       positions.section = null;
     }
 
     if (_.size(positions)) {
-      prevSection = section;
+      prevSection = currentSection;
+      currentSection = section;
+
       this.setState(positions);
     }
   },
