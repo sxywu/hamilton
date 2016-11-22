@@ -96,7 +96,7 @@ function sections(width, vizWidth, sectionWidth) {
       text: `
   After three days, I had a spectacularly rich dataset of lines, characters, and recurring phrases.  The first thing I did was to explore the lines filtered by characters and their conversations.
 
-  Below are **12** of the **18** primary characters with Hamilton at the center.  They are connected by **arcs** denoting the conversations between them.  <span class='underline'>Select any set of characters and conversations</span> to view their corresponding lines.
+  Above are **13** of the **18** primary characters with Hamilton at the center.  They are connected by **arcs** denoting the conversations between them.  <span class='underline'>Select any set of characters and conversations</span> to view their corresponding lines.
       `
     },
     {

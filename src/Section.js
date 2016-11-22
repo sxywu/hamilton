@@ -147,8 +147,8 @@ var Section = React.createClass({
 
     return (
       <div style={style} className='section' id={this.props.id}>
-        <div style={contentStyle} ref='section' dangerouslySetInnerHTML={rawMarkup} />
         {characters}
+        <div style={contentStyle} ref='section' dangerouslySetInnerHTML={rawMarkup} />
       </div>
     );
   }
