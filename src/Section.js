@@ -3,6 +3,7 @@ import _ from 'lodash';
 import * as d3 from "d3";
 
 import Characters from './visualizations/Characters';
+import Themes from './visualizations/Themes';
 
 import charList from './data/char_list.json';
 import chroma from 'chroma-js';
@@ -140,14 +141,18 @@ var Section = React.createClass({
     };
     var rawMarkup = { __html: md.render(this.props.text)};
 
-    var characters;
-    if (this.props.filter === 'characters') {
+    var characters, themes;
+    if (this.props.filter === 'characters' || this.props.filter === 'all') {
       characters = (<Characters {...this.props} />);
+    }
+    if (this.props.filter === 'themes' || this.props.filter === 'all') {
+      themes = (<Themes {...this.props} />);
     }
 
     return (
       <div style={style} className='section' id={this.props.id}>
         {characters}
+        {themes}
         <div style={contentStyle} ref='section' dangerouslySetInnerHTML={rawMarkup} />
       </div>
     );

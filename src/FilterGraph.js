@@ -23,6 +23,20 @@ var FilterGraph = {
     return {linePositions: filteredLines2, diamondPositions: filteredDiamonds, groupedThemes};
   },
 
+  filterForAll(data, selectedCharacters, selectedConversation, selectedThemes) {
+    var {filteredLines} = FilterGraph.filterLinesBySelectedCharacter(
+      selectedCharacters, selectedConversation, data.lines);
+    var {filteredLines2} = FilterGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
+    var {filteredDiamonds} = FilterGraph.filterDiamondsByRemainingLines(filteredLines2, data.diamonds);
+    var {characterNodes, characterLinks, groupedThemes} =
+      FilterGraph.updateFilterOpacities(filteredLines2, filteredDiamonds,
+        data.characters, data.conversations, data.groupedThemes,
+        selectedCharacters, selectedConversation, selectedThemes);
+
+    return {linePositions: filteredLines2, diamondPositions: filteredDiamonds,
+      groupedThemes, characterNodes, characterLinks};
+  },
+
   updateFilterOpacities(lines, diamonds, characterNodes, characterLinks, groupedThemes,
     selectedCharacters, selectedConversation, selectedThemes) {
     var nonSelected = _.isEmpty(selectedCharacters)

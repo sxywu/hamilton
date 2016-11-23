@@ -17,8 +17,9 @@ var width = 1200;
 var vizWidth = 700;
 var sectionWidth = width - vizWidth;
 var characterWidth = 460;
-// var themeWidth = width - characterWidth;
+var themeWidth = characterWidth;
 var characterHeight = 440;
+var themeHeight = 200;
 var prevSection = null;
 var currentSection = null;
 var sections = SectionsData(width, vizWidth, sectionWidth);
@@ -277,11 +278,14 @@ var App = React.createClass({
       width,
       characterWidth,
       characterHeight,
+      themeWidth,
+      themeHeight,
     };
     var eventProps = {
       selectLines: this.selectLines,
       onSelectCharacter: this.filterByCharacter,
       onSelectConversation: this.filterByConversation,
+      onSelectTheme: this.filterByThemes,
     };
 
     var sectionsEl = _.map(sections, section => {

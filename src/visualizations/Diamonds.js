@@ -41,9 +41,9 @@ var Themes = React.createClass({
       .on('click', (d) => d.available && this.props.click(d.id));
 
     this.diamonds.selectAll('path')
-      .data((d) => d.positions)
+      .data((d) => d.positions || [])
       .enter().append('path');
-    this.diamonds.filter((d) => d.positions.length > 1)
+    this.diamonds.filter((d) => d.positions && d.positions.length > 1)
       .insert('line', 'path');
 
     this.diamonds.selectAll('path')

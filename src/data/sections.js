@@ -257,6 +257,7 @@ function sections(width, vizWidth, sectionWidth) {
       style: {
         paddingTop,
       },
+      filter: 'themes',
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
         return positionEliza(data, selectedThemes);
       },
@@ -418,11 +419,23 @@ function sections(width, vizWidth, sectionWidth) {
     },
     {
       id: 'conclusion',
-      vizType: 'random',
       style: {
-        margin: 'auto',
-        paddingTop: '100vh',
-        width: '50%',
+        paddingTop,
+      },
+      filter: 'all',
+      position(data, selectedCharacters, selectedConversation, selectedThemes) {
+        var {linePositions, diamondPositions, groupedThemes, characterNodes, characterLinks} =
+          FilterGraph.filterForAll(data, selectedCharacters, selectedConversation, selectedThemes);
+
+        if (selectedCharacters.length || selectedConversation.length || selectedThemes.length) {
+          var {linePositions, songPositions, diamondPositions} =
+            PositionGraph.positionLinesForFilter(linePositions, diamondPositions, data.songs, vizWidth, sectionWidth, paddingTop);
+
+          return {linePositions, songPositions, diamondPositions, groupedThemes, characterNodes, characterLinks};
+        } else {
+          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 100, paddingTop);
+          return {linePositions, diamondPositions: [], groupedThemes, characterNodes, characterLinks};
+        }
       },
       text: `
   Angelica and Eliza are only two of the stories I've found; there are many more.  Filter by any combination of characters, conversations, and themes below to explore more stories.

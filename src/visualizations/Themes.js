@@ -3,7 +3,7 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import Diamonds from './Diamonds';
-import LineSummary from './LineSummary';
+import LineSummary from '../LineSummary';
 
 var Characters = React.createClass({
   getInitialState() {
@@ -29,8 +29,8 @@ var Characters = React.createClass({
   render() {
     var style = {
       display: 'inline-block',
-      width: this.props.width,
-      height: this.props.height,
+      width: this.props.themeWidth,
+      height: this.props.themeHeight,
       verticalAlign: 'top',
       textAlign: 'center',
     };
