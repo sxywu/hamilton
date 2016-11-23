@@ -11,106 +11,100 @@ var maxLength = _.maxBy(_.values(rawLines), line => line[2].length)[2].length;
 var radiusScale = d3.scaleLinear().domain([1, maxLength]);
 
 var PositionGraph = {
-  positionLinesForFilter(lines, diamonds, songs, width, left, top) {
-    var lineSize = 5;
-    var padding = {x: 1, y: lineSize * 5, right: 50};
-    var songWidth = songs.length ? 170 : lineSize * 8;
-    var s = 1;
-    var x = left + lineSize;
+  positionLinesForFilter(lines, songs, width, left, top) {
+    var lineSize = 10;
+    var padding = {left: 5, top: 20};
     var y = top;
+    var perLine = Math.floor((width - padding.left) / lineSize);
+
+    var currentSong = 1;
     var lastLineId = null;
-    var songPositions = [];
-    var songsById = _.keyBy(songs, 'id');
 
     // position all the lines
-    var linePositions = _.map(lines, (line, i) => {
+    var linePositions = [];
+    _.each(lines, (line, i) => {
       var songNum = line.songId;
-      var startLine = parseInt(line.lineId.split(':')[1].split('-')[0], 10);
-      var endLine = parseInt(line.lineId.split(':')[1].split('-')[1], 10) || startLine;
+      var startLine = parseInt(line.lineId.split(':')[1].split('-')[0], 10) - 1;
+      var endLine = parseInt(line.lineId.split(':')[1].split('-')[1], 10) - 1 || startLine;
 
       // if next song
-      if (songNum !== s) {
-        s = songNum;
-        // set positions back to the left
-        x = left + lineSize;
-        y += padding.y;
-
-        // also add song position
-        if (songs.length) {
-          var song = songsById[songNum];
-          songPositions.push({
-            id: song.id,
-            name: song.name,
-            x, y,
-          });
-        }
-      }
-      // and if a song has gone over the width
-      // bring it to next line
-      if (x > width + left - lineSize * 8 && lastLineId !== line.lineId) {
-        x = left + lineSize;
-        y += padding.y * 0.6;
+      if (songNum !== currentSong) {
+        // first note the next y
+        y += (Math.floor(songs[currentSong - 1].lineLength / perLine) + 2) * padding.top;
+        currentSong = songNum;
       }
 
-      // x-position
-      var focusX = x;
-      var length = lineSize * (endLine - startLine + 2);
-      if (lastLineId !== line.lineId) {
-        // add length to the x-position only if
-        // it's not start of song and different line from the last
-        x += length + padding.x;
-      } else {
-        // if it's the same, set focusX back by length
-        // so that this line overlaps with the last
-        // (they are the same line, different singers)
-        focusX -= length + padding.x;
-      }
+      var focusX = (startLine % perLine) * lineSize + padding.left + left;
+      var focusY = y + Math.floor(startLine / perLine) * padding.top;
+      var length = (endLine - startLine + 1) * lineSize;
+      var trueY = focusY;
+      var radius = lineSize / 2;
 
-      // y-position
-      var focusY = y;
-      var radius = lineSize;
       if (line.numSingers > 1) {
-        focusY += (lineSize / (line.numSingers - 1) * line.singerIndex) - (lineSize / 2);
-        radius = lineSize / line.numSingers + .25;
+        radius /= line.numSingers;
+        focusY += 1.5 * radius * line.singerIndex - (lineSize / 4);
       }
 
-      lastLineId = line.lineId;
+      // if startLine and endLine should be on different lines, split them up
+      var startRow = Math.floor(startLine / perLine);
+      var endRow = Math.floor(endLine / perLine);
+      if (startRow !== endRow) {
+        var row = Math.floor(startLine / perLine) + 1;
+        length = (row * perLine - startLine) * lineSize;
 
-      return Object.assign(line, {
+        // create one extra line for overflow
+        linePositions.push(Object.assign({}, line, {
+          id: line.id + '.2',
+          focusX: padding.left + left,
+          focusY: y + endRow * padding.top,
+          trueY: y + endRow * padding.top,
+          radius,
+          fullRadius: lineSize / 2,
+          length: (endLine - row * perLine + 1) * lineSize,
+          startLine,
+          endLine,
+        }));
+      }
+
+      linePositions.push(Object.assign(line, {
         focusX,
         focusY,
-        trueY: y,
+        trueY,
         radius,
-        fullRadius: lineSize,
+        fullRadius: lineSize / 2,
         length,
         startLine,
         endLine,
-      });
+      }));
     });
 
-    // position theme diamonds only if we've passed them in
-    if (diamonds.length) {
-      var linePositionsByLineId = _.keyBy(linePositions, 'lineId');
-      var diamondPositions = _.map(diamonds, (theme) => {
-        var startLine = linePositionsByLineId[theme.startLineId];
+    return {linePositions, diamondPositions: [], songPositions: []};
+  },
 
-        var x = startLine.focusX + (theme.startLine - startLine.startLine) * lineSize;
-        var y = startLine.trueY - 2 * startLine.fullRadius;
-        theme.positions = [{x, y, size: lineSize * .8}];
+  positionSongsForFilter() {
 
-        if (theme.startLine !== theme.endLine) {
-          var endLine = linePositionsByLineId[theme.startLineId];
-          x = endLine.focusX + (theme.endLine - endLine.startLine) * lineSize;
-          y = endLine.trueY - 2 * endLine.fullRadius;
-          theme.positions.push({x, y, size: lineSize * .8});
-        }
+  },
 
-        return theme;
-      });
-    }
-
-
-    return {linePositions, songPositions, diamondPositions};
+  positionDiamondsForFilter() {
+    // var linePositionsByLineId = _.keyBy(linePositions, 'lineId');
+    // var diamondPositions = _.map(diamonds, (theme) => {
+    //   var startLine = linePositionsByLineId[theme.startLineId];
+    //
+    //   var x = startLine.focusX + (theme.startLine - startLine.startLine) * lineSize;
+    //   var y = startLine.trueY - 2 * startLine.fullRadius;
+    //   theme.positions = [{x, y, size: lineSize * .8}];
+    //
+    //   if (theme.startLine !== theme.endLine) {
+    //     var endLine = linePositionsByLineId[theme.startLineId];
+    //     x = endLine.focusX + (theme.endLine - endLine.startLine) * lineSize;
+    //     y = endLine.trueY - 2 * endLine.fullRadius;
+    //     theme.positions.push({x, y, size: lineSize * .8});
+    //   }
+    //
+    //   return theme;
+    // });
+    //
+    // return {diamondPositions};
   },
 
   positionSelectLines(lineIds, linePositions, scale, width, left) {

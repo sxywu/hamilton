@@ -17,8 +17,8 @@ function sections(width, vizWidth, sectionWidth) {
     var {linePositions, characterNodes, characterLinks} =
       FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
     var {linePositions, songPositions} =
-      PositionGraph.positionLinesForFilter(linePositions, [],
-      data.songs, vizWidth, 0, paddingTop / 4);
+      PositionGraph.positionLinesForFilter(linePositions, data.songs,
+        vizWidth, 0, paddingTop / 6);
 
     return {linePositions, songPositions, characterNodes, characterLinks};
   }
@@ -30,8 +30,8 @@ function sections(width, vizWidth, sectionWidth) {
     var {linePositions, diamondPositions, groupedThemes} =
       FilterGraph.filterForThemes(data, selectedThemes);
     var {linePositions, diamondPositions, songPositions} =
-      PositionGraph.positionLinesForFilter(linePositions, diamondPositions,
-      data.songs, vizWidth, sectionWidth, paddingTop / 4);
+      PositionGraph.positionLinesForFilter(linePositions, data.songs,
+        vizWidth, sectionWidth, paddingTop / 6);
 
     return {linePositions, diamondPositions, groupedThemes};
   }
@@ -114,7 +114,8 @@ function sections(width, vizWidth, sectionWidth) {
 
         if (selectedCharacters.length || selectedConversation.length) {
           var {linePositions, songPositions} =
-            PositionGraph.positionLinesForFilter(linePositions, [], data.songs, vizWidth, sectionWidth, paddingTop);
+            PositionGraph.positionLinesForFilter(linePositions, data.songs,
+              vizWidth, sectionWidth, paddingTop);
 
           return {linePositions, songPositions, characterNodes, characterLinks};
         } else {
@@ -427,15 +428,15 @@ function sections(width, vizWidth, sectionWidth) {
         var {linePositions, diamondPositions, groupedThemes, characterNodes, characterLinks} =
           FilterGraph.filterForAll(data, selectedCharacters, selectedConversation, selectedThemes);
 
-        if (selectedCharacters.length || selectedConversation.length || selectedThemes.length) {
+        // if (selectedCharacters.length || selectedConversation.length || selectedThemes.length) {
           var {linePositions, songPositions, diamondPositions} =
-            PositionGraph.positionLinesForFilter(linePositions, diamondPositions, data.songs, vizWidth, sectionWidth, paddingTop);
+            PositionGraph.positionLinesForFilter(linePositions, data.songs, vizWidth, sectionWidth, paddingTop);
 
           return {linePositions, songPositions, diamondPositions, groupedThemes, characterNodes, characterLinks};
-        } else {
-          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 100, paddingTop);
-          return {linePositions, diamondPositions: [], groupedThemes, characterNodes, characterLinks};
-        }
+        // } else {
+        //   var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 100, paddingTop);
+        //   return {linePositions, diamondPositions: [], groupedThemes, characterNodes, characterLinks};
+        // }
       },
       text: `
   Angelica and Eliza are only two of the stories I've found; there are many more.  Filter by any combination of characters, conversations, and themes below to explore more stories.

@@ -16,10 +16,10 @@ var ProcessGraph = {
     // duplicate any of the lines sung by multiple characters
     var lines = _.chain(rawLines)
       .map((line, lineId) => {
+        var songId = lineId.split(':')[0];
         // get all characters from the line
         return _.map(line[1][0], (character, i) => {
           var id = character + '/' + lineId;
-          var songId = lineId.split(':')[0];
 
         	return {
             id,
@@ -42,22 +42,17 @@ var ProcessGraph = {
         });
       }).flatten().value();
 
-    var i = 0;
-    var radius = 6;
-    var songWidth = (3 * radius) * _.size(songList);
-    var songs = _.map(songList, (song, id) => {
-      var x = (width / 2 - songWidth / 2) + i * (radius * 3);
-      i += 1;
-
-      return {
-        id,
-        name: song[0],
-        color: song[1],
-        x,
-        radius,
-        selected: true,
-      }
-    });
+    var songs = _.chain(rawLines)
+      .groupBy(line => line[0].split(':')[0])
+      .map((lines, id) => {
+        return {
+          id,
+          name: songList[id][0],
+          selected: true,
+          lineLength: _.reduce(lines, (sum, line) => sum + line[2].length, 0),
+        }
+      }).value();
+      
     return {songs, lines};
   },
 

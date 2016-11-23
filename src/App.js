@@ -14,9 +14,9 @@ import PositionGraph from './PositionGraph';
 
 
 var width = 1200;
-var vizWidth = 700;
+var vizWidth = 710;
 var sectionWidth = width - vizWidth;
-var characterWidth = 460;
+var characterWidth = 450;
 var themeWidth = characterWidth;
 var characterHeight = 440;
 var themeHeight = 200;
@@ -78,10 +78,6 @@ var App = React.createClass({
     this.updateSectionPositions();
     this.onScroll();
     window.addEventListener('scroll', _.throttle(this.onScroll.bind(this), 100));
-  },
-
-  componentDidUpdate() {
-    this.updateSectionPositions();
   },
 
   filterByCharacter(character) {

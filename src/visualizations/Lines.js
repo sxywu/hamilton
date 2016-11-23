@@ -65,10 +65,10 @@ var Lines = React.createClass({
 
   drawPath(d, showLength) {
     var x1 = d.radius - d.fullRadius;
-    var y1 = -d.radius;
+    var y1 = showLength ? -d.radius : -d.fullRadius;
     var length = showLength ? d.length - 2 * d.radius : 0;
     var x2 = x1 + length;
-    var y2 = d.radius
+    var y2 = showLength ? d.radius : d.fullRadius;
 
     var result = 'M' + [x1, y1];
     result += ' L' + [x2, y1];
