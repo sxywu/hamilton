@@ -129,7 +129,7 @@ var Section = React.createClass({
   render() {
     var padding = 20;
     var style = Object.assign({
-      width: this.props.sectionWidth - 2 * padding,
+      width: this.props.sectionWidth,
       lineHeight: 2,
       pointerEvents: 'none',
       color: this.props.fontColor,
