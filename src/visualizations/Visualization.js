@@ -76,9 +76,9 @@ var Visualization = React.createClass({
     return (
       <div style={style}>
         <svg ref='svg' style={style}>
+          {songs}
           <Lines {...this.props} {...this.state} hover={this.hoverLine} />
           {diamonds}
-          {songs}
         </svg>
         <LineSummary {...this.state.hovered} hover={this.hoverLine} />
       </div>

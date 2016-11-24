@@ -46,7 +46,8 @@ var Lines = React.createClass({
       .attr('d', (d) => this.drawPath(d))
       .merge(this.circles)
       .attr('d', (d) => this.drawPath(d))
-      .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray);
+      .attr('fill', (d) => d.selected || d.filtered ? d.fill : this.props.gray)
+      .attr('opacity', d => d.selected || d.filtered ? 1 : 0.75);
 
     simulation.nodes(this.props.linePositions)
       .force("charge", this.props.random ? d3.forceManyBody() : null)

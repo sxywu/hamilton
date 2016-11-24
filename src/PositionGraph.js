@@ -10,7 +10,7 @@ import lineSongPositions from './data/line_song_positions.json';
 var maxLength = _.maxBy(_.values(rawLines), line => line[2].length)[2].length;
 var radiusScale = d3.scaleLinear().domain([1, maxLength]);
 var lineSize = 10;
-var padding = {left: 5, top: 20};
+var padding = {left: 10, top: 16};
 
 var PositionGraph = {
   positionForCharacters(lines, songs, width, left, top) {
@@ -45,7 +45,7 @@ var PositionGraph = {
       // if next song
       if (songNum !== currentSong) {
         // first note the next y
-        y = songsById[songNum].y;
+        y = songsById[songNum].y + padding.top;
         currentSong = songNum;
       }
 
@@ -97,23 +97,27 @@ var PositionGraph = {
   },
 
   positionSongsForFilter(songs, width, left, top) {
-    var y = top + padding.top;
+    var y = top;
     var perLine = Math.floor((width - padding.left) / lineSize);
 
     var songPositions = [];
     _.each(songs, song => {
-      var columns = song.lineLength >= perLine ?
-        Math.ceil(perLine / lineSize) : Math.ceil(song.lineLength / lineSize);
+      var columns = Math.ceil(perLine / lineSize);
       var rows = Math.ceil(song.lineLength / perLine);
 
       songPositions.push(Object.assign(song, {
         x: left,
         y,
+        width: columns * lineSize * lineSize + lineSize / 2,
+        height: rows * padding.top,
         rows: _.times(rows + 1, i => i * padding.top),
-        columns: _.times(columns + 1, i => i * lineSize * lineSize),
+        columns: _.times(columns + 1, i => [
+          i === 0 ? lineSize / 2 : 1,
+          i * lineSize * lineSize + lineSize / (i === 0 ? 4 : 2),
+        ]),
       }));
 
-      y += (rows + 1) * padding.top;
+      y += (rows + 2) * padding.top;
     });
 
     return {songPositions};
