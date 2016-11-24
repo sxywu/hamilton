@@ -178,7 +178,7 @@ var PositionGraph = {
       return line;
     });
 
-    return {linePositions};
+    return {linePositions, songPositions: [], diamondPositions: []};
   },
 
   positionLinesAsImage(lines, width, left) {
@@ -203,7 +203,7 @@ var PositionGraph = {
       }));
     });
 
-    return {linePositions};
+    return {linePositions, songPositions: [], diamondPositions: []};
   },
 
   positionLinesByCharacter(lines, width, left) {
@@ -221,7 +221,7 @@ var PositionGraph = {
         length: radius,
       });
     });
-    return {linePositions};
+    return {linePositions, songPositions: [], diamondPositions: []};
   },
 
   positionLinesBySong(lines, left, top) {
@@ -240,7 +240,7 @@ var PositionGraph = {
       });
     });
 
-    return {linePositions};
+    return {linePositions, songPositions: [], diamondPositions: []};
   },
 
   positionLinesRandomly(lines, width) {
@@ -260,7 +260,7 @@ var PositionGraph = {
       });
     });
 
-    return {linePositions};
+    return {linePositions, songPositions: [], diamondPositions: []};
   },
 };
 
