@@ -4,64 +4,29 @@ import * as d3 from "d3";
 var duration = 1000;
 var Visualization = React.createClass({
   componentDidMount() {
-    this.textContainer = d3.select(this.refs.text);
-    this.circleContainer = d3.select(this.refs.circle);
-    // this.updateText();
-    // this.updateRect();
+    this.container = d3.select(this.refs.container);
+    this.updateRender();
   },
 
   componentDidUpdate() {
-    // this.updateText();
-    // this.updateRect();
+    this.updateRender();
   },
 
-  updateRect() {
-    this.circle = this.circleContainer
-      .attr('transform', 'translate(0, 15)')
-      .selectAll('circle').data(this.props.songs, d => d.id);
-    this.circle.exit().remove();
-
-    this.circle = this.circle.enter()
-      .append('circle')
-      .attr('cx', d => d.x)
-      .attr('r', d => d.radius)
-      .merge(this.circle)
-      .attr('fill', d => d.selected ? d.color : this.props.gray);
-
-  },
-
-  updateText() {
-
-    this.text = this.textContainer.selectAll('text')
+  updateRender() {
+    this.songs = this.container.selectAll('.song')
       .data(this.props.songPositions, d => d.id);
 
-    this.text.exit().remove();
+    this.songs.exit().remove();
 
-    this.text = this.text.enter()
-      .append('text')
-      .attr('text-anchor', 'end')
-      .attr('dy', '.35em')
-      .attr('x', d => d.x - 10)
-      .attr('y', d => d.y)
-      .text(d => {
-        var name = d.name;
-        var nameLength = 18;
-        if (name.length > nameLength) {
-          name = name.substring(0, nameLength) + '...';
-        }
-        return name;
-      }).merge(this.text)
-      .transition().duration(duration)
-      .attr('x', d => d.x - 10)
-      .attr('y', d => d.y);
+    this.songs = this.songs.enter().append('g')
+      .classed('song', true)
+      .merge(this.songs)
+      .attr('transform', d => 'translate(' + [d.x, d.y] + ')');
   },
 
   render() {
     return (
-      <g className='songs'>
-        <g ref='circle' className='circle' />
-        <g ref='text' className='text' />
-      </g>
+      <g className='songs' ref='container' />
     );
   }
 });

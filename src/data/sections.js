@@ -14,10 +14,10 @@ function sections(width, vizWidth, sectionWidth) {
     if (!selectedConversation.length) {
       selectedConversation = ['2-8', '8-2'];
     }
-    var {linePositions, characterNodes, characterLinks} =
+    var {linePositions, songPositions, characterNodes, characterLinks} =
       FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
     var {linePositions, songPositions} =
-      PositionGraph.positionLinesForFilter(linePositions, data.songs,
+      PositionGraph.positionForCharacters(linePositions, songPositions,
         vizWidth, 0, paddingTop / 6);
 
     return {linePositions, songPositions, characterNodes, characterLinks};
@@ -27,13 +27,13 @@ function sections(width, vizWidth, sectionWidth) {
     if (!selectedThemes.length) {
       selectedThemes = ['10', '18'];
     }
-    var {linePositions, diamondPositions, groupedThemes} =
+    var {linePositions, songPositions, diamondPositions, groupedThemes} =
       FilterGraph.filterForThemes(data, selectedThemes);
-    var {linePositions, diamondPositions, songPositions} =
-      PositionGraph.positionLinesForFilter(linePositions, data.songs,
+    var {linePositions, songPositions} =
+      PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
         vizWidth, sectionWidth, paddingTop / 6);
 
-    return {linePositions, diamondPositions, groupedThemes};
+    return {linePositions, songPositions, diamondPositions, groupedThemes};
   }
 
   return [
@@ -109,12 +109,12 @@ function sections(width, vizWidth, sectionWidth) {
       filter: 'characters',
       position(data, selectedCharacters, selectedConversation) {
         // either way, have to reset the colors on everything
-        var {linePositions, characterNodes, characterLinks} =
+        var {linePositions, songPositions, characterNodes, characterLinks} =
           FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
 
         if (selectedCharacters.length || selectedConversation.length) {
           var {linePositions, songPositions} =
-            PositionGraph.positionLinesForFilter(linePositions, data.songs,
+            PositionGraph.positionForCharacters(linePositions, songPositions,
               vizWidth, sectionWidth, paddingTop);
 
           return {linePositions, songPositions, characterNodes, characterLinks};
@@ -425,12 +425,13 @@ function sections(width, vizWidth, sectionWidth) {
       },
       filter: 'all',
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
-        var {linePositions, diamondPositions, groupedThemes, characterNodes, characterLinks} =
+        var {linePositions, diamondPositions, songPositions, groupedThemes, characterNodes, characterLinks} =
           FilterGraph.filterForAll(data, selectedCharacters, selectedConversation, selectedThemes);
 
         // if (selectedCharacters.length || selectedConversation.length || selectedThemes.length) {
-          var {linePositions, songPositions, diamondPositions} =
-            PositionGraph.positionLinesForFilter(linePositions, data.songs, vizWidth, sectionWidth, paddingTop);
+          var {linePositions, songPositions} =
+            PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
+              vizWidth, sectionWidth, paddingTop);
 
           return {linePositions, songPositions, diamondPositions, groupedThemes, characterNodes, characterLinks};
         // } else {

@@ -9,15 +9,30 @@ import lineSongPositions from './data/line_song_positions.json';
 // radius scale for the lines
 var maxLength = _.maxBy(_.values(rawLines), line => line[2].length)[2].length;
 var radiusScale = d3.scaleLinear().domain([1, maxLength]);
+var lineSize = 10;
+var padding = {left: 5, top: 20};
 
 var PositionGraph = {
-  positionLinesForFilter(lines, songs, width, left, top) {
-    var lineSize = 10;
-    var padding = {left: 5, top: 20};
-    var y = top;
+  positionForCharacters(lines, songs, width, left, top) {
+    var {songPositions} = PositionGraph.positionSongsForFilter(songs, width, left, top);
+    var {linePositions} = PositionGraph.positionLinesForFilter(lines, songPositions, width, left, top);
+
+    return {linePositions, songPositions};
+  },
+
+  positionForAll(lines, diamonds, songs, width, left, top) {
+    var {songPositions} = PositionGraph.positionSongsForFilter(songs, width, left, top);
+    var {linePositions} = PositionGraph.positionLinesForFilter(lines, songPositions, width, left, top);
+
+    return {linePositions, songPositions};
+  },
+
+  positionLinesForFilter(lines, songs, width, left) {
     var perLine = Math.floor((width - padding.left) / lineSize);
 
-    var currentSong = 1;
+    var songsById = _.keyBy(songs, 'id');
+    var currentSong;
+    var y;
     var lastLineId = null;
 
     // position all the lines
@@ -30,7 +45,7 @@ var PositionGraph = {
       // if next song
       if (songNum !== currentSong) {
         // first note the next y
-        y += (Math.floor(songs[currentSong - 1].lineLength / perLine) + 2) * padding.top;
+        y = songsById[songNum].y;
         currentSong = songNum;
       }
 
@@ -78,11 +93,30 @@ var PositionGraph = {
       }));
     });
 
-    return {linePositions, diamondPositions: [], songPositions: []};
+    return {linePositions, diamondPositions: []};
   },
 
-  positionSongsForFilter() {
+  positionSongsForFilter(songs, width, left, top) {
+    var y = top + padding.top;
+    var perLine = Math.floor((width - padding.left) / lineSize);
 
+    var songPositions = [];
+    _.each(songs, song => {
+      var columns = song.lineLength >= perLine ?
+        Math.ceil(perLine / lineSize) : Math.ceil(song.lineLength / lineSize);
+      var rows = Math.ceil(song.lineLength / perLine);
+
+      songPositions.push(Object.assign(song, {
+        x: left,
+        y,
+        rows: _.times(rows + 1, i => i * padding.top),
+        columns: _.times(columns + 1, i => i * lineSize * lineSize),
+      }));
+
+      y += (rows + 1) * padding.top;
+    });
+
+    return {songPositions};
   },
 
   positionDiamondsForFilter() {

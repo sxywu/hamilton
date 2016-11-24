@@ -6,27 +6,30 @@ var FilterGraph = {
   filterForCharacters(data, selectedCharacters, selectedConversation) {
     var {filteredLines} = FilterGraph.filterLinesBySelectedCharacter(
       selectedCharacters, selectedConversation, data.lines);
+    var {songPositions} = FilterGraph.filterSongsByRemainingLines(filteredLines, data.songs);
     var {characterNodes, characterLinks} =
       FilterGraph.updateFilterOpacities(filteredLines, null,
         data.characters, data.conversations, null,
         selectedCharacters, selectedConversation, null);
 
-    return {linePositions: filteredLines, characterNodes, characterLinks};
+    return {linePositions: filteredLines, songPositions, characterNodes, characterLinks};
   },
 
   filterForThemes(data, selectedThemes) {
     var {filteredLines2} = FilterGraph.filterLinesBySelectedThemes(selectedThemes, data.lines);
+    var {songPositions} = FilterGraph.filterSongsByRemainingLines(filteredLines2, data.songs);
     var {filteredDiamonds} = FilterGraph.filterDiamondsByRemainingLines(filteredLines2, data.diamonds);
     var {groupedThemes} = FilterGraph.updateFilterOpacities(filteredLines2, filteredDiamonds,
         null, null, data.groupedThemes, null, null, selectedThemes);
 
-    return {linePositions: filteredLines2, diamondPositions: filteredDiamonds, groupedThemes};
+    return {linePositions: filteredLines2, diamondPositions: filteredDiamonds, songPositions, groupedThemes};
   },
 
   filterForAll(data, selectedCharacters, selectedConversation, selectedThemes) {
     var {filteredLines} = FilterGraph.filterLinesBySelectedCharacter(
       selectedCharacters, selectedConversation, data.lines);
     var {filteredLines2} = FilterGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
+    var {songPositions} = FilterGraph.filterSongsByRemainingLines(filteredLines2, data.songs);
     var {filteredDiamonds} = FilterGraph.filterDiamondsByRemainingLines(filteredLines2, data.diamonds);
     var {characterNodes, characterLinks, groupedThemes} =
       FilterGraph.updateFilterOpacities(filteredLines2, filteredDiamonds,
@@ -34,7 +37,7 @@ var FilterGraph = {
         selectedCharacters, selectedConversation, selectedThemes);
 
     return {linePositions: filteredLines2, diamondPositions: filteredDiamonds,
-      groupedThemes, characterNodes, characterLinks};
+      songPositions, groupedThemes, characterNodes, characterLinks};
   },
 
   updateFilterOpacities(lines, diamonds, characterNodes, characterLinks, groupedThemes,
@@ -166,6 +169,13 @@ var FilterGraph = {
     return {filteredLines2};
   },
 
+  filterSongsByRemainingLines(lines, songs) {
+    var songIds = _.keyBy(lines, 'songId');
+    var songPositions = _.filter(songs, song => songIds[song.id]);
+console.log(songPositions);
+    return {songPositions};
+  },
+
   filterDiamondsByRemainingLines(lines, diamonds) {
     var linesById = _.groupBy(lines, 'lineId');
     var filteredDiamonds = _.filter(diamonds, diamond => {
@@ -179,6 +189,7 @@ var FilterGraph = {
 
     return {filteredDiamonds}
   },
+
 };
 
 export default FilterGraph;
