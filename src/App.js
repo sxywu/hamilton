@@ -93,6 +93,7 @@ var App = React.createClass({
       selectedCharacters, this.state.selectedConversation, this.state.selectedThemes);
     positions.selectedCharacters = selectedCharacters;
     positions.update = true;
+    positions.prevTop = this.state.top;
     this.setState(positions);
   },
 
@@ -108,6 +109,7 @@ var App = React.createClass({
       this.state.selectedCharacters, selectedConversation, this.state.selectedThemes);
     positions.selectedConversation = selectedConversation;
     positions.update = true;
+    positions.prevTop = this.state.top;
     this.setState(positions);
   },
 
@@ -123,6 +125,7 @@ var App = React.createClass({
       this.state.selectedCharacters, this.state.selectedConversation, selectedThemes);
     positions.selectedThemes = selectedThemes;
     positions.update = true;
+    positions.prevTop = this.state.top;
     this.setState(positions);
   },
 
@@ -137,6 +140,7 @@ var App = React.createClass({
     positions.selectedConversation = [];
     positions.selectedThemes = [];
     positions.update = true;
+    positions.prevTop = this.state.top;
     this.setState(positions);
   },
 
