@@ -98,12 +98,13 @@ var Visualization = React.createClass({
 
   render() {
     var style = {
+      border: '1px solid',
       position: this.props.section && this.props.section.consecutive ? 'fixed' : 'relative',
     };
 
     return (
       <div style={style}>
-        <canvas ref='canvas' style={style} />
+        <canvas ref='canvas' />
         <LineSummary {...this.state.hovered} hover={this.hoverLine} />
       </div>
     );
