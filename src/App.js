@@ -195,8 +195,8 @@ var App = React.createClass({
         selectedThemes = positions.selectedThemes = [];
       }
 
-      positions = section.position(this.state, selectedCharacters,
-        selectedConversation, selectedThemes);
+      positions = Object.assign(positions,
+        section.position(this.state, selectedCharacters, selectedConversation, selectedThemes));
       positions.random = positions.random || false;
       positions.prevTop = section.consecutive ? 0 : this.state.top || scrollTop;
       positions.top = section.consecutive ? 0 : section.top;

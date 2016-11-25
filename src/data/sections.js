@@ -11,9 +11,6 @@ function sections(width, vizWidth, sectionWidth) {
     if (!selectedCharacters.length) {
       selectedCharacters = ['2', '8'];
     }
-    if (!selectedConversation.length) {
-      selectedConversation = ['2-8', '8-2'];
-    }
     var {linePositions, songPositions, characterNodes, characterLinks} =
       FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
     var {linePositions, songPositions} =

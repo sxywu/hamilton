@@ -16,7 +16,8 @@ var FilterGraph = {
   },
 
   filterForThemes(data, selectedThemes) {
-    var {filteredLines2} = FilterGraph.filterLinesBySelectedThemes(selectedThemes, data.lines);
+    var {filteredLines} = FilterGraph.filterLinesBySelectedCharacter([], [], data.lines);
+    var {filteredLines2} = FilterGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
     var {songPositions} = FilterGraph.filterSongsByRemainingLines(filteredLines2, data.songs);
     var {filteredDiamonds} = FilterGraph.filterDiamondsByRemainingLines(filteredLines2, data.diamonds);
     var {groupedThemes} = FilterGraph.updateFilterOpacities(filteredLines2, filteredDiamonds,
