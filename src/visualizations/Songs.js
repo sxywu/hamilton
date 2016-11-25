@@ -27,6 +27,7 @@ var Visualization = React.createClass({
       .classed('header', true)
       .attr('x', 5)
       .attr('y', -2)
+      .attr('font-size', 12)
       .text(d => d.name);
 
     this.songs = enter.merge(this.songs)
