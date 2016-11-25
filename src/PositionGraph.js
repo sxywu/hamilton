@@ -57,7 +57,7 @@ var PositionGraph = {
 
       if (line.numSingers > 1) {
         radius /= line.numSingers;
-        focusY += 1.5 * radius * line.singerIndex - (lineSize / 4);
+        focusY += (-lineSize / 2) + radius + 2 * radius * line.singerIndex;
       }
 
       // if startLine and endLine should be on different lines, split them up

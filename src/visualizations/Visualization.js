@@ -25,6 +25,7 @@ var Visualization = React.createClass({
   },
 
   componentDidMount() {
+    // make canvas crispy
     var sf = window.devicePixelRatio;
     this.refs.canvas.width = this.props.width * sf;
     this.refs.canvas.height = this.props.height * sf;
@@ -80,12 +81,17 @@ var Visualization = React.createClass({
     var top = this.interpolateTop(Math.max(0, interpolate));
 
     this.ctx.clearRect(0, 0, this.props.width, this.props.height);
-    Lines.drawCircle(this.ctx, this.props.linePositions, top);
+    Lines.drawCircles(this.ctx, this.props.linePositions, top);
   },
 
   forceEnd() {
+    var t = d3.timer((elapsed) => {
+      this.ctx.clearRect(0, 0, this.props.width, this.props.height);
 
-
+      var interpolate = Math.min(elapsed / duration, 1);
+      Lines.drawPaths(this.ctx, this.props.linePositions, interpolate, this.props);
+      if (elapsed > duration) t.stop();
+    });
 
   },
 
