@@ -6,6 +6,12 @@ import Diamonds from './Diamonds';
 import Songs from './Songs';
 import LineSummary from '../LineSummary';
 
+var duration = 500;
+var simulation = d3.forceSimulation()
+  .force('collide', d3.forceCollide().radius(d => d.radius + 3))
+  .force('x', d3.forceX().x(d => d.focusX))
+  .force('y', d3.forceY().y(d => d.focusY));
+
 var Visualization = React.createClass({
   getInitialState() {
     return {
@@ -19,8 +25,29 @@ var Visualization = React.createClass({
   },
 
   componentDidMount() {
-    this.svg = d3.select(this.refs.svg);
-    this.defineFilters();
+    var sf = window.devicePixelRatio;
+    this.refs.canvas.width = this.props.width * sf;
+    this.refs.canvas.height = this.props.height * sf;
+    this.refs.canvas.style.width = this.props.width + 'px';
+    this.refs.canvas.style.height = this.props.height + 'px';
+
+    this.ctx = this.refs.canvas.getContext('2d');
+    this.ctx.scale(sf, sf);
+
+    simulation.on('tick', this.forceTick.bind(this))
+      .on('end', this.forceEnd.bind(this))
+      .stop();
+  },
+
+  componentDidUpdate() {
+    // because we're using alpha which goes towards 0
+    // the top we're going towards must be 0
+    this.interpolateTop = d3.interpolateNumber(this.props.top, this.props.prevTop);
+
+    simulation.nodes(this.props.linePositions)
+      .force("charge", this.props.random ? d3.forceManyBody() : null)
+      .alphaMin(this.props.random ? 0 : 0.5)
+      .alpha(1).restart();
   },
 
   hoverLine(hoveredLine) {
@@ -48,25 +75,22 @@ var Visualization = React.createClass({
     this.setState({hovered, update: false});
   },
 
-  defineFilters() {
-    //SVG filter for the gooey effect
-    //Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
-    var defs = this.svg.append('defs');
-    var gooey = defs.append('filter').attr('id','gooey');
-    gooey.append('feGaussianBlur')
-      .attr('in','SourceGraphic')
-      .attr('stdDeviation','1')
-      .attr('result','blur');
-    gooey.append('feColorMatrix')
-      .attr('in','blur')
-      .attr('mode','matrix')
-      .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7');
+  forceTick() {
+    var interpolate = (simulation.alpha() - simulation.alphaMin()) / (1 - simulation.alphaMin());
+    var top = this.interpolateTop(Math.max(0, interpolate));
+
+    this.ctx.clearRect(0, 0, this.props.width, this.props.height);
+    Lines.drawCircle(this.ctx, this.props.linePositions, top);
+  },
+
+  forceEnd() {
+
+
+
   },
 
   render() {
     var style = {
-      width: '100%',
-      height: '100%',
       position: this.props.section && this.props.section.consecutive ? 'fixed' : 'relative',
     };
     var diamonds = this.props.diamondPositions.length && (
@@ -75,11 +99,7 @@ var Visualization = React.createClass({
 
     return (
       <div style={style}>
-        <svg ref='svg' style={style}>
-          {songs}
-          <Lines {...this.props} {...this.state} hover={this.hoverLine} />
-          {diamonds}
-        </svg>
+        <canvas ref='canvas' style={style} />
         <LineSummary {...this.state.hovered} hover={this.hoverLine} />
       </div>
     );

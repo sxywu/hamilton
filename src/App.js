@@ -14,6 +14,7 @@ import PositionGraph from './PositionGraph';
 
 
 var width = 1200;
+var height = 14000;
 var vizWidth = 710;
 var sectionWidth = width - vizWidth;
 var characterWidth = 450;
@@ -223,7 +224,7 @@ var App = React.createClass({
   render() {
     var style = {
       width,
-      height: 30000,
+      height,
       margin: 'auto',
       color: this.state.fontColor,
     };
@@ -276,6 +277,7 @@ var App = React.createClass({
       vizWidth,
       sectionWidth,
       width,
+      height,
       characterWidth,
       characterHeight,
       themeWidth,
