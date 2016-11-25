@@ -173,7 +173,7 @@ var FilterGraph = {
   filterSongsByRemainingLines(lines, songs) {
     var songIds = _.keyBy(lines, 'songId');
     var songPositions = _.filter(songs, song => songIds[song.id]);
-console.log(songPositions);
+    
     return {songPositions};
   },
 

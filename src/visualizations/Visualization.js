@@ -6,7 +6,7 @@ import Diamonds from './Diamonds';
 import Songs from './Songs';
 import LineSummary from '../LineSummary';
 
-var duration = 500;
+var duration = 300;
 var simulation = d3.forceSimulation()
   .force('collide', d3.forceCollide().radius(d => d.radius + 3))
   .force('x', d3.forceX().x(d => d.focusX))
@@ -89,6 +89,7 @@ var Visualization = React.createClass({
       this.ctx.clearRect(0, 0, this.props.width, this.props.height);
 
       var interpolate = Math.min(elapsed / duration, 1);
+      Songs.drawLines(this.ctx, this.props.songPositions, interpolate, this.props);
       Lines.drawPaths(this.ctx, this.props.linePositions, interpolate, this.props);
       if (elapsed > duration) t.stop();
     });
@@ -99,9 +100,6 @@ var Visualization = React.createClass({
     var style = {
       position: this.props.section && this.props.section.consecutive ? 'fixed' : 'relative',
     };
-    var diamonds = this.props.diamondPositions.length && (
-      <Diamonds {...this.props} hover={this.hoverTheme} />);
-    var songs = this.props.songPositions.length && (<Songs {...this.props} />);
 
     return (
       <div style={style}>

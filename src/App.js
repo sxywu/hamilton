@@ -282,6 +282,8 @@ var App = React.createClass({
       characterHeight,
       themeWidth,
       themeHeight,
+      headerFont: 'Open Sans',
+      bodyFont: 'Libre Baskerville',
     };
     var eventProps = {
       selectLines: this.selectLines,
