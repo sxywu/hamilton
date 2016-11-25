@@ -116,8 +116,8 @@ function sections(width, vizWidth, sectionWidth) {
 
           return {linePositions, songPositions, characterNodes, characterLinks};
         } else {
-          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, paddingTop);
-          return {linePositions, characterNodes, characterLinks};
+          var {linePositions, songPositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, paddingTop);
+          return {linePositions, songPositions, characterNodes, characterLinks};
         }
       },
       text: `
