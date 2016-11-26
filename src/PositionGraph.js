@@ -110,7 +110,11 @@ var PositionGraph = {
         y,
         width: columns * lineSize * lineSize + lineSize / 2,
         height: rows * padding.top,
-        rows: _.times(rows + 1, i => i * padding.top),
+        rows: _.times(rows + 1, i => [
+          lineSize / 2 + 1, // offset
+          i > 0 ? i * perLine : '', // text to display
+          i * padding.top, // y position
+        ]),
         columns: _.times(columns + 1, i => [
           i === 0 ? lineSize / 2 : 1,
           i * lineSize * lineSize + lineSize / (i === 0 ? 4 : 2),
