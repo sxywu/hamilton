@@ -21,15 +21,11 @@ var Songs = {
 
   drawRows(ctx, song, rows, props) {
     _.each(rows, row => {
-      var y = song.y + row[2] + props.top;
+      var y = song.y + row + props.top;
       ctx.beginPath();
       ctx.moveTo(song.x, y);
       ctx.lineTo(song.x + song.width, y);
       ctx.stroke();
-
-      ctx.font = '8px ' + props.bodyFont;
-      ctx.textAlign = 'right';
-      ctx.fillText(row[1], song.x + song.width - 1, y - row[0]);
     });
   },
 
