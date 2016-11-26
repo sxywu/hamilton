@@ -52,7 +52,7 @@ var ProcessGraph = {
           lineLength: _.reduce(lines, (sum, line) => sum + line[2].length, 0),
         }
       }).value();
-      
+
     return {songs, lines};
   },
 
@@ -197,9 +197,13 @@ var ProcessGraph = {
               lines: diamonds[0].themeLines,
               length: diamonds.length,
               fill: diamonds[0].fill,
+              diamonds,
             }
           }).sortBy(diamond => -diamond.length).value();
 
+        _.each(diamonds, (diamond, i) => {
+          _.each(diamond.diamonds, theme => theme.groupId = i + 1);
+        });
         return {name: themeType, diamonds};
       }).value();
 

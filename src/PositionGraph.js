@@ -10,7 +10,7 @@ import lineSongPositions from './data/line_song_positions.json';
 var maxLength = _.maxBy(_.values(rawLines), line => line[2].length)[2].length;
 var radiusScale = d3.scaleLinear().domain([1, maxLength]);
 var lineSize = 10;
-var padding = {left: 10, top: 16};
+var padding = {left: 10, top: 22};
 
 var PositionGraph = {
   positionForCharacters(lines, songs, width, left, top) {
@@ -23,8 +23,9 @@ var PositionGraph = {
   positionForAll(lines, diamonds, songs, width, left, top) {
     var {songPositions} = PositionGraph.positionSongsForFilter(songs, width, left, top);
     var {linePositions} = PositionGraph.positionLinesForFilter(lines, songPositions, width, left, top);
+    var {diamondPositions} = PositionGraph.positionDiamondsForFilter(linePositions, diamonds, width, left);
 
-    return {linePositions, songPositions};
+    return {linePositions, songPositions, diamondPositions};
   },
 
   positionLinesForFilter(lines, songs, width, left) {
@@ -92,8 +93,7 @@ var PositionGraph = {
         endLine,
       }));
     });
-
-    return {linePositions, diamondPositions: []};
+    return {linePositions};
   },
 
   positionSongsForFilter(songs, width, left, top) {
@@ -117,32 +117,33 @@ var PositionGraph = {
         ]),
       }));
 
-      y += (rows + 2) * padding.top;
+      y += (rows + 1.5) * padding.top;
     });
 
     return {songPositions};
   },
 
-  positionDiamondsForFilter() {
-    // var linePositionsByLineId = _.keyBy(linePositions, 'lineId');
-    // var diamondPositions = _.map(diamonds, (theme) => {
-    //   var startLine = linePositionsByLineId[theme.startLineId];
-    //
-    //   var x = startLine.focusX + (theme.startLine - startLine.startLine) * lineSize;
-    //   var y = startLine.trueY - 2 * startLine.fullRadius;
-    //   theme.positions = [{x, y, size: lineSize * .8}];
-    //
-    //   if (theme.startLine !== theme.endLine) {
-    //     var endLine = linePositionsByLineId[theme.startLineId];
-    //     x = endLine.focusX + (theme.endLine - endLine.startLine) * lineSize;
-    //     y = endLine.trueY - 2 * endLine.fullRadius;
-    //     theme.positions.push({x, y, size: lineSize * .8});
-    //   }
-    //
-    //   return theme;
-    // });
-    //
-    // return {diamondPositions};
+  positionDiamondsForFilter(linePositions, diamonds, width, left) {
+    var linePositionsByLineId = _.keyBy(linePositions, 'lineId');
+    var diamondPositions = [];
+    _.each(diamonds, (theme) => {
+      var startLine = linePositionsByLineId[theme.startLineId];
+
+      var x1 = startLine.focusX + (theme.startLine - startLine.startLine) * lineSize;
+      var y1 = startLine.trueY - startLine.fullRadius;
+
+      var x2 = x1;
+      var y2 = y1;
+      if (theme.startLine !== theme.endLine) {
+        var endLine = linePositionsByLineId[theme.startLineId];
+        x2 = endLine.focusX + (theme.endLine - endLine.startLine) * lineSize;
+        y2 = endLine.trueY - endLine.fullRadius;
+      }
+
+      diamondPositions.push(Object.assign(theme, {x1, y1, x2, y2}));
+    });
+
+    return {diamondPositions};
   },
 
   positionSelectLines(lineIds, linePositions, scale, width, left) {

@@ -26,7 +26,7 @@ function sections(width, vizWidth, sectionWidth) {
     }
     var {linePositions, songPositions, diamondPositions, groupedThemes} =
       FilterGraph.filterForThemes(data, selectedThemes);
-    var {linePositions, songPositions} =
+    var {linePositions, songPositions, diamondPositions} =
       PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
         vizWidth, sectionWidth, paddingTop / 6);
 
@@ -427,6 +427,7 @@ function sections(width, vizWidth, sectionWidth) {
 
         if (selectedCharacters.length || selectedConversation.length || selectedThemes.length) {
           var {linePositions, songPositions} =
+          var {linePositions, songPositions, diamondPositions} =
             PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
               vizWidth, sectionWidth, paddingTop);
 

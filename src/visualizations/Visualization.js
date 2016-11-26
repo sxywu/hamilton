@@ -90,6 +90,7 @@ var Visualization = React.createClass({
 
       var interpolate = Math.min(elapsed / duration, 1);
       Songs.drawLines(this.ctx, this.props.songPositions, interpolate, this.props);
+      Diamonds.drawCurves(this.ctx, this.props.diamondPositions, interpolate, this.props);
       Lines.drawPaths(this.ctx, this.props.linePositions, interpolate, this.props);
       if (elapsed > duration) t.stop();
     });
