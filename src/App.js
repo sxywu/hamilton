@@ -14,7 +14,7 @@ import PositionGraph from './PositionGraph';
 
 
 var width = 1200;
-var height = 14000;
+var height = 16000;
 var vizWidth = 710;
 var sectionWidth = width - vizWidth;
 var characterWidth = 450;
