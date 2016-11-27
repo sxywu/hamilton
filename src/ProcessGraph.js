@@ -8,6 +8,7 @@ import themeList from './data/theme_list.json';
 import rawCharacters from './data/characters.json';
 import rawThemes from './data/themes.json';
 
+var themeScale = d3.scaleLog().range([16, 36]);
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([3, 10]);
 
@@ -191,21 +192,40 @@ var ProcessGraph = {
       .map((diamonds, themeType) => {
         diamonds = _.chain(diamonds)
           .groupBy(diamond => diamond.themeId)
-          .map((diamonds, themeId) => {
+          .sortBy(diamonds => diamonds.length)
+          .map((diamonds, groupId) => {
+            // add group id's to each of the diamonds
+            groupId += 1;
+            _.each(diamonds, theme => theme.groupId = groupId);
+
             return {
-              id: themeId,
+              id: diamonds[0].themeId,
+              themeType,
+              groupId,
               lines: diamonds[0].themeLines,
               length: diamonds.length,
               fill: diamonds[0].fill,
               diamonds,
             }
-          }).sortBy(diamond => -diamond.length).value();
+          }).value();
 
-        _.each(diamonds, (diamond, i) => {
-          _.each(diamond.diamonds, theme => theme.groupId = i + 1);
-        });
         return {name: themeType, diamonds};
-      }).value();
+      }).sortBy(theme => -theme.diamonds.length).value();
+
+    // position the grouped themes
+    var padding = 5;
+    var maxDiamonds = _.chain(groupedThemes).map('diamonds')
+      .flatten().maxBy('length').value().length;
+    themeScale.domain([1, maxDiamonds]);
+    _.each(groupedThemes, theme => {
+      var x = padding;
+      _.each(theme.diamonds, diamond => {
+        diamond.x = x;
+        diamond.x2 = _.round(themeScale(diamond.length), 2);
+        x += diamond.x2 + 2 * padding;
+      });
+      theme.width = x;
+    });
 
     return {diamonds, groupedThemes};
   },

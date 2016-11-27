@@ -5,7 +5,8 @@ import * as d3 from 'd3';
 import Diamonds from './Diamonds';
 import LineSummary from '../LineSummary';
 
-var Characters = React.createClass({
+var fontSize = 12;
+var Themes = React.createClass({
   getInitialState() {
     return {
       update: true,
@@ -26,6 +27,14 @@ var Characters = React.createClass({
     this.setState({sideHovered, update: false});
   },
 
+  calculateCurve(diamond) {
+    var cpx = Math.min(diamond.x2 * 0.25, fontSize);
+    var cpy = -0.85 * fontSize;
+
+    return 'M' + [0, 0] +
+      'C' + [cpx, cpy] + ' ' + [diamond.x2, cpy] + ' ' + [diamond.x2, cpy];
+  },
+
   render() {
     var style = {
       display: 'inline-block',
@@ -36,23 +45,43 @@ var Characters = React.createClass({
     };
     var groupStyle = {
       display: 'inline-block',
-      padding: '0 15px',
-      margin: '0 0 20px 0',
+      padding: '5px 10px',
+      margin: 0,
     };
-    var diamondStyle = {
-      gray: this.props.gray,
-      cursor: 'pointer',
-    };
+
     var themes = _.map(this.props.groupedThemes, theme => {
-      var props = {update: true, diamondPositions: theme.diamonds};
-      var diamonds = (<Diamonds {...props} {...diamondStyle}
-        hover={this.hoverSideTheme} click={this.props.onSelectTheme} />);
+      var diamonds = _.map(theme.diamonds, diamond => {
+        var name = diamond.themeType[0].toLowerCase() + diamond.groupId;
+        var gAttr = {
+          transform: 'translate(' + [diamond.x, fontSize] + ')',
+          opacity: diamond.available ? (diamond.selected ? 1 : 0.5) : 0,
+          cursor: diamond.available ? 'pointer' : 'default',
+          onClick: diamond.available ? this.props.onSelectTheme.bind(this, diamond.id) : null,
+        };
+        var pathAttr = {
+          d: this.calculateCurve(diamond),
+          stroke: this.props.fontColor,
+          fill: 'none',
+        };
+        var textAttr = {
+          x: diamond.x2,
+          textAnchor: 'middle',
+          fontFamily: this.props.bodyFont,
+          fontStyle: 'italic',
+          fontSize,
+        };
+        return (
+          <g {...gAttr}>
+            <path {...pathAttr} />
+            <text {...textAttr}>{name}</text>
+          </g>
+        );
+      });
 
       return (
         <h3 style={groupStyle}>
-          {theme.name}
-          <br />
-          <svg width={theme.svgWidth} height={theme.svgHeight}>
+          {theme.name}<br />
+          <svg width={theme.width} height={fontSize * 2}>
             {diamonds}
           </svg>
         </h3>
@@ -68,4 +97,4 @@ var Characters = React.createClass({
   }
 });
 
-export default Characters;
+export default Themes;

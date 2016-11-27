@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import * as d3 from "d3";
 
-var themeScale = d3.scaleLinear().range([10, 20]);
 var FilterGraph = {
   filterForCharacters(data, selectedCharacters, selectedConversation) {
     var {filteredLines} = FilterGraph.filterLinesBySelectedCharacter(
@@ -84,20 +83,12 @@ var FilterGraph = {
     var availableDiamonds = _.chain(diamonds).map('themeId').uniq().value();
     var filteredDiamonds = _.chain(diamonds).filter('selected').map('themeId').uniq().value();
     var countedDiamonds = _.countBy(diamonds, 'themeId');
-    var maxDiamonds = _.chain(diamonds).countBy('themeId').values().max().value();
-    themeScale.domain([0, maxDiamonds]);
-    var svgSize = themeScale(maxDiamonds);
     _.each(groupedThemes, (theme) => {
-      theme.svgWidth = svgSize * theme.diamonds.length;
-      theme.svgHeight = svgSize;
       _.each(theme.diamonds, (diamond, i) => {
         diamond.available = _.includes(availableDiamonds, diamond.id);
         diamond.selected = nonSelected || _.includes(selectedThemes, diamond.id);
         diamond.filtered = _.includes(filteredDiamonds, diamond.id);
         diamond.length = countedDiamonds[diamond.id] || 0;
-
-        var size = themeScale(diamond.length);
-        diamond.positions = [{x: (i + .5) * svgSize, y: svgSize / 2, size: size / 2}];
       });
     });
 
