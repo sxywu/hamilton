@@ -3,7 +3,7 @@ import _ from 'lodash';
 import FilterGraph from '../FilterGraph';
 import PositionGraph from '../PositionGraph';
 
-var paddingTop = 150;
+var paddingTop = 100;
 var marginBottom = 400;
 
 function sections(width, vizWidth, sectionWidth) {
@@ -422,7 +422,6 @@ function sections(width, vizWidth, sectionWidth) {
           FilterGraph.filterForAll(data, selectedCharacters, selectedConversation, selectedThemes);
 
         if (selectedCharacters.length || selectedConversation.length || selectedThemes.length) {
-          var {linePositions, songPositions} =
           var {linePositions, songPositions, diamondPositions} =
             PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
               vizWidth, sectionWidth, paddingTop);
