@@ -99,7 +99,7 @@ var Visualization = React.createClass({
 
   render() {
     var style = {
-      border: '1px solid',
+      // border: '1px solid',
       position: this.props.section && this.props.section.consecutive ? 'fixed' : 'relative',
     };
 
