@@ -4,33 +4,29 @@ import FilterGraph from '../FilterGraph';
 import PositionGraph from '../PositionGraph';
 
 var paddingTop = 150;
-var marginBottom = 600;
+var marginBottom = 400;
 
 function sections(width, vizWidth, sectionWidth) {
   function positionAngelica(data, selectedCharacters, selectedConversation) {
-    if (!selectedCharacters.length) {
-      selectedCharacters = ['2', '8'];
-    }
+    selectedCharacters = _.union(selectedCharacters, ['2', '8']);
     var {linePositions, songPositions, characterNodes, characterLinks} =
       FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
     var {linePositions, songPositions} =
       PositionGraph.positionForCharacters(linePositions, songPositions,
         vizWidth, 0, paddingTop / 6);
 
-    return {linePositions, songPositions, characterNodes, characterLinks};
+    return {linePositions, songPositions, characterNodes, characterLinks, selectedCharacters};
   }
 
   function positionEliza(data, selectedThemes) {
-    if (!selectedThemes.length) {
-      selectedThemes = ['10', '18'];
-    }
+    selectedThemes = _.union(selectedThemes, ['10', '18']);
     var {linePositions, songPositions, diamondPositions, groupedThemes} =
       FilterGraph.filterForThemes(data, selectedThemes);
     var {linePositions, songPositions, diamondPositions} =
       PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
         vizWidth, sectionWidth, paddingTop / 6);
 
-    return {linePositions, songPositions, diamondPositions, groupedThemes};
+    return {linePositions, songPositions, diamondPositions, groupedThemes, selectedThemes};
   }
 
   return [
@@ -39,6 +35,7 @@ function sections(width, vizWidth, sectionWidth) {
       random: true,
       style: {
         width: '60%',
+        height: 300,
         marginBottom,
       },
       position(data) {
@@ -134,7 +131,6 @@ function sections(width, vizWidth, sectionWidth) {
         marginLeft: vizWidth,
       },
       filter: 'characters',
-      characterHeight: 100,
       position(data, selectedCharacters, selectedConversation) {
         return positionAngelica(data, selectedCharacters, selectedConversation);
       },
