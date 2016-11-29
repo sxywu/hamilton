@@ -56,7 +56,7 @@ var Themes = React.createClass({
           transform: 'translate(' + [diamond.x, fontSize] + ')',
           opacity: diamond.available ? (diamond.selected ? 1 : 0.5) : 0,
           cursor: diamond.available ? 'pointer' : 'default',
-          onClick: diamond.available ? this.props.onSelectTheme.bind(this, diamond.id) : null,
+          // onClick: diamond.available ? this.props.onSelectTheme.bind(this, diamond.id) : null,
         };
         var pathAttr = {
           d: this.calculateCurve(diamond),
