@@ -94,6 +94,7 @@ var App = React.createClass({
       selectedCharacters, this.state.selectedConversation, this.state.selectedThemes);
     positions.selectedCharacters = selectedCharacters;
     positions.update = true;
+    positions.useForce = true;
     positions.prevTop = this.state.top;
     this.setState(positions);
   },
@@ -110,6 +111,7 @@ var App = React.createClass({
       this.state.selectedCharacters, selectedConversation, this.state.selectedThemes);
     positions.selectedConversation = selectedConversation;
     positions.update = true;
+    positions.useForce = true;
     positions.prevTop = this.state.top;
     this.setState(positions);
   },
@@ -126,6 +128,7 @@ var App = React.createClass({
       this.state.selectedCharacters, this.state.selectedConversation, selectedThemes);
     positions.selectedThemes = selectedThemes;
     positions.update = true;
+    positions.useForce = true;
     positions.prevTop = this.state.top;
     this.setState(positions);
   },
@@ -141,6 +144,7 @@ var App = React.createClass({
     positions.selectedConversation = [];
     positions.selectedThemes = [];
     positions.update = true;
+    positions.useForce = true;
     positions.prevTop = this.state.top;
     this.setState(positions);
   },
@@ -202,11 +206,14 @@ var App = React.createClass({
       positions.top = (section.consecutive ? 0 : section.top) + (positions.top || 0);
       positions.section = section;
       positions.update = true;
+      positions.useForce = true;
     } else if (section && section.consecutive && section !== currentSection) {
       // if we just entered a consecutive section for the first time
       positions = section.position(this.state, selectedCharacters,
         selectedConversation, selectedThemes, section.consecutive);
       positions.prevTop = this.state.top;
+      positions.update = true;
+      positions.useForce = false;
     } else if (!section && currentSection && random) {
       // if there's no section, but there was previously a section
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
@@ -216,6 +223,7 @@ var App = React.createClass({
       positions.top = scrollTop;
       positions.section = null;
       positions.update = true;
+      positions.useForce = true;
     }
 
     if (_.size(positions)) {

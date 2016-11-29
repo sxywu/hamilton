@@ -41,14 +41,20 @@ var Visualization = React.createClass({
   },
 
   componentDidUpdate() {
-    // because we're using alpha which goes towards 0
-    // the top we're going towards must be 0
-    this.interpolateTop = d3.interpolateNumber(this.props.top, this.props.prevTop);
+    this.timer && this.timer.stop();
 
-    simulation.nodes(this.props.linePositions)
-      .force("charge", this.props.random ? d3.forceManyBody() : null)
-      .alphaMin(this.props.random ? 0 : 0.5)
-      .alpha(1).restart();
+    if (this.props.useForce) {
+      // because we're using alpha which goes towards 0
+      // the top we're going towards must be 0
+      this.interpolateTop = d3.interpolateNumber(this.props.top, this.props.prevTop);
+      simulation.nodes(this.props.linePositions)
+        .force("charge", this.props.random ? d3.forceManyBody() : null)
+        .alphaMin(this.props.random ? 0 : 0.5)
+        .alpha(1).restart();
+    } else {
+      this.interpolateTop = d3.interpolateNumber(this.props.prevTop, this.props.top);
+      this.positionNoForce();
+    }
   },
 
   hoverLine(hoveredLine) {
@@ -85,16 +91,28 @@ var Visualization = React.createClass({
   },
 
   forceEnd() {
-    var t = d3.timer((elapsed) => {
+    this.timer = d3.timer((elapsed) => {
       this.ctx.clearRect(0, 0, this.props.width, this.props.height);
 
       var interpolate = Math.min(elapsed / duration, 1);
       Diamonds.drawCurves(this.ctx, this.props.diamondPositions, interpolate, this.props);
       Songs.drawLines(this.ctx, this.props.songPositions, interpolate, this.props);
       Lines.drawPaths(this.ctx, this.props.linePositions, interpolate, this.props);
-      if (elapsed > duration) t.stop();
+      if (elapsed > duration) this.timer.stop();
     });
+  },
 
+  positionNoForce() {
+    this.timer = d3.timer((elapsed) => {
+      this.ctx.clearRect(0, 0, this.props.width, this.props.height);
+
+      var interpolate = Math.min(elapsed / duration, 1);
+      var top = this.interpolateTop(interpolate);
+      // Diamonds.drawCurves(this.ctx, this.props.diamondPositions, interpolate, this.props);
+      // Songs.drawLines(this.ctx, this.props.songPositions, interpolate, this.props);
+      Lines.movePaths(this.ctx, this.props.linePositions, top, this.props);
+      if (elapsed > duration) this.timer.stop();
+    });
   },
 
   render() {

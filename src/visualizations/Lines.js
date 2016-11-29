@@ -44,6 +44,32 @@ var Lines = {
     });
   },
 
+  movePaths(ctx, lines, top, props) {
+    _.each(lines, line => {
+      // line.x and line.y are center, so x1 won't change
+      // but y1 will go from full radius to just radius
+      // x2 will be current x + length
+      // y2 will also go from full radius to just radius
+      // also interpolate arc between full radius to radius
+      var x1 = line.focusX - (line.fullRadius - line.radius);
+      var y1 = line.focusY - line.radius + top;
+      var x2 = line.focusX + line.length - 2 * line.radius - (line.fullRadius - line.radius);
+      var y2 = line.focusY + line.radius + top;
+      var radius = line.radius;
+      var fill = line.selected ? line.fill : props.gray;
+
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y1);
+      ctx.arc(x2, y1 + radius, radius, -Math.PI / 2, Math.PI / 2, false);
+      ctx.lineTo(x1, y2);
+      ctx.arc(x1, y2 - radius, radius, Math.PI / 2, -Math.PI / 2, false);
+
+      ctx.fillStyle = fill;
+      ctx.fill();
+    });
+  },
+
   mouseEnter(line) {
     this.props.hover(line);
   },
