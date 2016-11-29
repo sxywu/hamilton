@@ -248,40 +248,6 @@ var App = React.createClass({
       pointerEvents: 'none',
     };
 
-
-    // var sideStyle = {
-    //   width,
-    //   height: filterHeight,
-    //   verticalAlign: 'top',
-    // };
-    // var characterStyle = {
-    //   width: characterWidth,
-    //   height: filterHeight,
-    // };
-    // var themeStyle = {
-    //   width: themeWidth,
-    //   height: filterHeight,
-    //   display: 'inline-block',
-    // };
-    // var resetFilter = this.state.selectedCharacters.length ||
-    //   this.state.selectedConversation.length || this.state.selectedThemes.length;
-    // var resetFilterStyle = {
-    //   color: resetFilter ? '#000' : this.state.gray,
-    //   cursor: resetFilter ? 'pointer' : 'default',
-    // };
-
-    // <div style={{textAlign: 'center'}}>
-    //   <h1>Filters</h1>
-    //   <h3 style={resetFilterStyle} onClick={this.resetFilters}>(reset filters)</h3>
-    // </div>
-    // <div style={sideStyle}>
-    //   <Characters {...this.state} {...this.props} {...characterStyle}
-    //     onSelectCharacter={this.filterByCharacter}
-    //     onSelectConversation={this.filterByConversation} />
-    //   <Themes {...this.state} {...this.props} {...themeStyle}
-    //     onSelectTheme={this.filterByThemes} />
-    // </div>
-    //
     var styleProps = {
       images,
       gray: '#eee',
