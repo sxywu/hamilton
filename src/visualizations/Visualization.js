@@ -109,7 +109,7 @@ var Visualization = React.createClass({
       var interpolate = Math.min(elapsed / duration, 1);
       var top = this.interpolateTop(interpolate);
       // Diamonds.drawCurves(this.ctx, this.props.diamondPositions, interpolate, this.props);
-      // Songs.drawLines(this.ctx, this.props.songPositions, interpolate, this.props);
+      Songs.moveLines(this.ctx, this.props.songPositions, top, this.props);
       Lines.movePaths(this.ctx, this.props.linePositions, top, this.props);
       if (elapsed > duration) this.timer.stop();
     });

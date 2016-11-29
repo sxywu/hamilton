@@ -14,14 +14,29 @@ var Songs = {
       ctx.textAlign = 'left';
       ctx.fillText(song.name, song.x + 5, song.y + props.top - 2);
 
-      this.drawRows(ctx, song, song.rows, props);
-      this.drawColumns(ctx, song, song.columns, props);
+      this.drawRows(ctx, song, song.rows, props.top);
+      this.drawColumns(ctx, song, song.columns, props.top);
     });
   },
 
-  drawRows(ctx, song, rows, props) {
+  moveLines(ctx, songs, top, props) {
+    ctx.fillStyle = props.fontColor;
+    ctx.strokeStyle = props.fontColor;
+
+    _.each(songs, song => {
+      // first write text
+      ctx.font = '12px ' + props.bodyFont;
+      ctx.textAlign = 'left';
+      ctx.fillText(song.name, song.x + 5, song.y + top - 2);
+
+      this.drawRows(ctx, song, song.rows, top);
+      this.drawColumns(ctx, song, song.columns, top);
+    });
+  },
+
+  drawRows(ctx, song, rows, top) {
     _.each(rows, row => {
-      var y = song.y + row + props.top;
+      var y = song.y + row + top;
       ctx.beginPath();
       ctx.moveTo(song.x, y);
       ctx.lineTo(song.x + song.width, y);
@@ -29,13 +44,13 @@ var Songs = {
     });
   },
 
-  drawColumns(ctx, song, columns, props) {
+  drawColumns(ctx, song, columns, top) {
     _.each(columns, column => {
       var x = song.x + column[1];
 
       ctx.beginPath();
-      ctx.moveTo(x, song.y + props.top);
-      ctx.lineTo(x, song.y + song.height + props.top);
+      ctx.moveTo(x, song.y + top);
+      ctx.lineTo(x, song.y + song.height + top);
       ctx.lineWidth = column[0];
       ctx.stroke();
     });
