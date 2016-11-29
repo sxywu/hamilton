@@ -10,7 +10,7 @@ function sections(width, vizWidth, sectionWidth) {
   function positionAngelica(data, selectedCharacters, selectedConversation, highlightedSong) {
     selectedCharacters = _.union(selectedCharacters, ['2', '8']);
     var {linePositions, songPositions, characterNodes, characterLinks} =
-      FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
+      FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation, highlightedSong);
     var {linePositions, songPositions, top} =
       PositionGraph.positionForCharacters(linePositions, songPositions,
         vizWidth, 0, paddingTop / 6, highlightedSong);
@@ -21,7 +21,7 @@ function sections(width, vizWidth, sectionWidth) {
   function positionEliza(data, selectedThemes, highlightedSong) {
     selectedThemes = _.union(selectedThemes, ['10', '18']);
     var {linePositions, songPositions, diamondPositions, groupedThemes} =
-      FilterGraph.filterForThemes(data, selectedThemes);
+      FilterGraph.filterForThemes(data, selectedThemes, highlightedSong);
     var {linePositions, songPositions, diamondPositions, top} =
       PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
         vizWidth, sectionWidth, paddingTop / 6, highlightedSong);

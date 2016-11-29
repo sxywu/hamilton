@@ -2,10 +2,10 @@ import _ from 'lodash';
 import * as d3 from "d3";
 
 var FilterGraph = {
-  filterForCharacters(data, selectedCharacters, selectedConversation) {
+  filterForCharacters(data, selectedCharacters, selectedConversation, highlightedSong) {
     var {filteredLines} = FilterGraph.filterLinesBySelectedCharacter(
       selectedCharacters, selectedConversation, data.lines);
-    var {songPositions} = FilterGraph.filterSongsByRemainingLines(filteredLines, data.songs);
+    var {songPositions} = FilterGraph.filterSongsByRemainingLines(filteredLines, data.songs, highlightedSong);
     var {characterNodes, characterLinks} =
       FilterGraph.updateFilterOpacities(filteredLines, null,
         data.characters, data.conversations, null,
@@ -14,10 +14,10 @@ var FilterGraph = {
     return {linePositions: filteredLines, songPositions, characterNodes, characterLinks};
   },
 
-  filterForThemes(data, selectedThemes) {
+  filterForThemes(data, selectedThemes, highlightedSong) {
     var {filteredLines} = FilterGraph.filterLinesBySelectedCharacter([], [], data.lines);
     var {filteredLines2} = FilterGraph.filterLinesBySelectedThemes(selectedThemes, filteredLines);
-    var {songPositions} = FilterGraph.filterSongsByRemainingLines(filteredLines2, data.songs);
+    var {songPositions} = FilterGraph.filterSongsByRemainingLines(filteredLines2, data.songs, highlightedSong);
     var {filteredDiamonds} = FilterGraph.filterDiamondsByRemainingLines(filteredLines2, data.diamonds);
     var {groupedThemes} = FilterGraph.updateFilterOpacities(filteredLines2, filteredDiamonds,
         null, null, data.groupedThemes, null, null, selectedThemes);
@@ -161,9 +161,13 @@ var FilterGraph = {
     return {filteredLines2};
   },
 
-  filterSongsByRemainingLines(lines, songs) {
+  filterSongsByRemainingLines(lines, songs, highlightedSong) {
     var songIds = _.keyBy(lines, 'songId');
-    var songPositions = _.filter(songs, song => songIds[song.id]);
+    var songPositions = _.filter(songs, song => {
+      song.prevHighlighted = song.highlighted;
+      song.highlighted = !highlightedSong || highlightedSong === song.id;
+      return songIds[song.id];
+    });
 
     return {songPositions};
   },

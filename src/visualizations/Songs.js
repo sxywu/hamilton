@@ -57,13 +57,11 @@ var Songs = {
     });
   },
 
-  highlightSong(ctx, songs, highlightedSong, top, interpolate) {
+  highlightSong(ctx, songs, top, interpolate) {
     _.each(songs, song => {
-      var opacity = 0;
-      if (highlightedSong) {
-        var highlighted = song.id === highlightedSong;
-        opacity = highlighted ? 0 : d3.interpolateNumber(0, 0.65)(interpolate);
-      }
+      var prevOpacity = song.prevHighlighted ? 0 : 0.75;
+      var opacity = song.highlighted ? 0 : 0.75;
+      opacity = d3.interpolateNumber(prevOpacity, opacity)(interpolate);
 
       ctx.fillStyle = 'rgba(255, 255, 255, ' + opacity + ')';
       ctx.fillRect(song.x, song.y + top - fontSize,
