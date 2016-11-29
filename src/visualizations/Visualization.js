@@ -50,6 +50,8 @@ var Visualization = React.createClass({
         .alphaMin(this.props.random ? 0 : 0.5)
         .alpha(1).restart();
     } else {
+      // as soon as this comes in, make sure to stop the simulation
+      simulation.stop();
       this.interpolateTop = d3.interpolateNumber(this.props.prevTop, this.props.top);
       this.positionNoForce();
     }
