@@ -41,8 +41,6 @@ var Visualization = React.createClass({
   },
 
   componentDidUpdate() {
-    this.timer && this.timer.stop();
-
     if (this.props.useForce) {
       // because we're using alpha which goes towards 0
       // the top we're going towards must be 0
@@ -91,19 +89,19 @@ var Visualization = React.createClass({
   },
 
   forceEnd() {
-    this.timer = d3.timer((elapsed) => {
+    var t = d3.timer((elapsed) => {
       this.ctx.clearRect(0, 0, this.props.width, this.props.height);
 
       var interpolate = Math.min(elapsed / duration, 1);
       Diamonds.drawCurves(this.ctx, this.props.diamondPositions, interpolate, this.props);
       Songs.drawLines(this.ctx, this.props.songPositions, interpolate, this.props);
       Lines.drawPaths(this.ctx, this.props.linePositions, interpolate, this.props);
-      if (elapsed > duration) this.timer.stop();
+      if (elapsed > duration) t.stop();
     });
   },
 
   positionNoForce() {
-    this.timer = d3.timer((elapsed) => {
+    var t = d3.timer((elapsed) => {
       this.ctx.clearRect(0, 0, this.props.width, this.props.height);
 
       var interpolate = Math.min(elapsed / duration, 1);
@@ -111,7 +109,7 @@ var Visualization = React.createClass({
       // Diamonds.drawCurves(this.ctx, this.props.diamondPositions, interpolate, this.props);
       Songs.moveLines(this.ctx, this.props.songPositions, top, this.props);
       Lines.movePaths(this.ctx, this.props.linePositions, top, this.props);
-      if (elapsed > duration) this.timer.stop();
+      if (elapsed > duration) t.stop();
     });
   },
 
