@@ -2,6 +2,7 @@ import React from 'react';
 import * as d3 from "d3";
 import _ from 'lodash';
 
+var fontSize = 12;
 var Songs = {
   drawLines(ctx, songs, interpolate, props) {
     var fill = d3.interpolateRgb('#fff', props.fontColor)(interpolate);
@@ -10,7 +11,7 @@ var Songs = {
 
     _.each(songs, song => {
       // first write text
-      ctx.font = '12px ' + props.bodyFont;
+      ctx.font = fontSize + 'px ' + props.bodyFont;
       ctx.textAlign = 'left';
       ctx.fillText(song.name, song.x + 5, song.y + props.top - 2);
 
@@ -53,6 +54,20 @@ var Songs = {
       ctx.lineTo(x, song.y + song.height + top);
       ctx.lineWidth = column[0];
       ctx.stroke();
+    });
+  },
+
+  highlightSong(ctx, songs, highlightedSong, top, interpolate) {
+    _.each(songs, song => {
+      var opacity = 0;
+      if (highlightedSong) {
+        var highlighted = song.id === highlightedSong;
+        opacity = highlighted ? 0 : d3.interpolateNumber(0, 0.65)(interpolate);
+      }
+
+      ctx.fillStyle = 'rgba(255, 255, 255, ' + opacity + ')';
+      ctx.fillRect(song.x, song.y + top - fontSize,
+        song.width + 2, song.height + fontSize + 5);
     });
   },
 };

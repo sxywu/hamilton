@@ -150,8 +150,8 @@ var PositionGraph = {
 
   calculateTop(songs, highlightedSong) {
     // figure out height from the last of the songs
-    var height = _.last(songs);
-    height = height ? height.y + _.last(height.rows) : 0;
+    var song = _.last(songs);
+    var height = song ? song.y + song.height : 0;
 
     var top = 0;
     if (height < window.innerHeight) {
@@ -159,7 +159,7 @@ var PositionGraph = {
       top = (window.innerHeight - height) / 2;
     } else if (highlightedSong) {
       var song = _.find(songs, song => song.id === highlightedSong);
-      var songBottom = song.y + _.last(song.rows);
+      var songBottom = song.y + song.height;
       // if there's a song to be highlighted, and it's in the lower quarter
       // put the song 3/4 of the way down
       if (songBottom > window.innerHeight * 3 / 4) {

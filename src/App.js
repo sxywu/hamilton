@@ -212,6 +212,7 @@ var App = React.createClass({
       positions = section.position(this.state, selectedCharacters,
         selectedConversation, selectedThemes, section.consecutive);
       positions.prevTop = this.state.top;
+      positions.section = section;
       positions.update = true;
       positions.useForce = false;
     } else if (!section && currentSection && random) {
