@@ -183,12 +183,11 @@ var App = React.createClass({
     });
 
     var positions = {};
-    // if we just entered a new section (so the prev current section was null), position
+    var selectedCharacters = this.state.selectedCharacters;
+    var selectedConversation = this.state.selectedConversation;
+    var selectedThemes = this.state.selectedThemes;
     if (section && !currentSection) {
-      var selectedCharacters = this.state.selectedCharacters;
-      var selectedConversation = this.state.selectedConversation;
-      var selectedThemes = this.state.selectedThemes;
-
+      // if we just entered a new section (so the prev current section was null), position
       // if it's new section, reset filters
       if (section !== prevSection) {
         selectedCharacters = positions.selectedCharacters = [];
@@ -200,14 +199,20 @@ var App = React.createClass({
         section.position(this.state, selectedCharacters, selectedConversation, selectedThemes));
       positions.random = positions.random || false;
       positions.prevTop = section.consecutive ? 0 : this.state.top || scrollTop;
-      positions.top = section.consecutive ? 0 : section.top;
+      positions.top = (section.consecutive ? 0 : section.top) + (positions.top || 0);
       positions.section = section;
       positions.update = true;
+    } else if (section && section.consecutive && section !== currentSection) {
+      // if we just entered a consecutive section for the first time
+      positions = section.position(this.state, selectedCharacters,
+        selectedConversation, selectedThemes, section.consecutive);
+      positions.prevTop = this.state.top;
     } else if (!section && currentSection && random) {
       // if there's no section, but there was previously a section
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
       positions.random = random;
-      positions.prevTop = this.state.top || scrollTop;
+      positions.prevTop = currentSection.consecutive ?
+        scrollTop : (this.state.top || scrollTop);
       positions.top = scrollTop;
       positions.section = null;
       positions.update = true;

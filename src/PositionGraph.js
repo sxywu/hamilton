@@ -13,19 +13,21 @@ var lineSize = 10;
 var padding = {left: 10, top: 22};
 
 var PositionGraph = {
-  positionForCharacters(lines, songs, width, left, top) {
-    var {songPositions} = PositionGraph.positionSongsForFilter(songs, width, left, top);
-    var {linePositions} = PositionGraph.positionLinesForFilter(lines, songPositions, width, left, top);
+  positionForCharacters(lines, songs, width, left, paddingTop, highlightedSong) {
+    var {songPositions} = PositionGraph.positionSongsForFilter(songs, width, left, paddingTop);
+    var {linePositions} = PositionGraph.positionLinesForFilter(lines, songPositions, width, left);
+    var {top} = PositionGraph.calculateTop(songPositions, highlightedSong);
 
-    return {linePositions, songPositions};
+    return {linePositions, songPositions, top};
   },
 
-  positionForAll(lines, diamonds, songs, width, left, top) {
-    var {songPositions} = PositionGraph.positionSongsForFilter(songs, width, left, top);
-    var {linePositions} = PositionGraph.positionLinesForFilter(lines, songPositions, width, left, top);
+  positionForAll(lines, diamonds, songs, width, left, paddingTop, highlightedSong) {
+    var {songPositions} = PositionGraph.positionSongsForFilter(songs, width, left, paddingTop);
+    var {linePositions} = PositionGraph.positionLinesForFilter(lines, songPositions, width, left);
     var {diamondPositions} = PositionGraph.positionDiamondsForFilter(linePositions, diamonds, width, left);
+    var {top} = PositionGraph.calculateTop(songPositions, highlightedSong);
 
-    return {linePositions, songPositions, diamondPositions};
+    return {linePositions, songPositions, diamondPositions, top};
   },
 
   positionLinesForFilter(lines, songs, width, left) {
@@ -96,8 +98,8 @@ var PositionGraph = {
     return {linePositions};
   },
 
-  positionSongsForFilter(songs, width, left, top) {
-    var y = top;
+  positionSongsForFilter(songs, width, left, paddingTop) {
+    var y = paddingTop;
     var perLine = Math.floor((width - padding.left) / lineSize);
 
     var songPositions = [];
@@ -144,6 +146,27 @@ var PositionGraph = {
     });
 
     return {diamondPositions};
+  },
+
+  calculateTop(songs, highlightedSong) {
+    // figure out height from the last of the songs
+    var height = _.last(songs);
+    height = height ? height.y + _.last(height.rows) : 0;
+
+    var top = 0;
+    if (height < window.innerHeight) {
+      // if the viz is less tall than the window, then center it vertically
+      top = (window.innerHeight - height) / 2;
+    } else if (highlightedSong) {
+      var song = _.find(songs, song => song.id === highlightedSong);
+      var songBottom = song.y + _.last(song.rows);
+      // if there's a song to be highlighted, and it's in the lower quarter
+      // put the song 3/4 of the way down
+      if (songBottom > window.innerHeight * 3 / 4) {
+        top = window.innerHeight * 2 / 3 - songBottom;
+      }
+    }
+    return {top};
   },
 
   positionSelectLines(lineIds, linePositions, scale, width, left) {

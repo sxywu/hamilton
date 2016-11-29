@@ -7,26 +7,26 @@ var paddingTop = 100;
 var marginBottom = 400;
 
 function sections(width, vizWidth, sectionWidth) {
-  function positionAngelica(data, selectedCharacters, selectedConversation) {
+  function positionAngelica(data, selectedCharacters, selectedConversation, highlightedSong) {
     selectedCharacters = _.union(selectedCharacters, ['2', '8']);
     var {linePositions, songPositions, characterNodes, characterLinks} =
       FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
-    var {linePositions, songPositions} =
+    var {linePositions, songPositions, top} =
       PositionGraph.positionForCharacters(linePositions, songPositions,
-        vizWidth, 0, paddingTop / 6);
+        vizWidth, 0, paddingTop / 6, highlightedSong);
 
-    return {linePositions, songPositions, characterNodes, characterLinks, selectedCharacters};
+    return {linePositions, songPositions, characterNodes, characterLinks, selectedCharacters, top};
   }
 
-  function positionEliza(data, selectedThemes) {
+  function positionEliza(data, selectedThemes, highlightedSong) {
     selectedThemes = _.union(selectedThemes, ['10', '18']);
     var {linePositions, songPositions, diamondPositions, groupedThemes} =
       FilterGraph.filterForThemes(data, selectedThemes);
-    var {linePositions, songPositions, diamondPositions} =
+    var {linePositions, songPositions, diamondPositions, top} =
       PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
-        vizWidth, sectionWidth, paddingTop / 6);
+        vizWidth, sectionWidth, paddingTop / 6, highlightedSong);
 
-    return {linePositions, songPositions, diamondPositions, groupedThemes, selectedThemes};
+    return {linePositions, songPositions, diamondPositions, groupedThemes, selectedThemes, top};
   }
 
   return [
@@ -141,6 +141,7 @@ function sections(width, vizWidth, sectionWidth) {
     {
       id: 'angelica2',
       consecutive: true,
+      highlightedSong: '26',
       style: {
         paddingTop,
         marginLeft: vizWidth,
@@ -150,7 +151,8 @@ function sections(width, vizWidth, sectionWidth) {
         ['/music/whenyouregone.mp3', ['8/26:85-86', '2/26:85-86']],
       ],
       position(data, selectedCharacters, selectedConversation) {
-        return positionAngelica(data, selectedCharacters, selectedConversation);
+        return positionAngelica(data, selectedCharacters,
+          selectedConversation, this.highlightedSong);
       },
       text: `
   ### An Ocean Away
@@ -182,6 +184,7 @@ function sections(width, vizWidth, sectionWidth) {
     {
       id: 'angelica3',
       consecutive: true,
+      highlightedSong: '37',
       style: {
         paddingTop,
         marginLeft: vizWidth,
@@ -192,7 +195,8 @@ function sections(width, vizWidth, sectionWidth) {
         ['/music/whenyouregone.mp3', ['8/11:92-111']],
       ],
       position(data, selectedCharacters, selectedConversation) {
-        return positionAngelica(data, selectedCharacters, selectedConversation);
+        return positionAngelica(data, selectedCharacters,
+          selectedConversation, this.highlightedSong);
       },
       text: `
   ### As Trusting Or As Kind
@@ -228,6 +232,7 @@ function sections(width, vizWidth, sectionWidth) {
     {
       id: 'angelica4',
       consecutive: true,
+      highlightedSong: '41',
       random: true,
       style: {
         paddingTop,
@@ -235,7 +240,8 @@ function sections(width, vizWidth, sectionWidth) {
         marginLeft: vizWidth,
       },
       position(data, selectedCharacters, selectedConversation) {
-        return positionAngelica(data, selectedCharacters, selectedConversation);
+        return positionAngelica(data, selectedCharacters,
+          selectedConversation, this.highlightedSong);
       },
       text: `
   ### She Takes His Hand
@@ -262,11 +268,12 @@ function sections(width, vizWidth, sectionWidth) {
     {
       id: 'eliza2',
       consecutive: true,
+      highlightedSong: '17',
       style: {
         paddingTop,
       },
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
-        return positionEliza(data, selectedThemes);
+        return positionEliza(data, selectedThemes, this.highlightedSong);
       },
       clips: [
         ['/music/whenyouregone.mp3', ['7/17:18-45']],
@@ -307,11 +314,12 @@ function sections(width, vizWidth, sectionWidth) {
     {
       id: 'eliza3',
       consecutive: true,
+      highlightedSong: '23',
       style: {
         paddingTop,
       },
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
-        return positionEliza(data, selectedThemes);
+        return positionEliza(data, selectedThemes, this.highlightedSong);
       },
       clips: [
         ['/music/whenyouregone.mp3', ['7/23:122-128']],
@@ -339,6 +347,7 @@ function sections(width, vizWidth, sectionWidth) {
     {
       id: 'eliza4',
       consecutive: true,
+      highlightedSong: '41',
       style: {
         paddingTop,
       },
@@ -347,7 +356,7 @@ function sections(width, vizWidth, sectionWidth) {
         ['/music/whenyouregone.mp3', ['24/41:56-59']],
       ],
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
-        return positionEliza(data, selectedThemes);
+        return positionEliza(data, selectedThemes, this.highlightedSong);
       },
       text: `
   ### Forgiveness
@@ -385,6 +394,7 @@ function sections(width, vizWidth, sectionWidth) {
       id: 'eliza5',
       consecutive: true,
       random: true,
+      highlightedSong: '46',
       style: {
         paddingTop,
         marginBottom,
@@ -393,7 +403,7 @@ function sections(width, vizWidth, sectionWidth) {
         ['/music/whenyouregone.mp3', ['7/46:70-74']],
       ],
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
-        return positionEliza(data, selectedThemes);
+        return positionEliza(data, selectedThemes, this.highlightedSong);
       },
       text: `
   ### Will They Tell My Story?
