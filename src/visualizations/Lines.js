@@ -29,8 +29,7 @@ var Lines = {
       var y2 = d3.interpolateNumber(line.y + line.fullRadius + props.top,
         line.focusY + line.radius + props.top)(interpolate);
       var radius = d3.interpolateNumber(line.fullRadius, line.radius)(interpolate);
-      var fill = d3.interpolateRgb(line.fill, line.selected ? line.fill : props.gray)(interpolate);
-      var opacity = d3.interpolateNumber(1, line.selected ? 1 : 0.75)(interpolate);
+      var opacity = d3.interpolateNumber(1, line.selected ? 1 : 0.15)(interpolate);
 
       ctx.beginPath();
       ctx.moveTo(x1, y1);
@@ -39,7 +38,7 @@ var Lines = {
       ctx.lineTo(x1, y2);
       ctx.arc(x1, y2 - radius, radius, Math.PI / 2, -Math.PI / 2, false);
 
-      ctx.fillStyle = fill.replace('rgb', 'rgba').replace(')', ',' + opacity + ')');
+      ctx.fillStyle = line.fill.replace('rgb', 'rgba').replace(')', ',' + opacity + ')');
       ctx.fill();
     });
   },
@@ -56,7 +55,7 @@ var Lines = {
       var x2 = line.focusX + line.length - 2 * line.radius - (line.fullRadius - line.radius);
       var y2 = line.focusY + line.radius + top;
       var radius = line.radius;
-      var fill = line.selected ? line.fill : props.gray;
+      var opacity = line.selected ? 1 : 0.15;
 
       ctx.beginPath();
       ctx.moveTo(x1, y1);
@@ -65,7 +64,7 @@ var Lines = {
       ctx.lineTo(x1, y2);
       ctx.arc(x1, y2 - radius, radius, Math.PI / 2, -Math.PI / 2, false);
 
-      ctx.fillStyle = fill;
+      ctx.fillStyle = line.fill.replace('rgb', 'rgba').replace(')', ',' + opacity + ')');
       ctx.fill();
     });
   },
