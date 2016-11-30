@@ -115,7 +115,7 @@ var Visualization = React.createClass({
     var [offsetX, offsetY] = d3.mouse(this.refs.canvas);
     var col = this.hiddenCtx.getImageData(offsetX, offsetY, 1, 1).data;
     var color = 'rgb(' + col[0] + "," + col[1] + ","+ col[2] + ")";
-    
+
     this.props.hoverLine(this.props.hoverLookup[color]);
   },
 
@@ -124,10 +124,17 @@ var Visualization = React.createClass({
       // border: '1px solid',
       position: this.props.section && this.props.section.consecutive ? 'fixed' : 'relative',
     };
+    var hiddenCanvasStyle = {
+      display: 'none',
+      // position: 'absolute',
+      // top: 0,
+      // left: 0,
+      // zIndex: -1,
+    };
 
     return (
       <div style={style}>
-        <canvas ref='hiddenCanvas' style={{display: 'none'}} />
+        <canvas ref='hiddenCanvas' style={hiddenCanvasStyle} />
         <canvas ref='canvas' />
       </div>
     );

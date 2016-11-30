@@ -46,6 +46,7 @@ var PositionGraph = {
       var songNum = line.songId;
       var startLine = parseInt(line.lineId.split(':')[1].split('-')[0], 10) - 1;
       var endLine = parseInt(line.lineId.split(':')[1].split('-')[1], 10) - 1 || startLine;
+      var row = Math.floor(startLine / perLine) + 1;
 
       // if next song
       if (songNum !== currentSong) {
@@ -60,30 +61,30 @@ var PositionGraph = {
       var trueY = focusY;
       var radius = lineSize / 2;
 
+      // hover should be padding.top / 2 above and below
+      var hoverPolygon = [
+        [focusX - radius, focusY - padding.top / 2], // top left
+        [focusX + length, focusY - padding.top / 2], // top right
+        [focusX + length, focusY + padding.top / 2], // bottom right
+        [focusX - radius, focusY + padding.top / 2], // bottom left
+      ];
+
       if (line.numSingers > 1) {
         radius /= line.numSingers;
         focusY += (-lineSize / 2) + radius + 2 * radius * line.singerIndex;
+
+        // if more than one one singer, hover top should be top of the line
+        if (line.singerIndex > 0) {
+          hoverPolygon[0][1] = focusY - radius;
+          hoverPolygon[1][1] = focusY - radius;
+        }
       }
 
       // if startLine and endLine should be on different lines, split them up
       var startRow = Math.floor(startLine / perLine);
       var endRow = Math.floor(endLine / perLine);
       if (startRow !== endRow) {
-        var row = Math.floor(startLine / perLine) + 1;
         length = (row * perLine - startLine) * lineSize;
-
-        // create one extra line for overflow
-        linePositions.push(Object.assign({}, line, {
-          id: line.id + '.2',
-          focusX: padding.left + left,
-          focusY: y + endRow * padding.top,
-          trueY: y + endRow * padding.top,
-          radius,
-          fullRadius: lineSize / 2,
-          length: (endLine - row * perLine + 1) * lineSize,
-          startLine,
-          endLine,
-        }));
       }
 
       linePositions.push(Object.assign(line, {
@@ -95,7 +96,36 @@ var PositionGraph = {
         length,
         startLine,
         endLine,
+        hoverPolygon,
       }));
+
+      // now finish putting the second one in
+      if (startRow !== endRow) {
+        length = (endLine - row * perLine + 1) * lineSize;
+
+        focusX = padding.left + left;
+        focusY += padding.top;
+        hoverPolygon = [
+          [focusX - radius, focusY - padding.top / 2], // top left
+          [focusX + length, focusY - padding.top / 2], // top right
+          [focusX + length, focusY + padding.top / 2], // bottom right
+          [focusX - radius, focusY + padding.top / 2], // bottom left
+        ];
+
+        // create one extra line for overflow
+        linePositions.push(Object.assign({}, line, {
+          id: line.id + '.2',
+          focusX,
+          focusY,
+          trueY: focusY,
+          radius,
+          fullRadius: lineSize / 2,
+          length,
+          startLine,
+          endLine,
+          hoverPolygon,
+        }));
+      }
     });
     return {linePositions};
   },
