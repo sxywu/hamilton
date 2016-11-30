@@ -251,8 +251,8 @@ var App = React.createClass({
 
     var styleProps = {
       images,
-      gray: '#eee',
-      fontColor: '#666',
+      gray: 'rgb(238, 238, 238)',
+      fontColor: 'rgb(102, 102, 102)',
       vizType: 'image',
       vizWidth,
       sectionWidth,
