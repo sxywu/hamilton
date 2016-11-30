@@ -12,8 +12,28 @@ var themeScale = d3.scaleLog().range([16, 36]);
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([3, 10]);
 
+// taken directly from nbremer's occupationcanvas code
+//Generates the next color in the sequence, going from 0,0,0 to 255,255,255.
+//From: https://bocoup.com/weblog/2d-picking-in-canvas
+var nextCol = 1;
+function genColor(){
+  var ret = [];
+  // via http://stackoverflow.com/a/15804183
+  if(nextCol < 16777215){
+    ret.push(nextCol & 0xff); // R
+    ret.push((nextCol & 0xff00) >> 8); // G
+    ret.push((nextCol & 0xff0000) >> 16); // B
+
+    nextCol += 100; // This is exagerated for this example and would ordinarily be 1.
+  }
+  var col = "rgb(" + ret.join(',') + ")";
+  return col;
+}
+
 var ProcessGraph = {
   processLinesSongs(width) {
+    var hoverLookup = {};
+
     // duplicate any of the lines sung by multiple characters
     var lines = _.chain(rawLines)
       .map((line, lineId) => {
@@ -21,8 +41,8 @@ var ProcessGraph = {
         // get all characters from the line
         return _.map(line[1][0], (character, i) => {
           var id = character + '/' + lineId;
-
-        	return {
+          var hoverFill = genColor();
+          var processedLine = {
             id,
             lineId,
             songId,
@@ -35,11 +55,15 @@ var ProcessGraph = {
             conversing: null,
             themes: [],
             fill: charList[character][4],
+            hoverFill,
             selected: true,
             data: line,
             x: line.x || _.random(window.innerWidth * -0.5, window.innerWidth * 1.5),
             y: line.y || _.random(window.innerHeight * -0.5, window.innerHeight * 1.5),
           };
+
+          hoverLookup[hoverFill] = processedLine;
+          return processedLine;
         });
       }).flatten().value();
 
@@ -54,7 +78,7 @@ var ProcessGraph = {
         }
       }).value();
 
-    return {songs, lines};
+    return {songs, lines, hoverLookup};
   },
 
   processCharacters(lines, width, height) {

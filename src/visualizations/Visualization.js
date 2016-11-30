@@ -4,7 +4,6 @@ import * as d3 from "d3";
 import Lines from './Lines';
 import Diamonds from './Diamonds';
 import Songs from './Songs';
-import LineSummary from '../LineSummary';
 
 var duration = 300;
 var simulation = d3.forceSimulation()
@@ -13,27 +12,25 @@ var simulation = d3.forceSimulation()
   .force('y', d3.forceY().y(d => d.focusY));
 
 var Visualization = React.createClass({
-  getInitialState() {
-    return {
-      hovered: null,
-      update: true,
-    };
-  },
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({update: true});
+  shouldComponentUpdate(nextProps) {
+    return nextProps.update;
   },
 
   componentDidMount() {
     // make canvas crispy
     var sf = window.devicePixelRatio;
-    this.refs.canvas.width = this.props.width * sf;
-    this.refs.canvas.height = this.props.height * sf;
-    this.refs.canvas.style.width = this.props.width + 'px';
-    this.refs.canvas.style.height = this.props.height + 'px';
-
+    this.crispyCanvas(this.refs.canvas, sf);
     this.ctx = this.refs.canvas.getContext('2d');
     this.ctx.scale(sf, sf);
+    // and hidden canvas
+    this.crispyCanvas(this.refs.hiddenCanvas, sf);
+    this.hiddenCtx = this.refs.hiddenCanvas.getContext('2d');
+    this.hiddenCtx.scale(sf, sf);
+
+    // add mousemove
+    d3.select(this.refs.canvas)
+      .on('mousemove', this.mousemove);
 
     simulation.on('tick', this.forceTick.bind(this))
       .on('end', this.forceEnd.bind(this))
@@ -41,6 +38,8 @@ var Visualization = React.createClass({
   },
 
   componentDidUpdate() {
+    this.updating = true;
+
     if (this.props.useForce) {
       // because we're using alpha which goes towards 0
       // the top we're going towards must be 0
@@ -57,34 +56,17 @@ var Visualization = React.createClass({
     }
   },
 
-  hoverLine(hoveredLine) {
-    var hovered = hoveredLine && {
-      title: hoveredLine.characterName,
-      lines: hoveredLine.data[2],
-      x: hoveredLine.x,
-      y: hoveredLine.y,
-      color: hoveredLine.fill,
-      image: this.props.images[hoveredLine.characterId],
-      hoverWidth: hoveredLine.length,
-      hoverHeight: hoveredLine.radius,
-      data: hoveredLine,
-    };
-    this.setState({hovered, update: false});
-  },
-
-  hoverTheme(hoveredTheme) {
-    var hovered = hoveredTheme && {
-      title: hoveredTheme.themeType,
-      lines: hoveredTheme.lines,
-      x: hoveredTheme.positions[0].x,
-      y: hoveredTheme.positions[0].y,
-    }
-    this.setState({hovered, update: false});
+  crispyCanvas(canvas, sf) {
+    canvas.width = this.props.width * sf;
+    canvas.height = this.props.height * sf;
+    canvas.style.width = this.props.width + 'px';
+    canvas.style.height = this.props.height + 'px';
   },
 
   forceTick() {
     var interpolate = (simulation.alpha() - simulation.alphaMin()) / (1 - simulation.alphaMin());
     var top = this.interpolateTop(Math.max(0, interpolate));
+
 
     this.ctx.clearRect(0, 0, this.props.width, this.props.height);
     Lines.drawCircles(this.ctx, this.props.linePositions, top);
@@ -99,7 +81,12 @@ var Visualization = React.createClass({
       Songs.drawLines(this.ctx, this.props.songPositions, interpolate, this.props);
       Lines.drawPaths(this.ctx, this.props.linePositions, interpolate, this.props);
       Songs.highlightSong(this.ctx, this.props.songPositions, this.props.top, interpolate);
-      if (elapsed > duration) t.stop();
+      if (elapsed > duration) {
+        this.hiddenCtx.clearRect(0, 0, this.props.width, this.props.height);
+        Lines.drawHover(this.hiddenCtx, this.props.linePositions, this.props.top);
+        this.updating = false;
+        t.stop();
+      };
     });
   },
 
@@ -113,8 +100,23 @@ var Visualization = React.createClass({
       Songs.moveLines(this.ctx, this.props.songPositions, top, this.props);
       Lines.movePaths(this.ctx, this.props.linePositions, top, this.props);
       Songs.highlightSong(this.ctx, this.props.songPositions, top, interpolate);
-      if (elapsed > duration) t.stop();
+      if (elapsed > duration) {
+        this.hiddenCtx.clearRect(0, 0, this.props.width, this.props.height);
+        Lines.drawHover(this.hiddenCtx, this.props.linePositions, this.props.top);
+        this.updating = false;
+        t.stop();
+      };
     });
+  },
+
+  mousemove() {
+    if (this.updating) return;
+
+    var [offsetX, offsetY] = d3.mouse(this.refs.canvas);
+    var col = this.hiddenCtx.getImageData(offsetX, offsetY, 1, 1).data;
+    var color = 'rgb(' + col[0] + "," + col[1] + ","+ col[2] + ")";
+    
+    this.props.hoverLine(this.props.hoverLookup[color]);
   },
 
   render() {
@@ -125,8 +127,8 @@ var Visualization = React.createClass({
 
     return (
       <div style={style}>
+        <canvas ref='hiddenCanvas' style={{display: 'none'}} />
         <canvas ref='canvas' />
-        <LineSummary {...this.state.hovered} hover={this.hoverLine} />
       </div>
     );
   }

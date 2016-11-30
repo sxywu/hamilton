@@ -3,6 +3,7 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import Visualization from './visualizations/Visualization';
+import LineSummary from './LineSummary';
 // import Themes from './Themes';
 import Section from './Section';
 import SectionsData from './data/sections';
@@ -41,6 +42,7 @@ var App = React.createClass({
 
     return {
       // original data
+      hoverLookup: [],
       lines: [],
       diamonds: [],
       songs: [],
@@ -60,19 +62,20 @@ var App = React.createClass({
       // render properties
       prevTop: null,
       top: null,
+      hovered: null,
       random: false,
       update: true,
     };
   },
 
   componentWillMount() {
-    var {lines, songs} = ProcessGraph.processLinesSongs(width);
+    var {lines, songs, hoverLookup} = ProcessGraph.processLinesSongs(width);
 
     var {characters, conversations} = ProcessGraph.processCharacters(lines, characterWidth, characterHeight);
 
     var {diamonds, groupedThemes} = ProcessGraph.processThemes(lines);
 
-    this.setState({lines, songs, characters, conversations, diamonds, groupedThemes});
+    this.setState({lines, songs, hoverLookup, characters, conversations, diamonds, groupedThemes});
   },
 
   componentDidMount() {
@@ -156,6 +159,22 @@ var App = React.createClass({
       linePositions = this.positionByVizType(this.state.vizType);
     };
     this.setState({linePositions});
+  },
+
+  hoverLine(hoveredLine) {
+    if (this.state.hovered && hoveredLine === this.state.hovered.data) return;
+    var hovered = hoveredLine && {
+      title: hoveredLine.characterName,
+      lines: hoveredLine.data[2],
+      x: hoveredLine.x,
+      y: hoveredLine.y + this.state.top,
+      color: hoveredLine.fill,
+      image: images[hoveredLine.characterId],
+      hoverWidth: hoveredLine.length,
+      hoverHeight: hoveredLine.radius,
+      data: hoveredLine,
+    };
+    this.setState({hovered, update: false});
   },
 
   updateSectionPositions() {
@@ -267,6 +286,7 @@ var App = React.createClass({
     };
     var eventProps = {
       selectLines: this.selectLines,
+      hoverLine: this.hoverLine,
       onSelectCharacter: this.filterByCharacter,
       onSelectConversation: this.filterByConversation,
       onSelectTheme: this.filterByThemes,
@@ -282,6 +302,7 @@ var App = React.createClass({
         <div className='sections' style={sectionStyle}>
           {sectionsEl}
         </div>
+        <LineSummary {...this.state.hovered} hover={this.hoverLine} />
       </div>
     );
   }

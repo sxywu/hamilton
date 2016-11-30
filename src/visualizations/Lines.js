@@ -69,12 +69,28 @@ var Lines = {
     });
   },
 
-  mouseEnter(line) {
-    this.props.hover(line);
-  },
-
-  mouseLeave(line) {
-    this.props.hover(null);
+  drawHover(ctx, lines, top) {
+    _.each(lines, line => {
+      ctx.beginPath();
+      var i = 0;
+      _.each(line.hoverPolygon, (pos) => {
+        // idk why there are some null values
+        if (!pos) return;
+        if (i === 0) {
+          // if it's first point, moveTo
+          ctx.moveTo(pos[0], top + pos[1]);
+        } else {
+          // for the rest, draw lines
+          ctx.lineTo(pos[0], top + pos[1]);
+        }
+        i += 1;
+      });
+      // then fill it in
+      ctx.fillStyle = line.hoverFill;
+      ctx.fill();
+      ctx.strokeStyle = line.hoverFill;
+      ctx.stroke();
+    });
   },
 
 };

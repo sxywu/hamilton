@@ -12,6 +12,8 @@ var radiusScale = d3.scaleLinear().domain([1, maxLength]);
 var lineSize = 10;
 var padding = {left: 10, top: 22};
 
+var voronoi = d3.voronoi().x(d => d.focusX).y(d => d.focusY);
+
 var PositionGraph = {
   positionForCharacters(lines, songs, width, left, paddingTop, highlightedSong) {
     var {songPositions} = PositionGraph.positionSongsForFilter(songs, width, left, paddingTop);
@@ -226,6 +228,7 @@ var PositionGraph = {
         length: radius,
       }));
     });
+    this.calculateHoverPolygons(linePositions);
 
     return {linePositions, songPositions: [], diamondPositions: []};
   },
@@ -245,6 +248,8 @@ var PositionGraph = {
         length: radius,
       });
     });
+    this.calculateHoverPolygons(linePositions);
+
     return {linePositions, songPositions: [], diamondPositions: []};
   },
 
@@ -263,6 +268,7 @@ var PositionGraph = {
         length: radius,
       });
     });
+    this.calculateHoverPolygons(linePositions);
 
     return {linePositions, songPositions: [], diamondPositions: []};
   },
@@ -285,6 +291,12 @@ var PositionGraph = {
     });
 
     return {linePositions, songPositions: [], diamondPositions: []};
+  },
+
+  calculateHoverPolygons(lines) {
+    _.each(voronoi(lines).polygons(), (polygon, i) => {
+      lines[i].hoverPolygon = polygon;
+    })
   },
 };
 
