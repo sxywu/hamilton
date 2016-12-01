@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-// import * as d3 from "d3";
+import * as d3 from "d3";
 
 var width = 300;
 var maxHeight = 300;
@@ -69,31 +69,33 @@ var LineSummary = React.createClass({
 
   calculatePosition() {
     var hovered = this.props.hovered;
-    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-    if (!this.props.top || !this.props.updateForce) {
+    var scrollLeft = d3.event.clientX - d3.mouse(d3.select('canvas').node())[0];
+    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    if (this.props.section && this.props.section.consecutive) {
       // if it's in the consecutive sections
       scrollTop = this.props.top;
     } else {
       scrollTop = this.props.top - scrollTop;
     }
-
+    
     // find the center of the line then subtract the width
-    var left = hovered.x + hovered.length / 2 - width / 2;
+    var left = hovered.focusX + hovered.length / 2 - width / 2 + scrollLeft;
     // check if it goes out of bounds
     if (left < 0) {
-      left = 0;
+      left = scrollLeft;
     } else if (left + width > this.props.width) {
-      left = this.props.width - width;
+      left = this.props.width - width + scrollLeft;
     }
 
     // top should be 5 pixels below the radius
     var verticalPadding = 5;
-    var top = hovered.y + hovered.radius + 5 + scrollTop;
+    var y = (hovered.trueY || hovered.focusY);
+    var top = y + hovered.fullRadius + 3 * verticalPadding + scrollTop;
     var bottom;
     // if the top is more than the height, have to set the bottom instead
     if (top + maxHeight > window.innerHeight) {
-      bottom = window.innerHeight - (hovered.y - hovered.radius - verticalPadding + scrollTop);
+      bottom = window.innerHeight - (y - hovered.fullRadius + scrollTop);
     }
 
     var positions = {left};

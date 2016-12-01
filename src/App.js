@@ -65,6 +65,7 @@ var App = React.createClass({
       hovered: null,
       random: false,
       update: true,
+      useForce: true,
     };
   },
 
@@ -99,6 +100,7 @@ var App = React.createClass({
     positions.update = true;
     positions.useForce = true;
     positions.prevTop = this.state.top;
+    positions.hovered = null;
     this.setState(positions);
   },
 
@@ -116,6 +118,7 @@ var App = React.createClass({
     positions.update = true;
     positions.useForce = true;
     positions.prevTop = this.state.top;
+    positions.hovered = null;
     this.setState(positions);
   },
 
@@ -133,6 +136,7 @@ var App = React.createClass({
     positions.update = true;
     positions.useForce = true;
     positions.prevTop = this.state.top;
+    positions.hovered = null;
     this.setState(positions);
   },
 
@@ -149,6 +153,7 @@ var App = React.createClass({
     positions.update = true;
     positions.useForce = true;
     positions.prevTop = this.state.top;
+    positions.hovered = null;
     this.setState(positions);
   },
 
@@ -163,6 +168,7 @@ var App = React.createClass({
 
   hoverLine(hoveredLine) {
     if (hoveredLine === this.state.hovered) return;
+    if (!hoveredLine) console.log(hoveredLine)
     this.setState({hovered: hoveredLine, update: false});
   },
 
