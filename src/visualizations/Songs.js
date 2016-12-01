@@ -15,8 +15,8 @@ var Songs = {
       ctx.textAlign = 'left';
       ctx.fillText(song.name, song.x + 5, song.y + props.top - 2);
 
-      this.drawRows(ctx, song, song.rows, props.top);
-      this.drawColumns(ctx, song, song.columns, props.top);
+      // this.drawRows(ctx, song, song.rows, props.top);
+      // this.drawColumns(ctx, song, song.columns, props.top);
     });
   },
 
@@ -30,8 +30,8 @@ var Songs = {
       ctx.textAlign = 'left';
       ctx.fillText(song.name, song.x + 5, song.y + top - 2);
 
-      this.drawRows(ctx, song, song.rows, top);
-      this.drawColumns(ctx, song, song.columns, top);
+      // this.drawRows(ctx, song, song.rows, top);
+      // this.drawColumns(ctx, song, song.columns, top);
     });
   },
 
@@ -64,8 +64,8 @@ var Songs = {
       opacity = d3.interpolateNumber(prevOpacity, opacity)(interpolate);
 
       ctx.fillStyle = 'rgba(255, 255, 255, ' + opacity + ')';
-      ctx.fillRect(song.x, song.y + top - fontSize,
-        song.width + 2, song.height + fontSize + 5);
+      ctx.fillRect(song.x, song.y + top - fontSize - 2,
+        song.width + 2, song.height + fontSize + 7);
     });
   },
 };
