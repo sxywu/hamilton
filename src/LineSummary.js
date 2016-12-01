@@ -2,41 +2,17 @@ import React from 'react';
 import _ from 'lodash';
 // import * as d3 from "d3";
 
+var width = 300;
+var maxHeight = 300;
+var borderRadius = 3;
+var gray = '#aaa';
 var LineSummary = React.createClass({
-
-  mouseEnter() {
-    // this.props.hover(this.props.data);
-  },
-
-  mouseLeave() {
-    // this.props.hover(null);
-  },
-
-  render() {
-    if (_.isEmpty(this.props.data)) {
-      return (<div></div>);
-    }
-
-    var borderRadius = 3;
+  renderImage() {
+    var hovered = this.props.hovered;
     var headerHeight = 40;
     var imageSize = 50;
-    var gray = '#aaa';
-    var width = 300;
-    var style = {
-      position: 'absolute',
-      left: this.props.x - (width / 2),
-      top: this.props.y + this.props.hoverHeight,
-    };
-    var contentStyle = {
-      backgroundColor: '#fff',
-      border: '1px solid ' + gray,
-      borderRadius,
-      boxShadow: '0 0 5px ' + gray,
-      textAlign: 'center',
-      width,
-    };
     var headerStyle = {
-      backgroundColor: this.props.color,
+      backgroundColor: hovered.fill,
       borderTopRightRadius: borderRadius,
       borderTopLeftRadius: borderRadius,
       height: headerHeight,
@@ -51,16 +27,32 @@ var LineSummary = React.createClass({
       width: imageSize,
       marginTop: headerHeight - imageSize / 2,
     };
+
+    return (
+      <div>
+        <div style={headerStyle}>
+          <img style={imageStyle} src={this.props.images[hovered.characterId]} role="presentation" />
+        </div>
+        <h3 style={titleStyle}>
+          {hovered.title}
+          <div style={{fontSize: 12}}>in "{hovered.songName}"</div>
+        </h3>
+      </div>
+    );
+  },
+
+  renderLines() {
+    var hovered = this.props.hovered;
     var linesStyle = {
       fontSize: 12,
       lineHeight: '22px',
       padding: '0 10px 10px 10px',
       textAlign: 'left',
-      maxHeight: 200,
       overflowY: 'scroll',
+      maxHeight: maxHeight - 100,
     };
 
-    var lines = _.map(this.props.lines, (line, i) => {
+    var lines = _.map(hovered.data[2], (line, i) => {
       return (
         <div key={i}>
           {line}
@@ -69,19 +61,70 @@ var LineSummary = React.createClass({
     });
 
     return (
+      <div style={linesStyle}>
+        {lines}
+      </div>
+    );
+  },
+
+  calculatePosition() {
+    var hovered = this.props.hovered;
+    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+    if (!this.props.top || !this.props.updateForce) {
+      // if it's in the consecutive sections
+      scrollTop = this.props.top;
+    } else {
+      scrollTop = this.props.top - scrollTop;
+    }
+
+    // find the center of the line then subtract the width
+    var left = hovered.x + hovered.length / 2 - width / 2;
+    // check if it goes out of bounds
+    if (left < 0) {
+      left = 0;
+    } else if (left + width > this.props.width) {
+      left = this.props.width - width;
+    }
+
+    // top should be 5 pixels below the radius
+    var verticalPadding = 5;
+    var top = hovered.y + hovered.radius + 5 + scrollTop;
+    var bottom;
+    // if the top is more than the height, have to set the bottom instead
+    if (top + maxHeight > window.innerHeight) {
+      bottom = window.innerHeight - (hovered.y - hovered.radius - verticalPadding + scrollTop);
+    }
+
+    var positions = {left};
+    if (!bottom) {
+      positions.top = top;
+    } else {
+      positions.bottom = bottom;
+    }
+
+    return positions;
+  },
+
+  render() {
+    if (_.isEmpty(this.props.hovered)) {
+      return (<div></div>);
+    }
+
+    var style = Object.assign({
+      position: 'fixed',
+      backgroundColor: '#fff',
+      border: '1px solid ' + gray,
+      borderRadius,
+      boxShadow: '0 0 5px ' + gray,
+      textAlign: 'center',
+      width,
+    }, this.calculatePosition());
+
+    return (
       <div ref='summary' style={style}>
-        <div style={contentStyle} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
-          <div style={headerStyle}>
-            <img style={imageStyle} src={this.props.image} role="presentation" />
-          </div>
-          <h3 style={titleStyle}>
-            {this.props.title}
-            <div style={{fontSize: 12}}>in "{this.props.data.songName}"</div>
-          </h3>
-          <div style={linesStyle}>
-            {lines}
-          </div>
-        </div>
+        {this.renderImage()}
+        {this.renderLines()}
       </div>
     );
   }

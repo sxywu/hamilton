@@ -162,19 +162,8 @@ var App = React.createClass({
   },
 
   hoverLine(hoveredLine) {
-    if (this.state.hovered && hoveredLine === this.state.hovered.data) return;
-    var hovered = hoveredLine && {
-      title: hoveredLine.characterName,
-      lines: hoveredLine.data[2],
-      x: hoveredLine.x,
-      y: hoveredLine.y + this.state.top,
-      color: hoveredLine.fill,
-      image: images[hoveredLine.characterId],
-      hoverWidth: hoveredLine.length,
-      hoverHeight: hoveredLine.radius,
-      data: hoveredLine,
-    };
-    this.setState({hovered, update: false});
+    if (hoveredLine === this.state.hovered) return;
+    this.setState({hovered: hoveredLine, update: false});
   },
 
   updateSectionPositions() {
@@ -224,7 +213,6 @@ var App = React.createClass({
       positions.prevTop = section.consecutive ? 0 : this.state.top || scrollTop;
       positions.top = (section.consecutive ? 0 : section.top) + (positions.top || 0);
       positions.section = section;
-      positions.update = true;
       positions.useForce = true;
     } else if (section && section.consecutive && section !== currentSection) {
       // if we just entered a consecutive section for the first time
@@ -232,7 +220,6 @@ var App = React.createClass({
         selectedConversation, selectedThemes, section.consecutive);
       positions.prevTop = this.state.top;
       positions.section = section;
-      positions.update = true;
       positions.useForce = false;
     } else if (!section && currentSection && random) {
       // if there's no section, but there was previously a section
@@ -242,13 +229,14 @@ var App = React.createClass({
         scrollTop : (this.state.top || scrollTop);
       positions.top = scrollTop;
       positions.section = null;
-      positions.update = true;
       positions.useForce = true;
     }
 
     if (_.size(positions)) {
       prevSection = currentSection;
       currentSection = section;
+      positions.hovered = null;
+      positions.update = true;
 
       this.setState(positions);
     }
@@ -260,6 +248,7 @@ var App = React.createClass({
       height,
       margin: 'auto',
       color: this.state.fontColor,
+      position: 'relative',
     };
     var sectionStyle = {
       top: 0,
@@ -302,7 +291,7 @@ var App = React.createClass({
         <div className='sections' style={sectionStyle}>
           {sectionsEl}
         </div>
-        <LineSummary {...this.state.hovered} hover={this.hoverLine} />
+        <LineSummary {...this.state} {...styleProps} />
       </div>
     );
   }
