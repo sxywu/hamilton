@@ -5,6 +5,7 @@ import Lines from './Lines';
 import Diamonds from './Diamonds';
 import Songs from './Songs';
 
+var sf = 2;
 var duration = 300;
 var simulation = d3.forceSimulation()
   .force('collide', d3.forceCollide().radius(d => d.radius + 3))
@@ -19,7 +20,6 @@ var Visualization = React.createClass({
 
   componentDidMount() {
     // make canvas crispy
-    var sf = window.devicePixelRatio;
     this.crispyCanvas(this.refs.canvas, sf);
     this.ctx = this.refs.canvas.getContext('2d');
     this.ctx.scale(sf, sf);
@@ -113,7 +113,8 @@ var Visualization = React.createClass({
     if (this.updating) return;
 
     var [offsetX, offsetY] = d3.mouse(this.refs.canvas);
-    var col = this.hiddenCtx.getImageData(offsetX, offsetY, 1, 1).data;
+    // multiply the x and y by whatever we scaled the canvas by to make it crispy
+    var col = this.hiddenCtx.getImageData(offsetX * sf, offsetY * sf, 1, 1).data;
     var color = 'rgb(' + col[0] + "," + col[1] + ","+ col[2] + ")";
 
     this.props.hoverLine(this.props.hoverLookup[color]);
@@ -134,8 +135,8 @@ var Visualization = React.createClass({
 
     return (
       <div style={style}>
-        <canvas ref='hiddenCanvas' style={hiddenCanvasStyle} />
         <canvas ref='canvas' />
+        <canvas ref='hiddenCanvas' style={hiddenCanvasStyle} />
       </div>
     );
   }
