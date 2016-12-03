@@ -186,16 +186,17 @@ var PositionGraph = {
     var height = (song ? song.y + song.height : 0) + 5;
 
     var top = 0;
-    if (height < window.innerHeight) {
+    var windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    if (height < windowHeight) {
       // if the viz is less tall than the window, then center it vertically
-      top = (window.innerHeight - height) / 8;
+      top = (windowHeight - height) / 8;
     } else if (highlightedSong) {
       var song = _.find(songs, song => song.id === highlightedSong);
       var songBottom = song.y + song.height;
       // if there's a song to be highlighted, and it's in the lower quarter
       // put the song 3/4 of the way down
-      if (songBottom > window.innerHeight * 3 / 4) {
-        top = window.innerHeight / 2 - song.y;
+      if (songBottom > windowHeight * 3 / 4) {
+        top = windowHeight / 2 - song.y;
       }
     }
     return {top};

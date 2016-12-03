@@ -78,7 +78,7 @@ var LineSummary = React.createClass({
     } else {
       scrollTop = this.props.top - scrollTop;
     }
-    
+
     // find the center of the line then subtract the width
     var left = hovered.focusX + hovered.length / 2 - width / 2 + scrollLeft;
     // check if it goes out of bounds
@@ -91,11 +91,12 @@ var LineSummary = React.createClass({
     // top should be 5 pixels below the radius
     var verticalPadding = 5;
     var y = (hovered.trueY || hovered.focusY);
+    var windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
     var top = y + hovered.fullRadius + 3 * verticalPadding + scrollTop;
     var bottom;
     // if the top is more than the height, have to set the bottom instead
-    if (top + maxHeight > window.innerHeight) {
-      bottom = window.innerHeight - (y - hovered.fullRadius + scrollTop);
+    if (top + maxHeight > windowHeight) {
+      bottom = windowHeight - (y - hovered.fullRadius + scrollTop);
     }
 
     var positions = {left};
