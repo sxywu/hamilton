@@ -98,10 +98,8 @@ var App = React.createClass({
     var positions = this.state.section.position(this.state,
       selectedCharacters, this.state.selectedConversation, this.state.selectedThemes);
     positions.selectedCharacters = selectedCharacters;
-    positions.update = true;
-    positions.useForce = true;
-    positions.prevTop = this.state.top;
-    positions.hovered = null;
+    this.afterFilter(positions);
+
     this.setState(positions);
   },
 
@@ -116,10 +114,8 @@ var App = React.createClass({
     var positions = this.state.section.position(this.state,
       this.state.selectedCharacters, selectedConversation, this.state.selectedThemes);
     positions.selectedConversation = selectedConversation;
-    positions.update = true;
-    positions.useForce = true;
-    positions.prevTop = this.state.top;
-    positions.hovered = null;
+    this.afterFilter(positions);
+
     this.setState(positions);
   },
 
@@ -134,10 +130,8 @@ var App = React.createClass({
     var positions = this.state.section.position(this.state,
       this.state.selectedCharacters, this.state.selectedConversation, selectedThemes);
     positions.selectedThemes = selectedThemes;
-    positions.update = true;
-    positions.useForce = true;
-    positions.prevTop = this.state.top;
-    positions.hovered = null;
+    this.afterFilter(positions);
+
     this.setState(positions);
   },
 
@@ -151,11 +145,17 @@ var App = React.createClass({
     positions.selectedCharacters = [];
     positions.selectedConversation = [];
     positions.selectedThemes = [];
+    this.afterFilter(positions);
+
+    this.setState(positions);
+  },
+
+  afterFilter(positions) {
     positions.update = true;
     positions.useForce = true;
     positions.prevTop = this.state.top;
     positions.hovered = null;
-    this.setState(positions);
+    positions.section = PositionGraph.updateSectionWithHeight(this.state.section, positions.linePositions);
   },
 
   selectLines(lineIds) {

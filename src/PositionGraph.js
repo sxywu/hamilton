@@ -334,10 +334,18 @@ var PositionGraph = {
     var y1 = _.maxBy(lines, line => line.focusY);
     y1 = y1.focusY + 2 * y1.fullRadius;
     voronoi.extent([[x0, y0], [x1, y1]]);
-    
+
     _.each(voronoi(lines).polygons(), (polygon, i) => {
       lines[i].hoverPolygon = polygon;
     })
+  },
+
+  updateSectionWithHeight(section, lines) {
+    return Object.assign(section, {
+      style: Object.assign(section.style, {
+        minHeight: _.maxBy(lines, line => line.focusY).focusY,
+      }),
+    });
   },
 };
 
