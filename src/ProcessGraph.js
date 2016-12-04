@@ -8,7 +8,7 @@ import themeList from './data/theme_list.json';
 import rawCharacters from './data/characters.json';
 import rawThemes from './data/themes.json';
 
-var themeScale = d3.scaleLog().range([16, 36]);
+var themeScale = d3.scaleLinear().range([16, 48]);
 var themeColor = d3.scaleOrdinal(d3.schemeCategory20);
 var linkScale = d3.scaleLinear().range([3, 10]);
 

@@ -62,8 +62,7 @@ var Characters = React.createClass({
     this.images.selectAll('.ring')
       .attr('r', (d) => d.radius)
       .attr('stroke', (d) => !d.selected && !d.filtered ? this.props.gray : d.color)
-      .attr('stroke-dasharray', (d) => !d.available ? '5 5' : '')
-      .attr('opacity', (d) => !d.selected && d.filtered ? .5 : 1);
+      .attr('opacity', (d) => !d.available ? 0 : (!d.selected && d.filtered ? .5 : 1));
   },
 
   updateLinks() {
@@ -80,11 +79,11 @@ var Characters = React.createClass({
           .on('click', (d) => d.available && this.props.onSelectConversation(d.id))
           .style('cursor', (d) => d.available ? 'pointer' : 'default')
           .attr('opacity', d => {
+            if (!d.available) return 0;
             if (d.selected) return 1;
-            if ((!d.selected && d.filtered) || !d.available) return .25;
+            if (!d.selected && d.filtered) return .25;
             return .75;
-          }).attr('stroke-dasharray', d => !d.available ? '10 2' : '')
-          .transition().duration(500)
+          }).transition().duration(500)
           .attr('stroke-width', (d) => d.available ? d.weight : 2);
   },
 

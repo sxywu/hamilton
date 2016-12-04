@@ -67,7 +67,7 @@ var LineSummary = React.createClass({
 
       return (
         <tr key={i}>
-          <td style={metaStyle}>
+          <td style={Object.assign({width: 12}, metaStyle)}>
             {lineNum}
           </td>
           <td>
