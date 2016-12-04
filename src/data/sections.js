@@ -435,7 +435,7 @@ function sections(width, vizWidth, sectionWidth) {
           return {linePositions, songPositions, diamondPositions, groupedThemes, characterNodes, characterLinks};
         } else {
           var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, paddingTop);
-          return {linePositions, diamondPositions: [], groupedThemes, characterNodes, characterLinks};
+          return {linePositions, songPositions: [], diamondPositions: [], groupedThemes, characterNodes, characterLinks};
         }
       },
       text: `
