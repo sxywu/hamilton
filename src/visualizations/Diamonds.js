@@ -36,7 +36,7 @@ var Diamonds = {
     ctx.textAlign = 'center';
     ctx.font = 'italic ' + fontSize + 'px ' + props.bodyFont;
     _.each(themes, theme => {
-      var name = theme.themeType[0].toLowerCase() + theme.groupId;
+      var name = theme.groupedThemeId;
       var x = theme.x2 - fontSize;
       var y = theme.y1 + top - 1;
 

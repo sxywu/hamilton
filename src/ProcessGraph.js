@@ -38,6 +38,7 @@ var ProcessGraph = {
     var lines = _.chain(rawLines)
       .map((line, lineId) => {
         var songId = lineId.split(':')[0];
+        var startLine = parseInt(lineId.split(':')[1].split('-')[0], 10)
         // get all characters from the line
         return _.map(line[1][0], (character, i) => {
           var id = character + '/' + lineId;
@@ -46,6 +47,7 @@ var ProcessGraph = {
             id,
             lineId,
             songId,
+            startLine,
             characterId: character,
             characterName: charList[character][0],
             songName: songList[songId][0],
@@ -171,22 +173,6 @@ var ProcessGraph = {
           var endLine = _.last(lineKey[0]).split(':')[1].split('/');
           var endLineId = songId + ':' + endLine[1];
           endLine = parseInt(endLine[0], 10);
-          var characterIds = [];
-          var conversationIds = [];
-
-          // add themes to the lines
-          _.chain(lineKey[0])
-            .map((lineId) => lineId.split(':')[0] + ':' + lineId.split('/')[1])
-            .uniq()
-            .each((lineId) => {
-              // have to loop through all the lines bc could have multiple characters
-              _.each(linesById[lineId], (line) => {
-                line.themes.push(theme);
-                // also add in characters
-                characterIds.push(line.characterId);
-                conversationIds.push(line.conversing);
-              });
-            }).value();
 
           return {
             id: theme + '/' + songId + ':' + startLine,
@@ -199,11 +185,9 @@ var ProcessGraph = {
             endLine,
             startLineId,
             endLineId,
-            characterIds: _.uniq(characterIds),
-            conversationIds: _.uniq(conversationIds),
             fill: themeColor(theme),
             keys: lineKey[0],
-            lines: lineKey[1],
+            // lines: lineKey[1],
             selected: true,
             available: true,
           }
@@ -249,6 +233,33 @@ var ProcessGraph = {
         x += diamond.x2 + 2 * padding;
       });
       theme.width = x;
+    });
+
+    // and go through all the diamonds just one last time
+    // for their character id's, conversation id's, and lines
+    diamonds = _.map(diamonds, diamond => {
+      var characterIds = [];
+      var conversationIds = [];
+      var groupedThemeId = diamond.themeType[0].toLowerCase() + diamond.groupId;
+      // add themes to the lines
+      _.chain(diamond.keys)
+        .map((lineId) => lineId.split(':')[0] + ':' + lineId.split('/')[1])
+        .uniq()
+        .each((lineId) => {
+          // have to loop through all the lines bc could have multiple characters
+          _.each(linesById[lineId], (line) => {
+            line.themes.push([diamond.themeId, diamond.startLine, diamond.endLine, diamond.themeType]);
+            // also add in characters
+            characterIds.push(line.characterId);
+            conversationIds.push(line.conversing);
+          });
+        }).value();
+
+        return Object.assign(diamond, {
+          groupedThemeId,
+          characterIds: _.uniq(characterIds),
+          conversationIds: _.uniq(conversationIds),
+        });
     });
 
     return {diamonds, groupedThemes};

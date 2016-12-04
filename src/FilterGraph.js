@@ -150,7 +150,8 @@ var FilterGraph = {
           var atLeastOne = false;
           _.each(lines, line => {
             line.selected = line.selected && _.some(line.themes, theme =>
-              _.includes(selectedThemes, theme));
+              // theme[0] is the theme id, the rest are start and end lines
+              _.includes(selectedThemes, theme[0]));
 
             atLeastOne = atLeastOne || line.selected;
           });

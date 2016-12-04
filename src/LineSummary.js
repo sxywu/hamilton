@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import * as d3 from "d3";
 
-var width = 300;
+var width = 360;
 var maxHeight = 300;
 var borderRadius = 3;
 var gray = '#aaa';
@@ -34,7 +34,7 @@ var LineSummary = React.createClass({
           <img style={imageStyle} src={this.props.images[hovered.characterId]} role="presentation" />
         </div>
         <h3 style={titleStyle}>
-          {hovered.title}
+          {hovered.characterName}
           <div style={{fontSize: 12}}>in "{hovered.songName}"</div>
         </h3>
       </div>
@@ -45,24 +45,48 @@ var LineSummary = React.createClass({
     var hovered = this.props.hovered;
     var linesStyle = {
       fontSize: 12,
-      lineHeight: '22px',
+      lineHeight: 1.5,
       padding: '0 10px 10px 10px',
       textAlign: 'left',
       overflowY: 'scroll',
       maxHeight: maxHeight - 100,
     };
-
+    var metaStyle = {
+      fontSize: 9,
+      color: this.props.medGray,
+      verticalAlign: 'middle',
+      fontStyle: 'italic',
+      textAlign: 'right',
+      padding: '0 5px',
+    };
     var lines = _.map(hovered.data[2], (line, i) => {
+      var lineNum = hovered.startLine + i + 1;
+      var themes = _.chain(hovered.themes)
+        .filter(theme => theme[1] <= lineNum && lineNum <= theme[2])
+        .map(3).uniq().value().join(', ');
+
       return (
-        <div key={i}>
-          {line}
-        </div>
+        <tr key={i}>
+          <td style={metaStyle}>
+            {lineNum}
+          </td>
+          <td>
+            {line}
+          </td>
+          <td style={metaStyle}>
+            {themes}
+          </td>
+        </tr>
       );
     });
 
     return (
       <div style={linesStyle}>
-        {lines}
+        <table style={{width: '100%'}}>
+          <tbody>
+            {lines}
+          </tbody>
+        </table>
       </div>
     );
   },
@@ -92,11 +116,11 @@ var LineSummary = React.createClass({
     var verticalPadding = 5;
     var y = (hovered.trueY || hovered.focusY);
     var windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-    var top = y + hovered.fullRadius + 3 * verticalPadding + scrollTop;
+    var top = y + hovered.fullRadius + 2.5 * verticalPadding + scrollTop;
     var bottom;
     // if the top is more than the height, have to set the bottom instead
     if (top + maxHeight > windowHeight) {
-      bottom = windowHeight - (y - hovered.fullRadius + scrollTop);
+      bottom = windowHeight - (y - hovered.fullRadius + 0.5 * verticalPadding + scrollTop);
     }
 
     var positions = {left};
