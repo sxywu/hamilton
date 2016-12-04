@@ -442,6 +442,18 @@ function sections(width, vizWidth, sectionWidth) {
   Angelica and Eliza are only two of the stories I've found; there are many more.  Filter by any combination of characters, conversations, and themes below to explore more stories.
       `
     },
+    {
+      id: 'thankyou',
+      style: {
+        paddingTop,
+      },
+      position(data, selectedCharacters, selectedConversation, selectedThemes) {
+        return {};
+      },
+      text: `
+  Thank you.
+      `
+    },
   ];
 }
 
