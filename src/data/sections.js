@@ -15,7 +15,7 @@ function sections(width, vizWidth, sectionWidth) {
       PositionGraph.positionForCharacters(linePositions, songPositions,
         vizWidth, sectionWidth, paddingTop / 6, highlightedSong);
 
-    return {linePositions, songPositions, characterNodes, characterLinks, selectedCharacters, top};
+    return {linePositions, songPositions, diamondPositions: [], characterNodes, characterLinks, selectedCharacters, top};
   }
 
   function positionEliza(data, selectedThemes, highlightedSong) {
