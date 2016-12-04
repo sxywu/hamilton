@@ -56,8 +56,8 @@ var Themes = React.createClass({
           transform: 'translate(' + [diamond.x, fontSize] + ')',
           opacity: diamond.available ? (diamond.selected ? 1 : 0.5) : 0,
           cursor: diamond.available ? 'pointer' : 'default',
-          // onClick: diamond.available ? this.props.onSelectTheme.bind(this, diamond.id) : null,
         };
+        var gClick = diamond.available ? this.props.onSelectTheme.bind(null, diamond.id) : null;
         var pathAttr = {
           d: this.calculateCurve(diamond),
           stroke: this.props.fontColor,
@@ -71,7 +71,7 @@ var Themes = React.createClass({
           fontSize,
         };
         return (
-          <g {...gAttr}>
+          <g {...gAttr} onClick={gClick}>
             <path {...pathAttr} />
             <text {...textAttr}>{name}</text>
           </g>
