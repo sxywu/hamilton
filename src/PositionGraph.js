@@ -325,6 +325,16 @@ var PositionGraph = {
   },
 
   calculateHoverPolygons(lines) {
+    var x0 = _.minBy(lines, line => line.focusX);
+    x0 = x0.focusX - 2 * x0.fullRadius;
+    var x1 = _.maxBy(lines, line => line.focusX);
+    x1 = x1.focusX + 2 * x1.fullRadius;
+    var y0 = _.minBy(lines, line => line.focusY);
+    y0 = y0.focusY - 2 * y0.fullRadius;
+    var y1 = _.maxBy(lines, line => line.focusY);
+    y1 = y1.focusY + 2 * y1.fullRadius;
+    voronoi.extent([[x0, y0], [x1, y1]]);
+    
     _.each(voronoi(lines).polygons(), (polygon, i) => {
       lines[i].hoverPolygon = polygon;
     })
