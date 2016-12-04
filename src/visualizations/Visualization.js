@@ -32,8 +32,8 @@ var Visualization = React.createClass({
     d3.select(this.refs.canvas)
       .on('mousemove', this.mousemove);
 
-    simulation.on('tick', this.forceTick.bind(this))
-      .on('end', this.forceEnd.bind(this))
+    simulation.on('tick', this.forceTick)
+      .on('end', this.forceEnd)
       .stop();
   },
 
