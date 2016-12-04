@@ -13,7 +13,7 @@ function sections(width, vizWidth, sectionWidth) {
       FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation, highlightedSong);
     var {linePositions, songPositions, top} =
       PositionGraph.positionForCharacters(linePositions, songPositions,
-        vizWidth, 0, paddingTop / 6, highlightedSong);
+        vizWidth, sectionWidth, paddingTop / 6, highlightedSong);
 
     return {linePositions, songPositions, characterNodes, characterLinks, selectedCharacters, top};
   }
@@ -128,7 +128,6 @@ function sections(width, vizWidth, sectionWidth) {
       consecutive: true,
       style: {
         paddingTop,
-        marginLeft: vizWidth,
       },
       filter: 'characters',
       position(data, selectedCharacters, selectedConversation) {
@@ -144,7 +143,6 @@ function sections(width, vizWidth, sectionWidth) {
       highlightedSong: '26',
       style: {
         paddingTop,
-        marginLeft: vizWidth,
       },
       clips: [
         ['/music/whenyouregone.mp3', ['8/26:23-27', '2/26:23-27']],
@@ -187,7 +185,6 @@ function sections(width, vizWidth, sectionWidth) {
       highlightedSong: '37',
       style: {
         paddingTop,
-        marginLeft: vizWidth,
       },
       clips: [
         ['/music/whenyouregone.mp3', ['2/37:32-33']],
@@ -237,7 +234,6 @@ function sections(width, vizWidth, sectionWidth) {
       style: {
         paddingTop,
         marginBottom,
-        marginLeft: vizWidth,
       },
       position(data, selectedCharacters, selectedConversation) {
         return positionAngelica(data, selectedCharacters,
