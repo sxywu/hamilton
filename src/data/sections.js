@@ -145,8 +145,8 @@ function sections(width, vizWidth, sectionWidth) {
         paddingTop,
       },
       clips: [
-        ['/music/whenyouregone.mp3', ['8/26:23-27', '2/26:23-27']],
-        ['/music/whenyouregone.mp3', ['8/26:85-86', '2/26:85-86']],
+        ['/music/andthereyouare.mp3', ['8/26:23-27', '2/26:23-27']],
+        ['/music/youwontbe.mp3', ['8/26:85-86', '2/26:85-86']],
       ],
       position(data, selectedCharacters, selectedConversation) {
         return positionAngelica(data, selectedCharacters,
