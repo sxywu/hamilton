@@ -91,7 +91,8 @@ var Visualization = React.createClass({
       .attr('width', props.width)
       .attr('height', props.height)
       .attr('fill', '#fff')
-      .attr('opacity', 0.75);
+      .attr('opacity', 0.75)
+      .style('pointer-events', 'none');
     var lines = props.playing.lines;
     _.each(lines, line => {
       var data = [
@@ -109,25 +110,9 @@ var Visualization = React.createClass({
         .attr('height', d => d.y2 - d.y1)
         .attr('rx', d => d.radius)
         .attr('ry', d => d.radius)
-        .attr('fill', d => d.fill);
+        .attr('fill', d => d.fill)
+        .style('pointer-events', 'none');
     });
-    // var music = this.svg.select('.music')
-    //   .selectAll('.line').data(lines || [], d => d.id);
-    //
-    // music.exit().remove();
-    // if (!props.playing) return;
-    //
-    // var enter = music.enter().append('g')
-    //   .classed('line', true);
-    // enter.append('rect')
-    //   .classed('gray', true);
-    //
-    // music = enter.merge(music)
-    //   .attr('fill', d => d.fill)
-    //   .attr('stroke', d => d.fill)
-    //   .attr('transform', d => 'translate(' + [d.focusX, d.focusY + props.top] + ')');
-    //
-    // music.select('.gray')
   },
 
   crispyCanvas(canvas, sf) {
@@ -170,6 +155,7 @@ var Visualization = React.createClass({
 
       var interpolate = Math.min(elapsed / duration, 1);
       var top = this.interpolateTop(interpolate);
+
       Diamonds.moveCurves(this.ctx, this.props.diamondPositions, top, this.props);
       Songs.moveLines(this.ctx, this.props.songPositions, top, this.props);
       Lines.movePaths(this.ctx, this.props.linePositions, top, this.props);
