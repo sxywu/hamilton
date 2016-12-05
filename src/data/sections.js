@@ -272,8 +272,8 @@ function sections(width, vizWidth, sectionWidth) {
         return positionEliza(data, selectedThemes, this.highlightedSong);
       },
       clips: [
-        ['/music/whenyouregone.mp3', ['7/17:18-45']],
-        ['/music/whenyouregone.mp3', ['7/17:18-45']],
+        ['/music/irelishbeing.mp3', ['7/17:18-45']],
+        ['/music/wedontneed.mp3', ['7/17:18-45']],
       ],
       text: `
   ### Look Around
