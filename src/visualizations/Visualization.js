@@ -19,6 +19,7 @@ var Visualization = React.createClass({
   shouldComponentUpdate(nextProps) {
     if (!nextProps.update) {
       this.playMusic(nextProps);
+      this.showHover(nextProps);
     }
 
     return nextProps.update;
@@ -66,11 +67,11 @@ var Visualization = React.createClass({
   },
 
   setupInteractions() {
-    var texture = textures.paths()
-      .d("woven")
-      .lighter()
-      .thicker();
-    this.svg.call(texture);
+    this.texture = textures.lines()
+      .size(4)
+      .strokeWidth(1)
+      .stroke('#fff');
+    this.svg.call(this.texture);
 
     // append music group
     this.svg.append('g')
@@ -113,6 +114,31 @@ var Visualization = React.createClass({
         .attr('fill', d => d.fill)
         .style('pointer-events', 'none');
     });
+  },
+
+  showHover(props) {
+    var hover = this.svg.select('.hover');
+    hover.selectAll('*').remove();
+
+    if (!props.hovered) return;
+    var line = props.hovered;
+    var data = [
+      {interpolate: 1, fill: line.fill},
+      {interpolate: 1, fill: this.texture.url()},
+    ];
+    data = _.map(data, d => {
+      return Object.assign(d, Lines.calculateLength(line, d.interpolate, props.top));
+    });
+    hover.append('g').selectAll('rect')
+      .data(data).enter().append('rect')
+      .attr('x', d => d.x1 - d.radius)
+      .attr('y', d => d.y1)
+      .attr('width', d => d.x2 - d.x1 + 2 * d.radius)
+      .attr('height', d => d.y2 - d.y1)
+      .attr('rx', d => d.radius)
+      .attr('ry', d => d.radius)
+      .attr('fill', d => d.fill)
+      .style('pointer-events', 'none');
   },
 
   crispyCanvas(canvas, sf) {
