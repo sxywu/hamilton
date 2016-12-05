@@ -348,8 +348,8 @@ function sections(width, vizWidth, sectionWidth) {
         paddingTop,
       },
       clips: [
-        ['/music/whenyouregone.mp3', ['2/41:25-40']],
-        ['/music/whenyouregone.mp3', ['24/41:56-59']],
+        ['/music/lookatwhere.mp3', ['2/41:25-40']],
+        ['/music/forgiveness.mp3', ['24/41:56-59']],
       ],
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
         return positionEliza(data, selectedThemes, this.highlightedSong);
