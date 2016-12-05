@@ -396,7 +396,7 @@ function sections(width, vizWidth, sectionWidth) {
         marginBottom,
       },
       clips: [
-        ['/music/whenyouregone.mp3', ['7/46:70-74']],
+        ['/music/haveidoneenough.mp3', ['7/46:70-74']],
       ],
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
         return positionEliza(data, selectedThemes, this.highlightedSong);
