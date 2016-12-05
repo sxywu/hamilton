@@ -1,5 +1,7 @@
 import React from 'react';
 import * as d3 from "d3";
+import _ from 'lodash';
+import textures from 'textures';
 
 import Lines from './Lines';
 import Diamonds from './Diamonds';
@@ -15,6 +17,10 @@ var simulation = d3.forceSimulation()
 var Visualization = React.createClass({
 
   shouldComponentUpdate(nextProps) {
+    if (!nextProps.update) {
+      this.playMusic(nextProps);
+    }
+
     return nextProps.update;
   },
 
@@ -27,6 +33,9 @@ var Visualization = React.createClass({
     this.crispyCanvas(this.refs.hiddenCanvas, sf);
     this.hiddenCtx = this.refs.hiddenCanvas.getContext('2d');
     this.hiddenCtx.scale(sf, sf);
+    // and svg
+    this.svg = d3.select(this.refs.interactions);
+    this.setupInteractions();
 
     // add mousemove
     d3.select(this.refs.canvas)
@@ -54,6 +63,71 @@ var Visualization = React.createClass({
       this.interpolateTop = d3.interpolateNumber(this.props.prevTop, this.props.top);
       this.positionNoForce();
     }
+  },
+
+  setupInteractions() {
+    var texture = textures.paths()
+      .d("woven")
+      .lighter()
+      .thicker();
+    this.svg.call(texture);
+
+    // append music group
+    this.svg.append('g')
+      .classed('music', true);
+
+    // append hover group
+    this.svg.append('g')
+      .classed('hover', true);
+  },
+
+  playMusic(props) {
+    var music = this.svg.select('.music');
+    music.selectAll('*').remove();
+
+    if (!props.playing) return;
+
+    music.append('rect')
+      .attr('width', props.width)
+      .attr('height', props.height)
+      .attr('fill', '#fff')
+      .attr('opacity', 0.75);
+    var lines = props.playing.lines;
+    _.each(lines, line => {
+      var data = [
+        {interpolate: 1, fill: props.gray},
+        {interpolate: props.playing.currentTime / props.playing.duration, fill: line.fill},
+      ];
+      data = _.map(data, d => {
+        return Object.assign(d, Lines.calculateLength(line, d.interpolate, props.top));
+      });
+      music.append('g').selectAll('rect')
+        .data(data).enter().append('rect')
+        .attr('x', d => d.x1 - d.radius)
+        .attr('y', d => d.y1)
+        .attr('width', d => d.x2 - d.x1 + 2 * d.radius)
+        .attr('height', d => d.y2 - d.y1)
+        .attr('rx', d => d.radius)
+        .attr('ry', d => d.radius)
+        .attr('fill', d => d.fill);
+    });
+    // var music = this.svg.select('.music')
+    //   .selectAll('.line').data(lines || [], d => d.id);
+    //
+    // music.exit().remove();
+    // if (!props.playing) return;
+    //
+    // var enter = music.enter().append('g')
+    //   .classed('line', true);
+    // enter.append('rect')
+    //   .classed('gray', true);
+    //
+    // music = enter.merge(music)
+    //   .attr('fill', d => d.fill)
+    //   .attr('stroke', d => d.fill)
+    //   .attr('transform', d => 'translate(' + [d.focusX, d.focusY + props.top] + ')');
+    //
+    // music.select('.gray')
   },
 
   crispyCanvas(canvas, sf) {
@@ -132,11 +206,20 @@ var Visualization = React.createClass({
       // left: 0,
       // zIndex: -1,
     };
+    var svgStyle = {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: this.props.width,
+      height: this.props.height,
+      pointerEvents: 'none',
+    };
 
     return (
       <div style={style}>
         <canvas ref='canvas' />
         <canvas ref='hiddenCanvas' style={hiddenCanvasStyle} />
+        <svg ref='interactions' style={svgStyle} />
       </div>
     );
   }

@@ -64,6 +64,7 @@ var App = React.createClass({
       prevTop: null,
       top: null,
       hovered: null,
+      playing: null,
       random: false,
       update: true,
       useForce: true,
@@ -158,18 +159,21 @@ var App = React.createClass({
     positions.section = PositionGraph.updateSectionWithHeight(this.state.section, positions.linePositions);
   },
 
-  selectLines(lineIds) {
-    var linePositions = PositionGraph.positionSelectLines(
-      lineIds, this.state.linePositions, 2, width, vizWidth);
-    if (!lineIds) {
-      linePositions = this.positionByVizType(this.state.vizType);
-    };
-    this.setState({linePositions});
+  playLines(playing) {
+    if (playing && this.state.playing) {
+      // if already playing, just modify the current time
+      playing = Object.assign(this.state.playing, {currentTime: playing.currentTime});
+    } else if (playing) {
+      // if it just started playing
+      var lines = _.filter(this.state.linePositions, line =>
+        _.includes(playing.lineIds, line.id));
+      playing = Object.assign(playing, {lines});
+    }
+    this.setState({playing, update: false});
   },
 
   hoverLine(hoveredLine) {
     if (hoveredLine === this.state.hovered) return;
-    if (!hoveredLine) console.log(hoveredLine)
     this.setState({hovered: hoveredLine, update: false});
   },
 
@@ -282,7 +286,7 @@ var App = React.createClass({
       bodyFont: 'Libre Baskerville',
     };
     var eventProps = {
-      selectLines: this.selectLines,
+      playLines: this.playLines,
       hoverLine: this.hoverLine,
       onSelectCharacter: this.filterByCharacter,
       onSelectConversation: this.filterByConversation,

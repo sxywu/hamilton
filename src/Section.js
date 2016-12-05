@@ -49,6 +49,13 @@ var Section = React.createClass({
           .style('background', 'linear-gradient(to right,' +
             color + ' ' + percent + '%,' +
             chroma(color).alpha(0.5).css() + ' ' + (percent + 0.5) + '%)');
+
+        // highlight the right line being played
+        this.props.playLines({
+          lineIds: this.clip.lineIds,
+          currentTime: this.currentTime,
+          duration: this.duration,
+        });
       }
 
       // if it's still playing, and current time is less than duration
@@ -61,7 +68,7 @@ var Section = React.createClass({
       }
       if (!playing) {
         this.setPlay();
-        this.props.selectLines(null);
+        this.props.playLines(null);
         clearInterval(intervalId);
       }
     }, 50);
@@ -115,9 +122,6 @@ var Section = React.createClass({
 
         d3.select(this).select('.control')
           .html('&nbsp; &#10073; &#10073; &nbsp;');
-
-        // when starting song, highlight the right lines
-        that.props.selectLines(that.clip.lineIds);
       });
   },
 
