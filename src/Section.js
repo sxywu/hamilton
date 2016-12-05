@@ -13,6 +13,9 @@ var md = new Remarkable({linkTarget: '_new', html: true});
 var playing = null;
 
 var Section = React.createClass({
+  shouldComponentUpdate(nextProps) {
+    return !!nextProps.update;
+  },
 
   componentDidMount() {
     this.container = d3.select(this.refs.section);
