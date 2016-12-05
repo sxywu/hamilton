@@ -318,8 +318,8 @@ function sections(width, vizWidth, sectionWidth) {
         return positionEliza(data, selectedThemes, this.highlightedSong);
       },
       clips: [
-        ['/music/whenyouregone.mp3', ['7/23:122-128']],
-        ['/music/whenyouregone.mp3', ['2/23:157']],
+        ['/music/andifyourwife.mp3', ['7/23:122-128']],
+        ['/music/lookaround.mp3', ['2/23:157']],
       ],
       text: `
   ### They're Asking Me To Lead
