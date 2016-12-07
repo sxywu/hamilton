@@ -272,7 +272,7 @@ var App = React.createClass({
       images,
       gray: 'rgb(238, 238, 238)',
       medGray: 'rgb(204, 204, 204)',
-      fontColor: 'rgb(102, 102, 102)',
+      fontColor: 'rgb(51, 51, 51)',
       vizType: 'image',
       vizWidth,
       sectionWidth,
