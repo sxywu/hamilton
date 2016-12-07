@@ -1,7 +1,7 @@
 body {
   font-family: 'Libre Baskerville', serif;
   color: #222;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 h1, h2, h3, h4, .header {
@@ -9,15 +9,15 @@ h1, h2, h3, h4, .header {
   font-weight: 700;
 }
 
-a, a:visited, a:link {
-  color: #333;
+a, a:visited, a:link, .underline {
   text-decoration: none;
-  border-bottom: 1px dashed;
+  border-bottom: 1px solid;
   pointer-events: auto;
+  color: inherit;
 }
 
-a:hover {
-  border-bottom: 1px solid;
+a:hover, .underline:hover {
+  border-bottom: 1px dashed;
 }
 
 svg {
@@ -34,10 +34,6 @@ text {
   line-height: 1.8;
   cursor: pointer;
   pointer-events: auto;
-}
-
-.underline {
-  border-bottom: 1px solid;
 }
 
 .background {

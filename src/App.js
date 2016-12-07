@@ -13,6 +13,15 @@ import ProcessGraph from './ProcessGraph';
 import FilterGraph from './FilterGraph';
 import PositionGraph from './PositionGraph';
 
+var images = _.reduce(charList, (obj, character, id) => {
+  try {
+    // load image
+    obj[id] = require('./images/' + id + '.png');
+  } catch(e) {
+    console.log(e);
+  }
+  return obj;
+}, {});
 
 var width = 1200;
 var height = 16000;
@@ -25,17 +34,7 @@ var characterHeight = 440;
 var themeHeight = 250;
 var prevSection = null;
 var currentSection = null;
-var sections = SectionsData(width, vizWidth, sectionWidth);
-
-var images = _.reduce(charList, (obj, character, id) => {
-  try {
-    // load image
-    obj[id] = require('./images/' + id + '.png');
-  } catch(e) {
-    console.log(e);
-  }
-  return obj;
-}, {});
+var sections = SectionsData(width, vizWidth, sectionWidth, images);
 
 var App = React.createClass({
 

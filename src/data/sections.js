@@ -6,7 +6,7 @@ import PositionGraph from '../PositionGraph';
 var paddingTop = 100;
 var marginBottom = 400;
 
-function sections(width, vizWidth, sectionWidth) {
+function sections(width, vizWidth, sectionWidth, images) {
   function positionAngelica(data, selectedCharacters, selectedConversation, highlightedSong) {
     selectedCharacters = _.union(selectedCharacters, ['2', '8']);
     var {linePositions, songPositions, characterNodes, characterLinks} =
@@ -76,9 +76,12 @@ function sections(width, vizWidth, sectionWidth) {
       random: true,
       style: {
         margin: 'auto',
-        paddingTop,
         marginBottom,
-        width: '50%',
+        width: 600,
+        backgroundColor: 'rgb(53,169,147)',
+        color: '#fff',
+        textAlign: 'center',
+        padding: '40px 80px',
       },
       position(data) {
         _.each(data.lines, line => line.selected = true);
@@ -88,54 +91,60 @@ function sections(width, vizWidth, sectionWidth) {
         return positions;
       },
       text: `
-  The [hype](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=hamilton%20hype) around [Hamilton](http://www.hamiltonbroadway.com/) is astronomical, so I was understandably doubtful at first.  But from the moment I sat down to listen the whole way through, I was done for.
+<img src=${images['2']} width='60' />
+## A hip-hop musical, really?
 
-  I was obsessed.  I had the soundtrack on repeat for months, it was all I listened to in my waking hours.  I listened so much I had favorite lines and favorite songs.  I analyzed the lyrics; I reveled in the layers of complexity, the double entredres, the clever word plays.
+When I first heard of Hamilton, I was doubtful ("a *hip-hop* musical?").  But from the moment I sat down to listen the whole way through, I was done for.
 
-  Then my obsession hit a peak and <span class='underline'>I started to wonder what a visualization of Hamilton would look like.</span>
+I was obsessed.  I had the soundtrack on repeat for months, it was all I listened to in my waking hours.  I listened so much I had favorite lines and favorite songs.  I analyzed the lyrics; I reveled in the layers of complexity, the double entredres, the clever word plays.
 
+Then my obession hit a peak; I kept wondering, *what would a visualization of Hamilton look like?*  I couldn't stop thinking about it.
 
-  When I started, I was curious about two things: the relationships between the primary characters, and the recurring phrases associated with those characters.
+# ✨✨✨
 
-  So I've gone through every single line in Hamilton (twice 😱) to record who sang each line, as well as who that line may have been directed towards.  I've noted every phrase that was sung more than once across more than one song, and grouped them into broad themes*.
+When I started digging through the lyrics, I was curious about two things: the relationships between the main characters, and the recurring phrases associated with those characters.
 
-  I've visualized the lines as circles, colored by singer.  <span class='underline'>Hover any circle</span> to see its lyrics.
+So I went through every single line in Hamilton (twice 😱 ) and recorded who sang each line, as well as who that line may have been directed towards.  I've noted every phrase that was sung more than once across more than one song, and grouped them into broad themes*.  You can find my lovingly (obsessively) curated data [here](https://github.com/sxywu/hamilton/tree/master/src/data).
 
-  <sup>**Though I am unconscious of intentional error, I am nevertheless too sensible of my defects not to think it probable that I may have committed many errors.*</sup>
+To explore the data, I created a visual tool to filter the lines by any combination of characters, conversations, and themes.  The insights were *amazing*, and I'm excited to share with you my two favorite stories.
+
+<p style='line-height: 1.25'>
+  <sup><em>*Though I am unconscious of intentional error, I am nevertheless too sensible of my defects not to think it probable that I may have committed many errors.</em></sup>
+</p>
       `
     },
-    {
-      id: 'filter_characters',
-      random: true,
-      left: sectionWidth,
-      style: {
-        paddingTop,
-        marginBottom,
-        minHeight: 600,
-      },
-      filter: 'characters',
-      position(data, selectedCharacters, selectedConversation) {
-        // either way, have to reset the colors on everything
-        var {linePositions, songPositions, characterNodes, characterLinks} =
-          FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
-
-        if (selectedCharacters.length || selectedConversation.length) {
-          var {linePositions, songPositions} =
-            PositionGraph.positionForCharacters(linePositions, songPositions,
-              vizWidth, sectionWidth, paddingTop);
-
-          return {linePositions, songPositions, characterNodes, characterLinks};
-        } else {
-          var {linePositions, songPositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, paddingTop);
-          return {linePositions, songPositions, characterNodes, characterLinks};
-        }
-      },
-      text: `
-  After three days, I had a spectacularly rich dataset of lines, characters, and recurring phrases.  The first thing I did was to explore the lines filtered by characters and their conversations.
-
-  Above are **13** of the **18** primary characters with Hamilton at the center.  They are connected by **arcs** denoting the conversations between them.  <span class='underline'>Select any set of characters and conversations</span> to view their corresponding lines.
-      `
-    },
+  //   {
+  //     id: 'filter_characters',
+  //     random: true,
+  //     left: sectionWidth,
+  //     style: {
+  //       paddingTop,
+  //       marginBottom,
+  //       minHeight: 600,
+  //     },
+  //     filter: 'characters',
+  //     position(data, selectedCharacters, selectedConversation) {
+  //       // either way, have to reset the colors on everything
+  //       var {linePositions, songPositions, characterNodes, characterLinks} =
+  //         FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
+  //
+  //       if (selectedCharacters.length || selectedConversation.length) {
+  //         var {linePositions, songPositions} =
+  //           PositionGraph.positionForCharacters(linePositions, songPositions,
+  //             vizWidth, sectionWidth, paddingTop);
+  //
+  //         return {linePositions, songPositions, characterNodes, characterLinks};
+  //       } else {
+  //         var {linePositions, songPositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, paddingTop);
+  //         return {linePositions, songPositions, characterNodes, characterLinks};
+  //       }
+  //     },
+  //     text: `
+  // After three days, I had a spectacularly rich dataset of lines, characters, and recurring phrases.  The first thing I did was to explore the lines filtered by characters and their conversations.
+  //
+  // Above are **13** of the **18** primary characters with Hamilton at the center.  They are connected by **arcs** denoting the conversations between them.  <span class='underline'>Select any set of characters and conversations</span> to view their corresponding lines.
+  //     `
+  //   },
     {
       id: 'angelica1',
       consecutive: true,
