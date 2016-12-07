@@ -34,34 +34,40 @@ function sections(width, vizWidth, sectionWidth) {
       id: 'header',
       random: true,
       style: {
+        paddingTop,
         width: '60%',
-        height: 300,
+        margin: 'auto',
+        height: 500,
         marginBottom,
       },
       position(data) {
         _.each(data.lines, line => line.selected = true);
-        return PositionGraph.positionLinesAsImage(data.lines, vizWidth, sectionWidth);
+        var left = (width - vizWidth) / 2;
+        return PositionGraph.positionLinesAsImage(data.lines, vizWidth, left);
       },
       text: `
   <center>
     <h1 style='line-height: 1.25'>
-      An Interactive Visualization of<br />
-      Every Line in Hamilton
+      <span class='background'>
+        An Interactive Visualization of<br />
+        Every Line in Hamilton
+      </span>
     </h1>
-    <sup>BY [SHIRLEY WU](http://twitter.com/sxywu)</sup>
-  </center>
-
-  The [hype](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=hamilton%20hype) around [Hamilton](http://www.hamiltonbroadway.com/) is astronomical, so I was understandably doubtful at first.  But from the moment I sat down to listen the whole way through, I was done for.
-
-  I was obsessed.  I had the soundtrack on repeat for months, it was all I listened to in my waking hours.  I listened so much I had favorite lines and favorite songs.  I analyzed the lyrics; I reveled in the layers of complexity, the double entredres, the clever word plays.
-
-  Then my obsession hit a peak and <span class='underline'>I started to wonder what a visualization of Hamilton would look like.</span>
-
-  <center>
-    <h3>
-      Start<br />
-      ↓
-    </h3>
+    <sup>
+      <span class='background'>
+        By [SHIRLEY WU](http://twitter.com/sxywu)
+      <span>
+    </sup>
+    <div style='padding-top: 225px'>
+      <div style='font-size: 12px'>
+        <span class='background'>Best on **Chrome** with</span><br />
+        <span class='background'>resolution higher than **1280x800** ✨</span>
+      </div>
+      <h2 style='margin-top: 0px'>
+        <span class='background'>Scroll</span><br />
+        <span class='background'>↓</span>
+      </h2>
+    </div>
   </center>
       `
     },
@@ -82,6 +88,13 @@ function sections(width, vizWidth, sectionWidth) {
         return positions;
       },
       text: `
+  The [hype](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=hamilton%20hype) around [Hamilton](http://www.hamiltonbroadway.com/) is astronomical, so I was understandably doubtful at first.  But from the moment I sat down to listen the whole way through, I was done for.
+
+  I was obsessed.  I had the soundtrack on repeat for months, it was all I listened to in my waking hours.  I listened so much I had favorite lines and favorite songs.  I analyzed the lyrics; I reveled in the layers of complexity, the double entredres, the clever word plays.
+
+  Then my obsession hit a peak and <span class='underline'>I started to wonder what a visualization of Hamilton would look like.</span>
+
+
   When I started, I was curious about two things: the relationships between the primary characters, and the recurring phrases associated with those characters.
 
   So I've gone through every single line in Hamilton (twice 😱) to record who sang each line, as well as who that line may have been directed towards.  I've noted every phrase that was sung more than once across more than one song, and grouped them into broad themes*.
