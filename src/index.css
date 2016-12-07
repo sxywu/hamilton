@@ -39,3 +39,10 @@ text {
 .underline {
   border-bottom: 1px solid;
 }
+
+.background {
+  background: rgba(255, 255, 255, 1);
+  padding: 2px 10px;
+  line-height: 1.8;
+  pointer-events: auto;
+}
