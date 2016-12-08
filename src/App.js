@@ -87,6 +87,10 @@ var App = React.createClass({
   },
 
   filterByCharacter(character) {
+    // if we're not in a section, or if the seciton we're in isn't a filter section
+    // then don't do anything and just return
+    if (!this.state.section || !this.state.section.filter) return;
+
     var selectedCharacters = this.state.selectedCharacters;
     if (_.includes(selectedCharacters, character)) {
       selectedCharacters = _.without(selectedCharacters, character);
@@ -104,6 +108,8 @@ var App = React.createClass({
   },
 
   filterByConversation(id) {
+    if (!this.state.section || !this.state.section.filter) return;
+
     var selectedConversation = this.state.selectedConversation;
     if (_.includes(selectedConversation, id)) {
       selectedConversation = _.without(selectedConversation, id);
@@ -120,6 +126,8 @@ var App = React.createClass({
   },
 
   filterByThemes(id) {
+    if (!this.state.section || !this.state.section.filter) return;
+
     var selectedThemes = this.state.selectedThemes;
     if (_.includes(selectedThemes, id)) {
       selectedThemes = _.without(selectedThemes, id);
@@ -136,6 +144,8 @@ var App = React.createClass({
   },
 
   resetFilters() {
+    if (!this.state.section || !this.state.section.filter) return;
+
     var selectedCharacters = [];
     var selectedConversation = [];
     var selectedThemes = [];
@@ -155,7 +165,10 @@ var App = React.createClass({
     positions.useForce = true;
     positions.prevTop = this.state.top;
     positions.hovered = null;
-    positions.section = PositionGraph.updateSectionWithHeight(this.state.section, positions.linePositions);
+    if (this.state.section.id === 'filter_tool') {
+      // only update the height of a section if it's the final filter tool
+      positions.section = PositionGraph.updateSectionWithHeight(this.state.section, positions.linePositions);
+    }
   },
 
   playLines(playing) {
