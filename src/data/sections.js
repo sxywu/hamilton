@@ -125,7 +125,7 @@ To explore the data, I created a visual tool to filter the lines by any combinat
       style: {
         paddingTop: 650,
         marginBottom,
-        height: 750,
+        height: 900,
         width: '100%',
         textAlign: 'center',
       },
@@ -149,9 +149,40 @@ Each circle is a set of lines, colored by singer.
 Hover any of them to see the lyrics.
   </span><br />
   <span class='background'>
-(Some of the tooltips are scrollable ✨)
+(Some of the longer tooltips are scrollable!)
   </span>
 </h3>
+      `
+    },
+    {
+      id: 'angelica_intro',
+      random: true,
+      style: {
+        margin: 'auto',
+        marginBottom: 100,
+        width: sectionWidth,
+        padding: 0,
+      },
+      contentStyle: {
+        backgroundColor: 'rgb(204,119,170)',
+        color: '#fff',
+        textAlign: 'center',
+        padding: '40px 80px',
+        pointerEvents: 'auto',
+      },
+      position(data, selectedCharacters, selectedConversation) {
+        _.each(data.lines, line => line.selected = true);
+        var positions = PositionGraph.positionLinesRandomly(data.lines, width);
+        positions.random = true;
+
+        return positions;
+      },
+      text: `
+<center>
+  <img src=${images['8']} width='60' />
+</center>
+
+When I started to explore the data and filter down by sets of characters - Alexander with Aaron Burr, Angelica with Eliza, Angelica and Eliza and Alexander - I was struck by their stories within the story.  My favorite is that of Angelica and Alexander, as they flirt and grow and finally **put Eliza first**.
       `
     },
     {
@@ -165,7 +196,7 @@ Hover any of them to see the lyrics.
         return positionAngelica(data, selectedCharacters, selectedConversation);
       },
       text: `
-  As I filtered by different sets of characters, I started to see the nuances, the stories between each set of characters.  The most widely analyzed relationship is the one between Alexander Hamilton and Aaron Burr, but I want to explore instead the relationship between Alexander and Angelica Schuyler.
+
       `
     },
     {
@@ -227,7 +258,7 @@ Hover any of them to see the lyrics.
           selectedConversation, this.highlightedSong);
       },
       text: `
-  ### As Trusting Or As Kind
+  ### I'm Standing At Her Side
 
   The turning point in Angelica and Alexander's relationship comes in *The Reynolds Pamphlet*, after Alexander publishes the details of his affair with Maria Reynolds to save his political reputation.  When Angelica hurries back from London, Alexander is relieved:
 
@@ -449,7 +480,7 @@ Hover any of them to see the lyrics.
       `
     },
     {
-      id: 'conclusion',
+      id: 'filter_tool',
       style: {
         paddingTop,
       },
