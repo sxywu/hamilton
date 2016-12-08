@@ -254,6 +254,7 @@ var PositionGraph = {
       linePositions.push(Object.assign(line, {
         focusX: x,
         focusY: y,
+        trueY: y,
         radius: radius / 2,
         fullRadius: radius / 2,
         length: radius,
@@ -274,6 +275,7 @@ var PositionGraph = {
       return Object.assign(line, {
         focusX: position.x + left,
         focusY: position.y,
+        trueY: position.y,
         radius: radius / 2,
         fullRadius: radius / 2,
         length: radius,
@@ -294,6 +296,7 @@ var PositionGraph = {
       return Object.assign(line, {
         focusX: position.x + left,
         focusY: position.y + top,
+        trueY: position.y + top,
         radius: radius / 2,
         fullRadius: radius / 2,
         length: radius,
@@ -315,6 +318,7 @@ var PositionGraph = {
       return Object.assign(line, {
         focusX: x,
         focusY: y,
+        trueY: y,
         radius: radius / 2,
         fullRadius: radius / 2,
         length: radius,
