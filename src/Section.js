@@ -143,9 +143,9 @@ var Section = React.createClass({
       padding,
       border: '1px solid',
     }, this.props.style);
-    var contentStyle = {
+    var contentStyle = Object.assign({
       // backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    };
+    }, this.props.contentStyle);
     var rawMarkup = { __html: md.render(this.props.text)};
 
     var characters, themes;

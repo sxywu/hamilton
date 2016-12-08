@@ -76,12 +76,17 @@ function sections(width, vizWidth, sectionWidth, images) {
       random: true,
       style: {
         margin: 'auto',
-        marginBottom,
-        width: 600,
+        marginBottom: 250,
+        height: 200,
+        width: vizWidth,
+        padding: 0,
+      },
+      contentStyle: {
         backgroundColor: 'rgb(53,169,147)',
         color: '#fff',
         textAlign: 'center',
         padding: '40px 80px',
+        pointerEvents: 'auto',
       },
       position(data) {
         _.each(data.lines, line => line.selected = true);
@@ -106,45 +111,49 @@ When I started digging through the lyrics, I was curious about two things: the r
 
 So I went through every single line in Hamilton (twice 😱 ) and recorded who sang each line, as well as who that line may have been directed towards.  I've noted every phrase that was sung more than once across more than one song, and grouped them into broad themes*.  You can find my lovingly (obsessively) curated data [here](https://github.com/sxywu/hamilton/tree/master/src/data).
 
-To explore the data, I created a visual tool to filter the lines by any combination of characters, conversations, and themes.  The insights were *amazing*, and I'm excited to share with you my two favorite stories.
+To explore the data, I created a visual tool to filter the lines by any combination of characters, conversations, and themes.  The insights were *amazing*, and I'm excited to share with you both the **visual tool** and my **analysis** of Hamilton with it.
 
 <p style='line-height: 1.25'>
   <sup><em>*Though I am unconscious of intentional error, I am nevertheless too sensible of my defects not to think it probable that I may have committed many errors.</em></sup>
 </p>
       `
     },
-  //   {
-  //     id: 'filter_characters',
-  //     random: true,
-  //     left: sectionWidth,
-  //     style: {
-  //       paddingTop,
-  //       marginBottom,
-  //       minHeight: 600,
-  //     },
-  //     filter: 'characters',
-  //     position(data, selectedCharacters, selectedConversation) {
-  //       // either way, have to reset the colors on everything
-  //       var {linePositions, songPositions, characterNodes, characterLinks} =
-  //         FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation);
-  //
-  //       if (selectedCharacters.length || selectedConversation.length) {
-  //         var {linePositions, songPositions} =
-  //           PositionGraph.positionForCharacters(linePositions, songPositions,
-  //             vizWidth, sectionWidth, paddingTop);
-  //
-  //         return {linePositions, songPositions, characterNodes, characterLinks};
-  //       } else {
-  //         var {linePositions, songPositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, paddingTop);
-  //         return {linePositions, songPositions, characterNodes, characterLinks};
-  //       }
-  //     },
-  //     text: `
-  // After three days, I had a spectacularly rich dataset of lines, characters, and recurring phrases.  The first thing I did was to explore the lines filtered by characters and their conversations.
-  //
-  // Above are **13** of the **18** primary characters with Hamilton at the center.  They are connected by **arcs** denoting the conversations between them.  <span class='underline'>Select any set of characters and conversations</span> to view their corresponding lines.
-  //     `
-  //   },
+    {
+      id: 'songs',
+      random: true,
+      left: sectionWidth,
+      style: {
+        paddingTop: 650,
+        marginBottom,
+        height: 750,
+        width: '100%',
+        textAlign: 'center',
+      },
+      contentStyle: {
+        paddingTop: 300,
+      },
+      position(data, selectedCharacters, selectedConversation) {
+        _.each(data.lines, line => line.selected = true);
+
+        var songWidth = 800;
+        var left = (width - songWidth) / 2;
+        var {linePositions, songPositions} = PositionGraph.positionLinesBySong(data.lines, left, this.style.paddingTop);
+        return {linePositions, songPositions};
+      },
+      text: `
+<h3>
+  <span class='background'>
+Each circle is a set of lines, colored by singer.
+  </span><br />
+  <span class='background'>
+Hover any of them to see the lyrics.
+  </span><br />
+  <span class='background'>
+(Some of the tooltips are scrollable ✨)
+  </span>
+</h3>
+      `
+    },
     {
       id: 'angelica1',
       consecutive: true,
