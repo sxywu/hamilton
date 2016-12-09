@@ -101,7 +101,6 @@ var App = React.createClass({
 
     var positions = this.state.section.position(this.state,
       selectedCharacters, this.state.selectedConversation, this.state.selectedThemes);
-    positions.selectedCharacters = selectedCharacters;
     this.afterFilter(positions);
 
     this.setState(positions);
@@ -119,7 +118,6 @@ var App = React.createClass({
 
     var positions = this.state.section.position(this.state,
       this.state.selectedCharacters, selectedConversation, this.state.selectedThemes);
-    positions.selectedConversation = selectedConversation;
     this.afterFilter(positions);
 
     this.setState(positions);
@@ -137,7 +135,6 @@ var App = React.createClass({
 
     var positions = this.state.section.position(this.state,
       this.state.selectedCharacters, this.state.selectedConversation, selectedThemes);
-    positions.selectedThemes = selectedThemes;
     this.afterFilter(positions);
 
     this.setState(positions);
@@ -152,9 +149,6 @@ var App = React.createClass({
 
     var positions = this.state.section.position(this.state,
       selectedCharacters, selectedConversation, selectedThemes);
-    positions.selectedCharacters = [];
-    positions.selectedConversation = [];
-    positions.selectedThemes = [];
     this.afterFilter(positions);
 
     this.setState(positions);
@@ -239,8 +233,8 @@ var App = React.createClass({
       positions.useForce = true;
     } else if (section && section.consecutive && section !== currentSection) {
       // if we just entered a consecutive section for the first time
-      positions = section.position(this.state, selectedCharacters,
-        selectedConversation, selectedThemes, section.consecutive);
+      // don't pass in any filters, only want filters at the beginning
+      positions = section.position(this.state, [], [], [], section.consecutive);
       positions.prevTop = this.state.top;
       positions.section = section;
       positions.useForce = false;

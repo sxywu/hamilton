@@ -8,14 +8,15 @@ var marginBottom = 400;
 
 function sections(width, vizWidth, sectionWidth, images) {
   function positionAngelica(data, selectedCharacters, selectedConversation, highlightedSong) {
-    selectedCharacters = _.union(selectedCharacters, ['2', '8']);
+    selectedCharacters = _.chain(selectedCharacters).union(['2', '8']).sortBy().value();
     var {linePositions, songPositions, characterNodes, characterLinks} =
       FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation, highlightedSong);
     var {linePositions, songPositions, top} =
       PositionGraph.positionForCharacters(linePositions, songPositions,
         vizWidth, sectionWidth, paddingTop / 6, highlightedSong);
 
-    return {linePositions, songPositions, diamondPositions: [], characterNodes, characterLinks, selectedCharacters, top};
+    return {linePositions, songPositions, diamondPositions: [],
+      characterNodes, characterLinks, selectedCharacters, selectedConversation, top};
   }
 
   function positionEliza(data, selectedThemes, highlightedSong) {
@@ -494,10 +495,12 @@ When I started to explore the data and filter down by sets of characters - Alexa
             PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
               vizWidth, sectionWidth, paddingTop);
 
-          return {linePositions, songPositions, diamondPositions, groupedThemes, characterNodes, characterLinks};
+          return {linePositions, songPositions, diamondPositions, groupedThemes,
+            characterNodes, characterLinks, selectedCharacters, selectedConversation, selectedThemes};
         } else {
           var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, paddingTop);
-          return {linePositions, songPositions: [], diamondPositions: [], groupedThemes, characterNodes, characterLinks};
+          return {linePositions, songPositions: [], diamondPositions: [], groupedThemes,
+            characterNodes, characterLinks, selectedCharacters, selectedConversation, selectedThemes};
         }
       },
       text: `
