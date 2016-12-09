@@ -3,7 +3,7 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import Visualization from './visualizations/Visualization';
-import LineSummary from './LineSummary';
+import LineHover from './LineHover';
 // import Themes from './Themes';
 import Section from './Section';
 import SectionsData from './data/sections';
@@ -310,7 +310,7 @@ var App = React.createClass({
         <div className='sections' style={sectionStyle}>
           {sectionsEl}
         </div>
-        <LineSummary {...this.state} {...styleProps} />
+        <LineHover {...this.state} {...styleProps} />
       </div>
     );
   }

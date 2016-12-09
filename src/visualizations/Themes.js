@@ -3,7 +3,7 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import Diamonds from './Diamonds';
-import LineSummary from '../LineSummary';
+import LineHover from '../LineHover';
 
 var fontSize = 12;
 var Themes = React.createClass({
@@ -91,7 +91,7 @@ var Themes = React.createClass({
     return (
       <div style={style}>
         {themes}
-        <LineSummary {...this.state.sideHovered} />
+        <LineHover {...this.state.sideHovered} />
       </div>
     );
   }

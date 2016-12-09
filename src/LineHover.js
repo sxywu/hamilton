@@ -6,7 +6,7 @@ var width = 360;
 var maxHeight = 300;
 var borderRadius = 3;
 var gray = '#aaa';
-var LineSummary = React.createClass({
+var LineHover = React.createClass({
 
   shouldComponentUpdate(nextProps) {
     // update if there's hover OR there's no hover
@@ -164,4 +164,4 @@ var LineSummary = React.createClass({
   }
 });
 
-export default LineSummary;
+export default LineHover;
