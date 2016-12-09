@@ -183,7 +183,7 @@ Hover any of them to see the lyrics.
   <img src=${images['8']} width='60' />
 </center>
 
-When I started to explore the data and filter down by sets of characters - Alexander with Aaron Burr, Angelica with Eliza, Angelica and Eliza and Alexander - I was struck by their stories within the story.  My favorite is the relationship between Angelica and Alexander, as they flirt and grow and finally **put Eliza first**.
+When I started to explore the data and filter down by sets of characters - Alexander with Aaron Burr, Angelica with Eliza, Angelica and Eliza and Alexander - I was struck by their stories within the story.  My favorite is the relationship between Angelica and Alexander, as they flirt and mature and finally **put Eliza first**.
       `
     },
     {
@@ -242,7 +242,7 @@ Try playing with the filters.
 
   Angelica Schuyler is Alexander Hamilton's sister-in-law, the one who introduces Alexander to her sister Eliza Schuyler.  Angelica and Alexander's relationship is ambiguously flirtateous from the very start, their exchanges in *Satisfied* puntuated by mutual understanding - that they're both never satisfied.
 
-  This flirtation is amplified in *Take A Break*, the only time in the whole musical they sing together:
+  Their flirtation is amplified in *Take A Break*, the only time in the whole musical they sing together:
 
   <span class='music' data-char='2' data-clip='0'>
     <span class='control'></span>
@@ -253,7 +253,7 @@ Try playing with the filters.
     &nbsp; I cannot put the notion away… &nbsp;<br />
   </span>
 
-  Angelica sings that she's coming home from London for the summer (at Eliza's invitation), and that she just can't wait:
+  They continue as Angelica visits from London:
 
   <span class='music' data-char='8' data-clip='1'>
     <span class='control'></span>
@@ -305,10 +305,13 @@ Try playing with the filters.
     &nbsp; God, I hope you’re satisfied &nbsp;<br />
   </span>
 
-  And here we see that Angelica has matured; when she first introduces Eliza to Alexander, she does so because she knows Eliza is in love with him.  She believes that Eliza (*you will never find anyone as trusting or as kind*) is a better match for Alexander.  But most of all, she does so for herself, because she knows:
-  <span class='music' data-char='8' data-clip='2'><span class='control'></span>He will never be satisfied, I will never be satisfied </span>.
+  And here Angelica has matured; when she first introduces Eliza to Alexander in *Satisfied*, she does so because she knows Eliza is in love with him.  She believes that Eliza (*you will never find anyone as trusting or as kind*) is a better match for Alexander.  But most of all, she does so for herself, because she knows:
 
-  But after the Reynolds affair, she *puts what they had aside*, and we know that she does this solely for Eliza's sake; she sings only that Alexander could never be satisfied.
+  <span class='music' data-char='8' data-clip='2'>
+    <span class='control'></span>He will never be satisfied, I will never be satisfied &nbsp;<br />
+  </span>
+
+  After the Reynolds affair, she puts Eliza first, for Eliza's sake; she sings only that Alexander could never be satisfied.
       `
     },
     {
@@ -317,6 +320,7 @@ Try playing with the filters.
       highlightedSong: '41',
       random: true,
       style: {
+        height: 100,
         paddingTop,
         marginBottom,
       },
@@ -327,7 +331,7 @@ Try playing with the filters.
       text: `
   ### She Takes His Hand
 
-  *It's Quiet Uptown* is the only song that starts with Angelica, as she and Alexander take turns narrating the aftermath of the Hamiltons losing their eldest son.  Angelica watches over as Alexander tries to get through to an unmoving Eliza, and as they reconcile; it is the most beautifully satisfying close to Angelica and Alexander's story.
+  *It's Quiet Uptown* is the only song that starts with Angelica, as she and Alexander take turns narrating the aftermath of the Hamiltons losing their eldest son.  Angelica watches over as Alexander finally puts Eliza first, as he tries to reach out to an unmoving Eliza, and as they reconcile; it is the most beautifully satisfying close to Angelica and Alexander's story.
 
   Angelica does not re-appear with Alexander until his death in *The World Was Wide Enough*.
       `
