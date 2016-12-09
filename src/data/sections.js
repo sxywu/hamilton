@@ -183,7 +183,7 @@ Hover any of them to see the lyrics.
   <img src=${images['8']} width='60' />
 </center>
 
-When I started to explore the data and filter down by sets of characters - Alexander with Aaron Burr, Angelica with Eliza, Angelica and Eliza and Alexander - I was struck by their stories within the story.  My favorite is that of Angelica and Alexander, as they flirt and grow and finally **put Eliza first**.
+When I started to explore the data and filter down by sets of characters - Alexander with Aaron Burr, Angelica with Eliza, Angelica and Eliza and Alexander - I was struck by their stories within the story.  My favorite is the relationship between Angelica and Alexander, as they flirt and grow and finally **put Eliza first**.
       `
     },
     {
@@ -191,13 +191,35 @@ When I started to explore the data and filter down by sets of characters - Alexa
       consecutive: true,
       style: {
         paddingTop,
+        textAlign: 'center',
       },
       filter: 'characters',
       position(data, selectedCharacters, selectedConversation) {
         return positionAngelica(data, selectedCharacters, selectedConversation);
       },
       text: `
-
+<h3>
+  <span class='background'>
+Songs filtered by Angelica and Alexander
+  </span><br />
+  <span class='background'>
+  →
+  </span>
+</h3>
+<h3>
+  <span class='background'>
+Here's what the filter looks like.
+  </span><br />
+  <span class='background'>
+Try playing with the filters.
+  </span><br />
+  <span class='background'>
+(Here's a <span class='underline reset'>reset</span> just in case.)
+  </span><br />
+  <span class='background'>
+↓
+  </span>
+</h3>
       `
     },
     {

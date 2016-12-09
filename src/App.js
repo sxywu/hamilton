@@ -297,6 +297,7 @@ var App = React.createClass({
       onSelectCharacter: this.filterByCharacter,
       onSelectConversation: this.filterByConversation,
       onSelectTheme: this.filterByThemes,
+      resetFilters: this.resetFilters,
     };
 
     var sectionsEl = _.map(sections, section => {

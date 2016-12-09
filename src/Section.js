@@ -34,6 +34,7 @@ var Section = React.createClass({
 
     this.processMusic();
     this.setPlay();
+    this.processReset();
 
   },
 
@@ -131,6 +132,11 @@ var Section = React.createClass({
   setPlay() {
     this.container.selectAll('.control')
       .html('&nbsp; ▶ &nbsp;');
+  },
+
+  processReset() {
+    this.container.selectAll('.reset')
+      .on('click', this.props.resetFilters)
   },
 
   render() {

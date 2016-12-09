@@ -14,6 +14,7 @@ a, a:visited, a:link, .underline {
   border-bottom: 1px solid;
   pointer-events: auto;
   color: inherit;
+  cursor: pointer;
 }
 
 a:hover, .underline:hover {
