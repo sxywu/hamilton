@@ -211,14 +211,20 @@ var App = React.createClass({
       return false;
     });
 
+    // if it's the final thank you section, do nothing
+    if (section && section.id === 'thankyou') return;
+
     var positions = {};
     var selectedCharacters = this.state.selectedCharacters;
     var selectedConversation = this.state.selectedConversation;
     var selectedThemes = this.state.selectedThemes;
-    if (section && !currentSection) {
-      // if we just entered a new section (so the prev current section was null), position
+    if ((section && !currentSection) ||
+        (section && !section.consecutive && currentSection && section !== currentSection)) {
+      // if we just entered a new section (so the prev current section was null),
+      // or if we immediately jumped into the new section, position
       // if it's new section, reset filters
-      if (section !== prevSection) {
+      if ((section && !currentSection && section !== prevSection) ||
+        (section && currentSection && section !== currentSection)) {
         selectedCharacters = positions.selectedCharacters = [];
         selectedConversation = positions.selectedConversation = [];
         selectedThemes = positions.selectedThemes = [];
@@ -227,11 +233,18 @@ var App = React.createClass({
       positions = Object.assign(positions,
         section.position(this.state, selectedCharacters, selectedConversation, selectedThemes));
       positions.random = positions.random || false;
-      positions.prevTop = section.consecutive ? 0 : this.state.top || scrollTop;
-      positions.top = (section.consecutive ? 0 : section.top) + (positions.top || 0);
       positions.section = section;
       positions.useForce = true;
-    } else if (section && section.consecutive && section !== currentSection) {
+
+      if (section && currentSection && section !== currentSection) {
+        // if jumped immediately into new section, fake the null section
+        positions.prevTop = section.consecutive ? (positions.top || 0) : scrollTop;
+      } else {
+        positions.prevTop = section.consecutive ? (positions.top || 0) : this.state.top || scrollTop;
+      }
+      positions.top = (section.consecutive ? 0 : section.top) + (positions.top || 0);
+
+     } else if (section && section.consecutive && section !== currentSection) {
       // if we just entered a consecutive section for the first time
       // don't pass in any filters, only want filters at the beginning
       positions = section.position(this.state, [], [], [], section.consecutive);
@@ -250,8 +263,16 @@ var App = React.createClass({
     }
 
     if (_.size(positions)) {
-      prevSection = currentSection;
-      currentSection = section;
+      if (section && !section.consecutive && currentSection && section !== currentSection) {
+        // if enter new section directly from old without registering
+        // the null section in between, then fake that
+        prevSection = currentSection;
+        currentSection = null;
+      } else {
+        prevSection = currentSection;
+        currentSection = section;
+      }
+
       positions.hovered = null;
       positions.update = true;
 
