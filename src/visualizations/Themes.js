@@ -2,7 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
 
-import Diamonds from './Diamonds';
 import Hover from '../Hover';
 
 var fontSize = 12;
@@ -99,6 +98,9 @@ var Themes = React.createClass({
     if ((diamond && this.state.hovered && diamond.id === this.state.hovered.id) ||
       (!diamond && !this.state.hovered)) return;
 
+    // if there's a line hovered, dismiss that
+    this.props.hoverLine(null);
+
     var containerRect = this.refs.container.getBoundingClientRect();
     var diamondRect = d3.event.target.getBoundingClientRect();
     var top = (diamondRect.top - containerRect.top) + diamondRect.height + 5;
@@ -106,7 +108,7 @@ var Themes = React.createClass({
 
     var hovered = diamond && {
       lines: diamond.lines,
-      width: 200,
+      width: 250,
       top,
       left,
     }
