@@ -13,6 +13,10 @@ var Hover = React.createClass({
     }
 
     var hovered = this.props.hovered;
+    var padding = 10;
+    var left = hovered.left - hovered.width / 2;
+    left = Math.max(left, 0);
+    
     var style = {
       position: 'absolute',
       backgroundColor: '#fff',
@@ -22,10 +26,11 @@ var Hover = React.createClass({
       textAlign: 'left',
       fontSize: 12,
       lineHeight: 1.5,
-      width: hovered.width,
-      left: hovered.left - hovered.width / 2,
+      width: hovered.width - 2 * padding,
+      left,
       top: hovered.top,
-      padding: 10,
+      padding,
+      zIndex: 1000,
     };
     var metaStyle = {
       fontSize: 9,
@@ -38,7 +43,7 @@ var Hover = React.createClass({
 
     var lines = _.map(hovered.lines, (line, i) => {
       return (
-        <tr>
+        <tr key={i}>
           <td style={metaStyle}>{i + 1}</td>
           <td>{line}</td>
         </tr>

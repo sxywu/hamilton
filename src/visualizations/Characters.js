@@ -1,7 +1,16 @@
 import React from 'react';
+import _ from 'lodash';
 import * as d3 from "d3";
 
+import Hover from '../Hover';
+
 var Characters = React.createClass({
+  getInitialState() {
+    return {
+      hovered: null,
+    };
+  },
+
   shouldComponentUpdate(nextProps) {
     return !!nextProps.update;
   },
@@ -42,7 +51,9 @@ var Characters = React.createClass({
     this.images = enter.merge(this.images)
       .attr('transform', (d, i) => 'translate(' + [d.x, d.y] + ')')
       .style('cursor', (d) => d.available ? 'pointer' : 'default')
-      .on('click', (d) => d.available && this.props.onSelectCharacter(d.id));
+      .on('click', (d) => d.available && this.props.onSelectCharacter(d.id))
+      .on('mouseover', d => d.available && this.mouseoverCharacter(d) : null)
+      .on('mouseleave', d => this.mouseoverCharacter(null));
 
     this.images.selectAll('.bg')
       .attr('r', (d) => d.radius);
@@ -117,11 +128,35 @@ var Characters = React.createClass({
       .attr('values','1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 1 0');
   },
 
+  mouseoverCharacter(character) {
+    if ((character && this.state.hovered && character.id === this.state.hovered.id) ||
+      (!character && !this.state.hovered)) return;
+
+    // if there's a line hovered, dismiss that
+    this.props.hoverLine(null);
+
+    var hovered = character && {
+      lines: [character.name],
+      width: 180,
+      top: character.y + this.props.characterHeight / 2 + character.radius + 5,
+      left: character.x + this.props.characterWidth / 2,
+    }
+
+    this.setState({hovered});
+  },
+
   render() {
+    var style = {
+      position: 'relative',
+    };
+
     return (
-      <svg width={this.props.characterWidth} height={this.props.characterHeight}>
-        <g ref='images' className='images' />
-      </svg>
+      <div style={style}>
+        <svg width={this.props.characterWidth} height={this.props.characterHeight}>
+          <g ref='images' className='images' />
+        </svg>
+        <Hover {...this.props} {...this.state} />
+      </div>
     );
   }
 });
