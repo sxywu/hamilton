@@ -160,7 +160,7 @@ Hover any of them to see the lyrics.
       random: true,
       style: {
         margin: 'auto',
-        marginBottom: 100,
+        marginBottom,
         width: sectionWidth,
         padding: 0,
       },
@@ -320,7 +320,7 @@ Try playing with the filters.
       highlightedSong: '41',
       random: true,
       style: {
-        height: 100,
+        height: 150,
         paddingTop,
         marginBottom: marginBottom + 250,
       },
@@ -341,7 +341,7 @@ Try playing with the filters.
       random: true,
       style: {
         margin: 'auto',
-        marginBottom: 100,
+        marginBottom,
         width: sectionWidth,
         padding: 0,
       },
