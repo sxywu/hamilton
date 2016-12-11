@@ -102,17 +102,33 @@ var Characters = React.createClass({
 
   calcualteLinkPath(link) {
     var x1, x2, y1, y2;
+    var spaceApart = 30;
     if (link.source.x < link.target.x) {
       x1 = link.source.x;
       y1 = link.source.y - link.weight / 2;
       x2 = link.target.x;
       y2 = link.target.y - link.weight / 2;
+
+      // if points are within 10px of each other horizontally
+      // push it apart
+      if (x2 - x1 < spaceApart) {
+        x1 -= link.weight / 2;
+        x2 -= link.weight / 2;
+      }
     } else {
       x1 = link.target.x;
       y1 = link.target.y + link.weight / 2;
       x2 = link.source.x;
       y2 = link.source.y + link.weight / 2;
+
+      // if points are within 10px of each other horizontally
+      // push it apart
+      if (x2 - x1 < spaceApart) {
+        x1 += link.weight / 2;
+        x2 += link.weight / 2;
+      }
     }
+
     // if it's on same level, then curve if not straight line
     var curve = (y1 === y2) ? (x2 - x1) / 4 : 0;
     var cx1 = x1 + curve;
