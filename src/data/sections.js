@@ -423,7 +423,7 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
       text: `
   ### Look Around
 
-  Eliza Schuyler is the second daughter of a wealthy New York family; her upbringing has afforded her an innocently idealistic outlook on life.  When she meets Alexander, she lacks Angelica's understanding of Alexander's ambition, and she is helplessly in love.
+  Eliza Schuyler is the second daughter of a wealthy New York family, and her upbringing has afforded her an idealistic outlook on life.  When she meets Alexander, she lacks Angelica's understanding of Alexander's ambition, and she is helplessly in love.
 
   That confident optimism is highlighted in *That Would Be Enough*, when Alexander is on leave from the war.  Downtrodden that he may never be given command, he asks Eliza if she'll relish being a poor man's wife.  She responds:
 
@@ -449,7 +449,7 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
     &nbsp; In the story they will write someday &nbsp;<br />
   </span>
 
-  They're newly married with a child on the way, and Eliza knows exactly what she wants from him: not money nor legacy, but for him to stay, and for her to be a part of his story.
+  They're newly married with a child on the way, and Eliza knows exactly what she wants from him: for him to stay, and for her to be a part of his story.
       `
     },
     {
@@ -469,7 +469,7 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
       text: `
   ### They're Asking Me To Lead
 
-  The next time Eliza appears with Alexander is in *Non-Stop* after the war.  Alexander works (non-stop) as a lawyer, is invited to the Constitutional Convention, and writes the majority of the Federalist Papers.  Eliza pleads with him:
+  The next time Eliza appears with Alexander is in *Non-Stop* after the war.  Alexander works (non-stop) as a lawyer, is invited to the Constitutional Convention, and writes majority of the Federalist Papers.  Eliza pleads with him:
 
   <span class='music' data-char='7' data-clip='0'>
     <span class='control'></span>
@@ -478,11 +478,15 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
     &nbsp; Would that be enough? &nbsp;<br />
   </span>
 
-  Eliza's lines are close to the ones she sung to Alexander in *That Would Be Enough*, but the subtle changes make clear two things: Eliza is starting to realize that Alexander will always place his political ambitions before her, and she is left unsure of her own role.
+  Eliza's lines are similar to the ones she sung in *That Would Be Enough*, but the subtle changes highlight two things: Eliza is starting to realize the extent of Alexander's ambitions, and she is left unsure of her own role.
 
-  The most heartbreaking moment comes when George Washington asks Alexander to join his cabinet as Treasury Secretary, and Eliza instead asks Alexander to stay.  Alexander responds with the very lines that Eliza uses to reassure him in *That Would Be Enough*, using them instead as his reason to leave: <span class='music' data-char='2' data-clip='1'><span class='control'></span>Look around, look around at how lucky we are to be alive right now &nbsp;</span>.
+  The most heartbreaking moment comes when George Washington asks Alexander to join his cabinet as Treasury Secretary, and Eliza instead asks Alexander to stay.  Alexander responds with the very lines that Eliza uses to reassure him in *That Would Be Enough*, using them instead as his reason to leave:
 
-  In return, Eliza sings only one word: *helpless*.  *It is the last time she sings* helpless *in the whole musical.*
+  <span class='music' data-char='2' data-clip='1'>
+    <span class='control'></span>Look around, look around at how lucky we are to be alive right now &nbsp;
+  </span>
+
+  In return, Eliza sings only one word: *helpless*.  It is the last time she sings *helpless* in the whole musical.
       `
     },
     {
@@ -502,9 +506,9 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
       text: `
   ### Forgiveness
 
-  When Eliza learns of Alexander's affair with Maria Reynolds, she burns their letters, determined to write herself out of the narrative.  But when their eldest son Philip dies in a duel, she is grief-stricken, mute throughout *It's Quiet Uptown*.
+  When Eliza learns of Alexander's affair with Maria Reynolds, she burns their letters, determined to write herself out of the narrative.  But when their eldest son Philip dies in a duel, she is grief-stricken, mute throughout *It's Quiet Uptown*, and Alexander tries to get through to her.
 
-  The song starts with Alexander working through his grief, but as the song progresses Alexander tries to get through to Eliza instead.  He again mirrors Eliza's lines from *That Would Be Enough*, but this time, it is to reassure her that he will stay by her side:
+  He again mirrors Eliza's lines from *That Would Be Enough*, but this time, he asks to stay:
 
   <span class='music' data-char='2' data-clip='0'>
     <span class='control'></span>
@@ -528,7 +532,7 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
     &nbsp; They are going through the unimaginable &nbsp;<br />
   </span>
 
-  And it's heartbreakingly beautiful as they reconcile, and their story comes around full circle: *Alexander finally puts Eliza first, and he promises to stay*.
+  And it's heartbreakingly beautiful as they reconcile, and their story comes around full circle; Alexander finally puts Eliza first.
       `
     },
     {
@@ -549,7 +553,7 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
       text: `
   ### Will They Tell My Story?
 
-  At the beginning of their Marriage, Eliza tells Alexander that if he could just stay by her side, that would be enough.  As their marriage progresses and she realizes the extent of his ambition, Eliza starts to doubt herself, asking Alexander what would be enough - if she could be enough.  But as they face the hardest of trials - an affair and the death of a child - their relationship reverses, and Alexander asks if he could stay by her side, that would be enough.
+  At the beginning of their marriage, Eliza tells Alexander that if he could just stay by her side, *that would be enough*.  As their marriage progresses and she realizes the extent of his ambition, Eliza starts to doubt herself, asking Alexander *what would be enough* - if she could be enough.  But as they face the hardest of trials - an affair and the death of a child - their relationship reverses, and Alexander asks if he could stay by her side, *that would be enough*.
 
   As the musical closes with *Who Lives, Who Dies, Who Tells Your Story*, Eliza comes into her own; after Alexander's death, she puts herself back in the narrative.  She tells his story, his fellow soldiers' stories, Washington's story.  She builds the first private orphanage in New York City - her proudest accomplishment.  And when her time is up, she asks:
 
@@ -559,7 +563,7 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
     &nbsp; Will they tell *my* story? &nbsp;<br />
   </span>
 
-  That subtle change in wording is amazing; Eliza is no longer concerned about *what would be enough*, but rather if *she* has *done* enough.  She is responsible for her own wants, her own purpose, her own legacy.  She is no longer a secondary character in her husband's story, but *the main character of her own*.
+  That subtle change in wording is amazing; Eliza is no longer concerned about *what would be enough*, but rather if *she* has *done* enough.  She is responsible for her own purpose, her own legacy.  She is no longer a secondary character in her husband's story, but **the main character of her own**.
       `
     },
     {
