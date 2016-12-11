@@ -151,6 +151,7 @@ var Section = React.createClass({
     }, this.props.style);
     var contentStyle = Object.assign({
       // backgroundColor: 'rgba(255, 255, 255, 0.85)',
+      paddingBottom: padding,
     }, this.props.contentStyle);
     var rawMarkup = { __html: md.render(this.props.text)};
 

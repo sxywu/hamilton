@@ -542,7 +542,8 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
       highlightedSong: '46',
       style: {
         paddingTop,
-        marginBottom,
+        height: 400,
+        marginBottom: marginBottom + 400,
       },
       clips: [
         ['/music/haveidoneenough.mp3', ['7/46:70-74']],
@@ -569,7 +570,8 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
     {
       id: 'filter_tool',
       style: {
-        paddingTop,
+        paddingTop: 2 * paddingTop,
+        height: 1300,
       },
       filter: 'all',
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
@@ -579,18 +581,18 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
         if (selectedCharacters.length || selectedConversation.length || selectedThemes.length) {
           var {linePositions, songPositions, diamondPositions} =
             PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
-              vizWidth, sectionWidth, paddingTop);
+              vizWidth, sectionWidth, 3 * paddingTop);
 
           return {linePositions, songPositions, diamondPositions, groupedThemes,
             characterNodes, characterLinks, selectedCharacters, selectedConversation, selectedThemes};
         } else {
-          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, paddingTop);
+          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, 3 * paddingTop);
           return {linePositions, songPositions: [], diamondPositions: [], groupedThemes,
             characterNodes, characterLinks, selectedCharacters, selectedConversation, selectedThemes};
         }
       },
       text: `
-  Angelica and Eliza are only two of the stories I've found; there are many more.  Filter by any combination of characters, conversations, and themes below to explore more stories.
+  Angelica and Eliza are only two of the stories I've found; **there are many more**.  Filter by any combination of characters, conversations, and themes below to explore them; here is the <span class='underline reset'>**reset**</span> again in case you need it.
       `
     },
     {
