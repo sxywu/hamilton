@@ -147,7 +147,6 @@ var Section = React.createClass({
       pointerEvents: 'none',
       color: this.props.fontColor,
       padding,
-      border: '1px solid',
     }, this.props.style);
     var contentStyle = Object.assign({
       // backgroundColor: 'rgba(255, 255, 255, 0.85)',
