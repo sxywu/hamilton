@@ -598,13 +598,34 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
     {
       id: 'thankyou',
       style: {
-        paddingTop,
+        margin: 'auto',
+        marginBottom,
+        width: sectionWidth,
+        padding: 0,
+      },
+      contentStyle: {
+        backgroundColor: 'rgb(81,173,223)',
+        color: '#fff',
+        textAlign: 'center',
+        padding: '40px 80px',
+        pointerEvents: 'auto',
       },
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
         return {};
       },
       text: `
-  Thank you.
+# Thank you 💖
+
+to LMM+team for the inspiration and brilliance that is Hamilton,
+
+to Matt+Polygraph for letting me work on this labor of love,
+
+to Taia, my ultimate Hamilton expert, for all the feedback and encouragement,
+
+and **to Alex, my Eliza, who teaches me to *look around* and reminds me of *what would be enough***.
+
+
+
       `
     },
   ];
