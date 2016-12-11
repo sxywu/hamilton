@@ -88,6 +88,8 @@ var Characters = React.createClass({
           .attr('d', this.calcualteLinkPath)
           .attr('stroke', (d) => d.selected || d.filtered ? d.color : this.props.gray)
           .on('click', (d) => d.available && this.props.onSelectConversation(d.id))
+          .on('mouseover', (d) => d.available && this.mouseoverLink(d))
+          .on('mouseleave', (d) => d.available && this.mouseoverLink(null))
           .style('cursor', (d) => d.available ? 'pointer' : 'default')
           .attr('opacity', d => {
             if (!d.available) return 0;
@@ -145,6 +147,24 @@ var Characters = React.createClass({
     this.setState({hovered});
   },
 
+  mouseoverLink(link) {
+    if ((link && this.state.hovered && link.id === this.state.hovered.id) ||
+      (!link && !this.state.hovered)) return;
+
+    // if there's a line hovered, dismiss that
+    this.props.hoverLine(null);
+
+    var [x, y] = d3.mouse(this.refs.container);
+    var hovered = link && {
+      lines: [link.source.name, 'to ' + link.target.name],
+      width: 200,
+      top: y + 5,
+      left: x,
+    }
+
+    this.setState({hovered});
+  },
+
   render() {
     var style = {
       position: 'relative',
@@ -152,7 +172,7 @@ var Characters = React.createClass({
 
     return (
       <div style={style}>
-        <svg width={this.props.characterWidth} height={this.props.characterHeight}>
+        <svg ref='container' width={this.props.characterWidth} height={this.props.characterHeight}>
           <g ref='images' className='images' />
         </svg>
         <Hover {...this.props} {...this.state} />
