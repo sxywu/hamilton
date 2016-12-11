@@ -24,7 +24,7 @@ var images = _.reduce(charList, (obj, character, id) => {
 }, {});
 
 var width = 1200;
-var height = 16000;
+var height = 16300;
 var vizWidth = 710;
 var padding = 20;
 var sectionWidth = width - vizWidth;
