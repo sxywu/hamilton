@@ -238,11 +238,11 @@ var App = React.createClass({
       positions.prevTop = this.state.top;
       positions.section = section;
       positions.useForce = false;
-    } else if (!section && currentSection && random) {
+    } else if (!section && random) {
       // if there's no section, but there was previously a section
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
       positions.random = random;
-      positions.prevTop = currentSection.consecutive ?
+      positions.prevTop = currentSection && currentSection.consecutive ?
         scrollTop : (this.state.top || scrollTop);
       positions.top = scrollTop;
       positions.section = null;
