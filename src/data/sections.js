@@ -322,7 +322,7 @@ Try playing with the filters.
       style: {
         height: 100,
         paddingTop,
-        marginBottom,
+        marginBottom: marginBottom + 250,
       },
       position(data, selectedCharacters, selectedConversation) {
         return positionAngelica(data, selectedCharacters,
@@ -337,6 +337,37 @@ Try playing with the filters.
       `
     },
     {
+      id: 'eliza_intro',
+      random: true,
+      style: {
+        margin: 'auto',
+        marginBottom: 100,
+        width: sectionWidth,
+        padding: 0,
+      },
+      contentStyle: {
+        backgroundColor: 'rgb(81,173,223)',
+        color: '#fff',
+        textAlign: 'center',
+        padding: '40px 80px',
+        pointerEvents: 'auto',
+      },
+      position(data, selectedCharacters, selectedConversation) {
+        _.each(data.lines, line => line.selected = true);
+        var positions = PositionGraph.positionLinesRandomly(data.lines, width);
+        positions.random = true;
+
+        return positions;
+      },
+      text: `
+<center>
+  <img src=${images['7']} width='60' />
+</center>
+
+When I first heard the soundtrack, I didn't care much for Eliza; she was shy and reserved and completely overshadowed by her sister.  But as I listened and dug more into her story, I was blown away by her quiet grace and by how much she grew throughout the story.  To me, she is the real star of the show.
+      `
+    },
+    {
       id: 'eliza1',
       consecutive: true,
       style: {
@@ -347,7 +378,32 @@ Try playing with the filters.
         return positionEliza(data, selectedThemes);
       },
       text: `
-  When I first started listening to the soundtrack, I adored Angelica for her independence and intelligence (and her rap was *fierce*).  Eliza, on the other hand, was just...there for me.  But the more I listened and the more I dug through Eliza's lines, the more she grew on me; I am now convinced that she - not Alexander - has the most character growth in the musical.
+The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look around"*), which are phrases of Contentment.  These are the phrases most commonly attributed to Eliza.
+
+<center>
+  <h3>
+    <span class='background'>
+  Curves above lines indicate recurring phrases.
+    </span><br />
+    <span class='background'>
+    →
+    </span>
+  </h3>
+  <h3>
+    <span class='background'>
+  Phrases are grouped into themes.
+    </span><br />
+    <span class='background'>
+  Many themes are blank as they do not
+    </span><br />
+    <span class='background'>
+  co-occur with the filtered themes.
+    </span><br />
+    <span class='background'>
+  ↓
+    </span>
+  </h3>
+</center>
       `
     },
     {
