@@ -1,15 +1,15 @@
-body {
+#root {
   font-family: 'Libre Baskerville', serif;
   color: #222;
   font-size: 14px;
 }
 
-h1, h2, h3, h4, .header {
+#root h1, #root h2, #root h3, #root h4, #root .header {
   font-family: 'Open Sans', sans-serif;
   font-weight: 700;
 }
 
-a, a:visited, a:link, .underline {
+#root a, #root a:visited, #root a:link, #root .underline {
   text-decoration: none;
   border-bottom: 1px solid;
   pointer-events: auto;
@@ -17,19 +17,19 @@ a, a:visited, a:link, .underline {
   cursor: pointer;
 }
 
-a:hover, .underline:hover {
+#root a:hover, #root .underline:hover {
   border-bottom: 1px dashed;
 }
 
-svg {
+#root svg {
   pointer-events: auto;
 }
 
-text {
+#root text {
   fill: #666;
 }
 
-.music {
+#root .music {
   padding: 3px 0;
   font-weight: 400;
   line-height: 1.8;
@@ -37,7 +37,7 @@ text {
   pointer-events: auto;
 }
 
-.background {
+#root .background {
   background: rgba(255, 255, 255, 1);
   padding: 2px 10px;
   line-height: 1.8;
