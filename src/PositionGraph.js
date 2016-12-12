@@ -238,7 +238,7 @@ var PositionGraph = {
     return {linePositions, songPositions: [], diamondPositions: []};
   },
 
-  positionLinesAsImage(lines, width, left) {
+  positionLinesAsImage(lines, width, left, top) {
     var dotSize = width / 71;
     var linePositions = [];
 
@@ -247,7 +247,7 @@ var PositionGraph = {
     _.each(lineImagePositions, (positions, i) => {
       var {x, y} = positions;
       x = (x + 0.5) * dotSize + left;
-      y = (y + 0.5) * dotSize;
+      y = (y + 0.5) * dotSize + top;
       var line = lines[i];
       var radius = Math.floor(radiusScale(line.lineLength));
 

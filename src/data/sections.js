@@ -35,16 +35,16 @@ function sections(width, vizWidth, sectionWidth, images) {
       id: 'header',
       random: true,
       style: {
-        paddingTop,
+        paddingTop: 2 * paddingTop,
+        height: 600,
         width: '60%',
         margin: 'auto',
-        height: 500,
         marginBottom,
       },
       position(data) {
         _.each(data.lines, line => line.selected = true);
         var left = (width - vizWidth) / 2;
-        return PositionGraph.positionLinesAsImage(data.lines, vizWidth, left);
+        return PositionGraph.positionLinesAsImage(data.lines, vizWidth, left, paddingTop);
       },
       text: `
   <center>
