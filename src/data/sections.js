@@ -35,8 +35,8 @@ function sections(width, vizWidth, sectionWidth, images) {
       id: 'header',
       random: true,
       style: {
-        paddingTop: 2 * paddingTop,
-        height: 600,
+        paddingTop: 2.5 * paddingTop,
+        height: 500,
         width: '60%',
         margin: 'auto',
         marginBottom,
@@ -59,7 +59,7 @@ function sections(width, vizWidth, sectionWidth, images) {
         By [SHIRLEY WU](http://twitter.com/sxywu)
       <span>
     </sup>
-    <div style='padding-top: 225px'>
+    <div style='padding-top: 150px'>
       <div style='font-size: 12px'>
         <span class='background'>Best on **Chrome** with</span><br />
         <span class='background'>resolution higher than **1280x800** ✨</span>
