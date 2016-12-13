@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import FilterGraph from '../FilterGraph';
 import PositionGraph from '../PositionGraph';
+import filterImage from '../images/filter.png';
 
 var padding = 20;
 var paddingTop = 100;
@@ -615,8 +616,8 @@ co-occur with the filtered themes.
       style: {
         paddingTop,
         paddingBottom: isMobile ? window.innerHeight / 2 : padding,
-        height: 400,
-        marginBottom: marginBottom + 400,
+        height: isMobile ? 'auto' : 400,
+        marginBottom: isMobile ? 0 : marginBottom + 400,
       },
       contentStyle: {
         padding: 10,
@@ -647,11 +648,20 @@ co-occur with the filtered themes.
     {
       id: 'filter_tool',
       style: {
-        paddingTop: 2 * paddingTop,
-        height: 1300,
+        paddingTop: (isMobile ? 0.5 : 2) * paddingTop,
+        height: isMobile ? 675 : 1300,
+        background: isMobile ? 'no-repeat center url(' + filterImage + ')' : '',
       },
-      filter: 'all',
+      contentStyle: {
+        padding: 10,
+        backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.9)' : '',
+        textAlign: 'center',
+      },
+      filter: isMobile ? '' : 'all',
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
+        // if we're on mobile just do nothing
+        if (isMobile) return {linePositions: [], songPositions: [], diamondPositions: []};
+
         var {linePositions, diamondPositions, songPositions, groupedThemes, characterNodes, characterLinks} =
           FilterGraph.filterForAll(data, selectedCharacters, selectedConversation, selectedThemes);
 
@@ -669,7 +679,16 @@ co-occur with the filtered themes.
         }
       },
       text: `
-  Angelica and Eliza are only two of the stories I've found; **there are many more**.  Filter by any combination of characters, conversations, and themes below to explore them; here is the <span class='underline reset'>**reset**</span> again in case you need it.
+  Angelica and Eliza are only two of the stories I've found; **there are many more**.
+
+${isMobile ? `
+  I have built an interactive tool to filter every line in Hamilton by character, conversation, and theme.  Unfortunately, the tool is too computationally intensive for mobile.
+  ### Make sure to explore these stories with the filter tool on desktop.
+  `
+  : `
+  Filter by any combination of characters, conversations, and themes below to explore them; here is the <span class='underline reset'>**reset**</span> again in case you need it.
+  `
+}
       `
     },
     {
@@ -684,7 +703,7 @@ co-occur with the filtered themes.
         backgroundColor: 'rgb(81,173,223)',
         color: '#fff',
         textAlign: 'center',
-        padding: '40px 80px',
+        padding: isMobile ? 10 : '40px 80px',
         pointerEvents: 'auto',
       },
       position(data, selectedCharacters, selectedConversation, selectedThemes) {

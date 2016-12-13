@@ -27,7 +27,7 @@ var images = _.reduce(charList, (obj, character, id) => {
 var isMobilePhone = isMobile.phone;
 var padding = isMobilePhone ? 10 : 20;
 var width = isMobilePhone ? window.innerWidth - 2 * padding : 1200;
-var height = 16300;
+var height = isMobilePhone ? 18000 : 16300;
 var vizWidth = isMobilePhone ? width : 710;
 var sectionWidth = isMobilePhone ? width : width - vizWidth;
 var characterWidth = sectionWidth - 5 * padding;
