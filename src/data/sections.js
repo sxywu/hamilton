@@ -65,7 +65,7 @@ function sections(width, vizWidth, sectionWidth, images, isMobile) {
       <div style='font-size: 12px'>
         ${isMobile ?
           "<span class='background'>For full set of interactions</span><br />" +
-          "<span class='background'>view on desktop</span>"
+          "<span class='background'>please view on desktop</span>"
           :
           "<span class='background'>Best on **Chrome** with</span><br />" +
           "<span class='background'>resolution higher than **1280x800** ✨</span>"
@@ -86,7 +86,7 @@ function sections(width, vizWidth, sectionWidth, images, isMobile) {
         margin: 'auto',
         marginBottom: 250,
         height: isMobile ? 500 : 200,
-        width: isMobile ? sectionWidth - padding : vizWidth,
+        width: isMobile ? sectionWidth : vizWidth,
         padding: 0,
       },
       contentStyle: {
@@ -134,8 +134,9 @@ To explore the data, I created a visual tool to filter the lines by any combinat
         paddingTop: 650,
         marginBottom,
         height: 900,
-        width: '100%',
+        width: isMobile ? sectionWidth : '100%',
         textAlign: 'center',
+        padding: 0,
       },
       contentStyle: {
         paddingTop: 300,
@@ -154,7 +155,7 @@ To explore the data, I created a visual tool to filter the lines by any combinat
 Each circle is a set of lines, colored by singer.
   </span><br />
   <span class='background'>
-Hover any of them to see the lyrics.
+${isMobile ? "Scrub" : "Hover"} over any of them to see the lyrics.
   </span><br />
   <span class='background'>
 (Some of the longer tooltips are scrollable!)
