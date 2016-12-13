@@ -116,7 +116,7 @@ When I first heard of Hamilton, I was doubtful ("a *hip-hop* musical?").  But fr
 
 I was obsessed.  I had the soundtrack on repeat for months, it was all I listened to in my waking hours.  I listened so much I had favorite lines and favorite songs.  I analyzed the lyrics; I reveled in the layers of complexity, the double entredres, the clever word plays.
 
-Then my obession hit a peak; I kept wondering, *what would a visualization of Hamilton look like?*  I couldn't stop thinking about it.
+Then my obsession hit a peak; I kept wondering, *what would a visualization of Hamilton look like?*  I couldn't stop thinking about it.
 
 # ✨✨✨
 
