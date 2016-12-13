@@ -3,6 +3,7 @@ import _ from 'lodash';
 import FilterGraph from '../FilterGraph';
 import PositionGraph from '../PositionGraph';
 
+var padding = 20;
 var paddingTop = 100;
 var marginBottom = 400;
 
@@ -84,15 +85,15 @@ function sections(width, vizWidth, sectionWidth, images, isMobile) {
       style: {
         margin: 'auto',
         marginBottom: 250,
-        height: 200,
-        width: vizWidth,
+        height: isMobile ? 500 : 200,
+        width: isMobile ? sectionWidth - padding : vizWidth,
         padding: 0,
       },
       contentStyle: {
         backgroundColor: 'rgb(53,169,147)',
         color: '#fff',
         textAlign: 'center',
-        padding: '40px 80px',
+        padding: isMobile ? '10px' : '40px 80px',
         pointerEvents: 'auto',
       },
       position(data) {
