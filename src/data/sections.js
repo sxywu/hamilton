@@ -6,7 +6,7 @@ import PositionGraph from '../PositionGraph';
 var paddingTop = 100;
 var marginBottom = 400;
 
-function sections(width, vizWidth, sectionWidth, images) {
+function sections(width, vizWidth, sectionWidth, images, isMobile) {
   function positionAngelica(data, selectedCharacters, selectedConversation, highlightedSong) {
     selectedCharacters = _.chain(selectedCharacters).union(['2', '8']).sortBy().value();
     var {linePositions, songPositions, characterNodes, characterLinks} =
@@ -35,7 +35,7 @@ function sections(width, vizWidth, sectionWidth, images) {
       id: 'header',
       random: true,
       style: {
-        paddingTop: 2.5 * paddingTop,
+        paddingTop: (isMobile ? 1.5 : 2.5) * paddingTop,
         height: 500,
         width: '60%',
         margin: 'auto',
@@ -43,14 +43,15 @@ function sections(width, vizWidth, sectionWidth, images) {
       },
       position(data) {
         _.each(data.lines, line => line.selected = true);
-        var left = (width - vizWidth) / 2;
-        return PositionGraph.positionLinesAsImage(data.lines, vizWidth, left, paddingTop);
+        var imageWidth = isMobile ? vizWidth * 1.5 : vizWidth;
+        var left = (width - imageWidth) / 2;
+        return PositionGraph.positionLinesAsImage(data.lines, imageWidth, left, paddingTop);
       },
       text: `
   <center>
     <h1 style='line-height: 1.25'>
       <span class='background'>
-        An Interactive Visualization of<br />
+        Interactive Visualization of<br />
         Every Line in Hamilton
       </span>
     </h1>
@@ -59,10 +60,15 @@ function sections(width, vizWidth, sectionWidth, images) {
         By [SHIRLEY WU](http://twitter.com/sxywu)
       <span>
     </sup>
-    <div style='padding-top: 150px'>
+    <div style='padding-top: ${isMobile ? "50px" : "150px"}'>
       <div style='font-size: 12px'>
-        <span class='background'>Best on **Chrome** with</span><br />
-        <span class='background'>resolution higher than **1280x800** ✨</span>
+        ${isMobile ?
+          "<span class='background'>For full set of interactions</span><br />" +
+          "<span class='background'>view on desktop</span>"
+          :
+          "<span class='background'>Best on **Chrome** with</span><br />" +
+          "<span class='background'>resolution higher than **1280x800** ✨</span>"
+        }
       </div>
       <h2 style='margin-top: 0px'>
         <span class='background'>Scroll</span><br />

@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
+import isMobile from 'ismobilejs';
 
 import Visualization from './visualizations/Visualization';
 import LineHover from './LineHover';
@@ -23,18 +24,19 @@ var images = _.reduce(charList, (obj, character, id) => {
   return obj;
 }, {});
 
-var width = 1200;
+var isMobilePhone = isMobile.phone;
+var width = isMobilePhone ? window.innerWidth : 1200;
 var height = 16300;
-var vizWidth = 710;
+var vizWidth = isMobilePhone ? width : 710;
 var padding = 20;
-var sectionWidth = width - vizWidth;
+var sectionWidth = isMobilePhone ? width : width - vizWidth;
 var characterWidth = sectionWidth - 5 * padding;
 var themeWidth = characterWidth;
 var characterHeight = 440;
 var themeHeight = 250;
 var prevSection = null;
 var currentSection = null;
-var sections = SectionsData(width, vizWidth, sectionWidth, images);
+var sections = SectionsData(width, vizWidth, sectionWidth, images, isMobilePhone);
 
 var App = React.createClass({
 
