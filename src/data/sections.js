@@ -26,9 +26,11 @@ function sections(width, vizWidth, sectionWidth, images, isMobile) {
     selectedThemes = _.union(selectedThemes, ['10', '18']);
     var {linePositions, songPositions, diamondPositions, groupedThemes} =
       FilterGraph.filterForThemes(data, selectedThemes, highlightedSong);
+
+    var left = isMobile ? 0 : sectionWidth;
     var {linePositions, songPositions, diamondPositions, top} =
       PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
-        vizWidth, sectionWidth, paddingTop / 6, highlightedSong);
+        vizWidth, left, paddingTop / 6, highlightedSong);
 
     return {linePositions, songPositions, diamondPositions, groupedThemes, selectedThemes, top};
   }
@@ -392,7 +394,7 @@ ${isMobile ? '' :
         backgroundColor: 'rgb(81,173,223)',
         color: '#fff',
         textAlign: 'center',
-        padding: '40px 80px',
+        padding: isMobile ? '10px' : '40px 80px',
         pointerEvents: 'auto',
       },
       position(data, selectedCharacters, selectedConversation) {
@@ -415,37 +417,49 @@ When I first heard the soundtrack, I didn't care much for Eliza; she was shy and
       consecutive: true,
       style: {
         paddingTop,
+        textAlign: 'center',
+        paddingBottom: isMobile ? window.innerHeight / 2 : padding,
       },
-      filter: 'themes',
+      filter: isMobile ? '' : 'themes',
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
         return positionEliza(data, selectedThemes);
       },
       text: `
-The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look around"*), which are phrases of Contentment.  These are the phrases most commonly attributed to Eliza.
+${isMobile ? `<div style='background-color: rgba(255, 255, 255, 0.9); padding: 10'>` : ''}
+The songs are filtered by two recurring phrases of Contentment: "that would be enough" (<em>c2</em>) and "look around at how lucky we are to be alive right now" (<em>c3</em>). These are the phrases most commonly attributed to Eliza.
+${isMobile ? `</div>`: ''}
 
 <center>
   <h3>
     <span class='background'>
   Curves above lines indicate recurring phrases.
     </span><br />
-    <span class='background'>
-    →
-    </span>
+${isMobile ? '' :
+`
+<span class='background'>
+→
+</span>
+`
+}
   </h3>
-  <h3>
-    <span class='background'>
-  Phrases are grouped into themes.
-    </span><br />
-    <span class='background'>
-  Many themes are blank as they do not
-    </span><br />
-    <span class='background'>
-  co-occur with the filtered themes.
-    </span><br />
-    <span class='background'>
-  ↓
-    </span>
-  </h3>
+${isMobile ? '' :
+`
+<h3>
+  <span class='background'>
+Phrases are grouped into themes.
+  </span><br />
+  <span class='background'>
+Many themes are blank as they do not
+  </span><br />
+  <span class='background'>
+co-occur with the filtered themes.
+  </span><br />
+  <span class='background'>
+↓
+  </span>
+</h3>
+`
+}
 </center>
       `
     },
@@ -455,6 +469,11 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
       highlightedSong: '17',
       style: {
         paddingTop,
+        paddingBottom: isMobile ? window.innerHeight / 2 : padding,
+      },
+      contentStyle: {
+        padding: 10,
+        backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.9)' : '',
       },
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
         return positionEliza(data, selectedThemes, this.highlightedSong);
@@ -501,6 +520,11 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
       highlightedSong: '23',
       style: {
         paddingTop,
+        paddingBottom: isMobile ? window.innerHeight / 2 : padding,
+      },
+      contentStyle: {
+        padding: 10,
+        backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.9)' : '',
       },
       position(data, selectedCharacters, selectedConversation, selectedThemes) {
         return positionEliza(data, selectedThemes, this.highlightedSong);
@@ -538,6 +562,11 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
       highlightedSong: '41',
       style: {
         paddingTop,
+        paddingBottom: isMobile ? window.innerHeight / 2 : padding,
+      },
+      contentStyle: {
+        padding: 10,
+        backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.9)' : '',
       },
       clips: [
         ['/music/lookatwhere.mp3', ['2/41:25-40']],
@@ -585,8 +614,13 @@ The songs are filtered by *c2* (*"that would be enough"*) and *c3* (*"look aroun
       highlightedSong: '46',
       style: {
         paddingTop,
+        paddingBottom: isMobile ? window.innerHeight / 2 : padding,
         height: 400,
         marginBottom: marginBottom + 400,
+      },
+      contentStyle: {
+        padding: 10,
+        backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.9)' : '',
       },
       clips: [
         ['/music/haveidoneenough.mp3', ['7/46:70-74']],
