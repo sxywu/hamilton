@@ -13,7 +13,8 @@
     "lodash": "^4.0.0",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
-    "remarkable": "^1.7.1"
+    "remarkable": "^1.7.1",
+    "textures": "^1.0.4"
   },
   "homepage": "http://sxywu.github.io/hamilton",
   "scripts": {
