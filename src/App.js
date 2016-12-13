@@ -313,6 +313,7 @@ var App = React.createClass({
       themeHeight,
       headerFont: 'Open Sans',
       bodyFont: 'Libre Baskerville',
+      isMobile: isMobilePhone,
     };
     var eventProps = {
       playLines: this.playLines,

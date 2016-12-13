@@ -39,8 +39,20 @@ var Visualization = React.createClass({
     this.setupInteractions();
 
     // add mousemove
-    d3.select(this.refs.canvas)
-      .on('mousemove', this.mousemove);
+    if (this.props.isMobile) {
+      var drag = d3.drag()
+        .on('drag', () => {
+          this.mousemove(d3.event.x, d3.event.y);
+        }).on('end', () => this.props.hoverLine(null));
+      d3.select(this.refs.canvas)
+        .call(drag);
+    } else {
+      d3.select(this.refs.canvas)
+        .on('mousemove', () => {
+          var [offsetX, offsetY] = d3.mouse(this.refs.canvas);
+          this.mousemove(offsetX, offsetY);
+        });
+    }
 
     simulation.on('tick', this.forceTick)
       .on('end', this.forceEnd)
@@ -195,10 +207,9 @@ var Visualization = React.createClass({
     });
   },
 
-  mousemove() {
+  mousemove(offsetX, offsetY) {
     if (this.updating) return;
 
-    var [offsetX, offsetY] = d3.mouse(this.refs.canvas);
     // multiply the x and y by whatever we scaled the canvas by to make it crispy
     var col = this.hiddenCtx.getImageData(offsetX * sf, offsetY * sf, 1, 1).data;
     var color = 'rgb(' + col[0] + "," + col[1] + ","+ col[2] + ")";

@@ -125,8 +125,9 @@ var LineHover = React.createClass({
     var windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
     var top = y + hovered.fullRadius + 2.5 * verticalPadding + scrollTop;
     var bottom;
-    // if the top is more than the height, have to set the bottom instead
-    if (top + maxHeight > windowHeight) {
+    // if the top is more than the height, and it's not mobile
+    // have to set the bottom instead
+    if (!this.props.isMobile && top + maxHeight > windowHeight) {
       bottom = windowHeight - (y - hovered.fullRadius + 0.5 * verticalPadding + scrollTop);
     }
 
