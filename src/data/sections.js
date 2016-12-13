@@ -235,10 +235,15 @@ ${isMobile ? '' :
 </h3>
 
 ${isMobile ? '' :
-  `<h3>
+  `
+  <h3>
     <span class='background'>
   Here's what the filter looks like.
-    </span><br />
+    </span></br>
+  </h3>
+A highlighted character or conversation means it's been selected. If it's grayed out, it can be clicked on to filter further.
+As you filter, **characters or conversations will disappear** because they are no longer in the songs left; you can find co-appearances this way 👍
+  <h3>
     <span class='background'>
   Try playing with the filters.
     </span><br />
@@ -425,9 +430,9 @@ When I first heard the soundtrack, I didn't care much for Eliza; she was shy and
         return positionEliza(data, selectedThemes);
       },
       text: `
-${isMobile ? `<div style='background-color: rgba(255, 255, 255, 0.9); padding: 10'>` : ''}
+${isMobile ? `<div style='background-color: rgba(255, 255, 255, 0.9); padding: 10'>
 The songs are filtered by two recurring phrases of Contentment: "that would be enough" (<em>c2</em>) and "look around at how lucky we are to be alive right now" (<em>c3</em>). These are the phrases most commonly attributed to Eliza.
-${isMobile ? `</div>`: ''}
+</div>`: ''}
 
 <center>
   <h3>
@@ -448,12 +453,10 @@ ${isMobile ? '' :
   <span class='background'>
 Phrases are grouped into themes.
   </span><br />
-  <span class='background'>
-Many themes are blank as they do not
-  </span><br />
-  <span class='background'>
-co-occur with the filtered themes.
-  </span><br />
+</h3>
+The songs are filtered by two recurring phrases of Contentment: "that would be enough" (<em>c2</em>) and "look around at how lucky we are to be alive right now" (<em>c3</em>).
+**Many of the themes are blank** since they don't co-occur with the filtered themes.
+<h3>
   <span class='background'>
 ↓
   </span>
@@ -677,14 +680,23 @@ co-occur with the filtered themes.
         }
       },
       text: `
-  Angelica and Eliza are only two of the stories I've found; **there are many more**.
+  ${!isMobile ? `### Explore their stories.`: ''}
 
-${isMobile ? `
+  Angelica and Eliza are only two of the stories I've found; **there are many more**. ${isMobile ? `
   I have built an interactive tool to filter every line in Hamilton by character, conversation, and theme.  Unfortunately, the tool is too computationally intensive for mobile.
-  ### Make sure to explore these stories with the filter tool on desktop.
+  ### Make sure to explore their stories with the filter tool on desktop.
   `
   : `
-  Filter by any combination of characters, conversations, and themes below to explore them; here is the <span class='underline reset'>**reset**</span> again in case you need it.
+  Filter by any combination of characters, conversations, and themes below to explore them.  Take advantage of the fact that some characters, conversations, or themes will disappear as you filter down; their co-appearances and co-occurrences are often times just as interesting as the songs that are left.
+
+  <h3>
+  <span class='background'>
+If you get into a bad state, <span class='underline reset'>reset</span>.
+  </span><br />
+  <span class='background'>
+↓
+  </span>
+  </h3>
   `
 }
       `
