@@ -2,12 +2,13 @@ import React from 'react';
 import * as d3 from "d3";
 import _ from 'lodash';
 import textures from 'textures';
+import isMobile from 'ismobilejs';
 
 import Lines from './Lines';
 import Diamonds from './Diamonds';
 import Songs from './Songs';
 
-var sf = 2;
+var sf = isMobile.phone ? 1 : 2;
 var duration = 300;
 var simulation = d3.forceSimulation()
   .force('collide', d3.forceCollide().radius(d => d.radius + 3))
@@ -39,20 +40,11 @@ var Visualization = React.createClass({
     this.setupInteractions();
 
     // add mousemove
-    if (this.props.isMobile) {
-      var drag = d3.drag()
-        .on('drag', () => {
-          this.mousemove(d3.event.x, d3.event.y);
-        }).on('end', () => this.props.hoverLine(null));
-      d3.select(this.refs.canvas)
-        .call(drag);
-    } else {
-      d3.select(this.refs.canvas)
-        .on('mousemove', () => {
-          var [offsetX, offsetY] = d3.mouse(this.refs.canvas);
-          this.mousemove(offsetX, offsetY);
-        });
-    }
+    d3.select(this.refs.canvas)
+      .on('mousemove', () => {
+        var [offsetX, offsetY] = d3.mouse(this.refs.canvas);
+        this.mousemove(offsetX, offsetY);
+      });
 
     simulation.on('tick', this.forceTick)
       .on('end', this.forceEnd)
