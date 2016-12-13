@@ -345,7 +345,7 @@ var PositionGraph = {
   },
 
   updateSectionWithHeight(section, lines) {
-    var height = Math.max(1300, _.maxBy(lines, line => line.focusY).focusY + 100);
+    var height = Math.max(1450, _.maxBy(lines, line => line.focusY).focusY + 100);
     return Object.assign(section, {
       style: Object.assign(section.style, {
         height,
