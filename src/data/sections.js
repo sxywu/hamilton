@@ -156,12 +156,23 @@ To explore the data, I created a visual tool to filter the lines by any combinat
   <span class='background'>
 Each circle is a set of lines, colored by singer.
   </span><br />
-  <span class='background'>
-${isMobile ? "Scrub" : "Hover"} over any of them to see the lyrics.
-  </span><br />
-  <span class='background'>
-(Some of the longer tooltips are scrollable!)
-  </span>
+  ${isMobile ? `
+<span class='background'>
+  Switch to desktop to explore
+</span><br />
+<span class='background'>
+  corresponding lyrics.
+</span><br />
+    `
+  : `
+<span class='background'>
+  Hover over any of them to see the lyrics.
+</span><br />
+<span class='background'>
+  (Some of the longer tooltips are scrollable!)
+</span>
+  `
+}
 </h3>
       `
     },
@@ -202,7 +213,7 @@ When I started to explore the data and filter down by sets of characters - Alexa
       style: {
         paddingTop,
         textAlign: 'center',
-        paddingBottom: isMobile ? window.innerHeight : padding,
+        paddingBottom: isMobile ? window.innerHeight / 2 : padding,
       },
       filter: isMobile ? '' : 'characters',
       position(data, selectedCharacters, selectedConversation) {
@@ -211,7 +222,7 @@ When I started to explore the data and filter down by sets of characters - Alexa
       text: `
 <h3>
   <span class='background'>
-Songs filtered by Angelica and Alexander
+${isMobile ? 'These are the songs': 'Songs'} filtered by Angelica and Alexander
   </span><br />
 ${isMobile ? '' :
 `  <span class='background'>
@@ -245,7 +256,7 @@ ${isMobile ? '' :
       highlightedSong: '26',
       style: {
         paddingTop,
-        paddingBottom: isMobile ? window.innerHeight : padding,
+        paddingBottom: isMobile ? window.innerHeight / 2 : padding,
       },
       contentStyle: {
         padding: 10,
@@ -292,6 +303,11 @@ ${isMobile ? '' :
       highlightedSong: '37',
       style: {
         paddingTop,
+        paddingBottom: isMobile ? window.innerHeight / 2 : padding,
+      },
+      contentStyle: {
+        padding: 10,
+        backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.9)' : '',
       },
       clips: [
         ['/music/angelicathankgod.mp3', ['2/37:32-33']],
@@ -344,7 +360,12 @@ ${isMobile ? '' :
       style: {
         height: 150,
         paddingTop,
+        paddingBottom: isMobile ? window.innerHeight / 2 : padding,
         marginBottom: marginBottom + 250,
+      },
+      contentStyle: {
+        padding: 10,
+        backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.9)' : '',
       },
       position(data, selectedCharacters, selectedConversation) {
         return positionAngelica(data, selectedCharacters,
