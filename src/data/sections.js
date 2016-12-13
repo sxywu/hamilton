@@ -12,9 +12,11 @@ function sections(width, vizWidth, sectionWidth, images, isMobile) {
     selectedCharacters = _.chain(selectedCharacters).union(['2', '8']).sortBy().value();
     var {linePositions, songPositions, characterNodes, characterLinks} =
       FilterGraph.filterForCharacters(data, selectedCharacters, selectedConversation, highlightedSong);
+
+    var left = isMobile ? 0 : sectionWidth;
     var {linePositions, songPositions, top} =
       PositionGraph.positionForCharacters(linePositions, songPositions,
-        vizWidth, sectionWidth, paddingTop / 6, highlightedSong);
+        vizWidth, left, paddingTop / 6, highlightedSong);
 
     return {linePositions, songPositions, diamondPositions: [],
       characterNodes, characterLinks, selectedCharacters, selectedConversation, top};
@@ -64,11 +66,11 @@ function sections(width, vizWidth, sectionWidth, images, isMobile) {
     <div style='padding-top: ${isMobile ? "50px" : "150px"}'>
       <div style='font-size: 12px'>
         ${isMobile ?
-          "<span class='background'>For full set of interactions</span><br />" +
-          "<span class='background'>please view on desktop</span>"
+          `<span class='background'>For full set of interactions</span><br />
+          <span class='background'>please view on desktop</span>`
           :
-          "<span class='background'>Best on **Chrome** with</span><br />" +
-          "<span class='background'>resolution higher than **1280x800** ✨</span>"
+          `<span class='background'>Best on **Chrome** with</span><br />
+          <span class='background'>resolution higher than **1280x800** ✨</span>`
         }
       </div>
       <h2 style='margin-top: 0px'>
@@ -176,7 +178,7 @@ ${isMobile ? "Scrub" : "Hover"} over any of them to see the lyrics.
         backgroundColor: 'rgb(204,119,170)',
         color: '#fff',
         textAlign: 'center',
-        padding: '40px 80px',
+        padding: isMobile ? '10px' : '40px 80px',
         pointerEvents: 'auto',
       },
       position(data, selectedCharacters, selectedConversation) {
@@ -200,8 +202,9 @@ When I started to explore the data and filter down by sets of characters - Alexa
       style: {
         paddingTop,
         textAlign: 'center',
+        height: isMobile ? window.innerHeight : 800,
       },
-      filter: 'characters',
+      filter: isMobile ? '' : 'characters',
       position(data, selectedCharacters, selectedConversation) {
         return positionAngelica(data, selectedCharacters, selectedConversation);
       },
@@ -210,24 +213,30 @@ When I started to explore the data and filter down by sets of characters - Alexa
   <span class='background'>
 Songs filtered by Angelica and Alexander
   </span><br />
-  <span class='background'>
-  →
+${isMobile ? '' :
+`  <span class='background'>
+→
   </span>
+`
+}
 </h3>
-<h3>
-  <span class='background'>
-Here's what the filter looks like.
-  </span><br />
-  <span class='background'>
-Try playing with the filters.
-  </span><br />
-  <span class='background'>
-(Here's a <span class='underline reset'>reset</span> just in case.)
-  </span><br />
-  <span class='background'>
-↓
-  </span>
-</h3>
+
+${isMobile ? '' :
+  `<h3>
+    <span class='background'>
+  Here's what the filter looks like.
+    </span><br />
+    <span class='background'>
+  Try playing with the filters.
+    </span><br />
+    <span class='background'>
+  (Here's a <span class='underline reset'>reset</span> just in case.)
+    </span><br />
+    <span class='background'>
+  ↓
+    </span>
+  </h3>`
+}
       `
     },
     {
