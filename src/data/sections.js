@@ -617,7 +617,7 @@ co-occur with the filtered themes.
         paddingTop,
         paddingBottom: isMobile ? window.innerHeight / 2 : padding,
         height: isMobile ? 'auto' : 400,
-        marginBottom: isMobile ? 0 : marginBottom + 400,
+        marginBottom: isMobile ? 0 : marginBottom + 250,
       },
       contentStyle: {
         padding: 10,
@@ -668,12 +668,12 @@ co-occur with the filtered themes.
         if (selectedCharacters.length || selectedConversation.length || selectedThemes.length) {
           var {linePositions, songPositions, diamondPositions} =
             PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
-              vizWidth, sectionWidth, 2 * paddingTop);
+              vizWidth, sectionWidth, 3 * paddingTop);
 
           return {linePositions, songPositions, diamondPositions, groupedThemes,
             characterNodes, characterLinks, selectedCharacters, selectedConversation, selectedThemes};
         } else {
-          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, 2 * paddingTop);
+          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, 3 * paddingTop);
           return {linePositions, songPositions: [], diamondPositions: [], groupedThemes,
             characterNodes, characterLinks, selectedCharacters, selectedConversation, selectedThemes};
         }
