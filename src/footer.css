@@ -7,6 +7,7 @@
   color: #222;
   font-size: 14px;
   line-height: 1.6;
+  z-index: 100;
 }
 
 .thankyou a, .thankyou a:visited, .thankyou a:link, .thankyou .underline {
