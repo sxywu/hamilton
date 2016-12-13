@@ -668,12 +668,12 @@ co-occur with the filtered themes.
         if (selectedCharacters.length || selectedConversation.length || selectedThemes.length) {
           var {linePositions, songPositions, diamondPositions} =
             PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
-              vizWidth, sectionWidth, 3 * paddingTop);
+              vizWidth, sectionWidth, 2 * paddingTop);
 
           return {linePositions, songPositions, diamondPositions, groupedThemes,
             characterNodes, characterLinks, selectedCharacters, selectedConversation, selectedThemes};
         } else {
-          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, 3 * paddingTop);
+          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, 2 * paddingTop);
           return {linePositions, songPositions: [], diamondPositions: [], groupedThemes,
             characterNodes, characterLinks, selectedCharacters, selectedConversation, selectedThemes};
         }
@@ -689,39 +689,6 @@ ${isMobile ? `
   Filter by any combination of characters, conversations, and themes below to explore them; here is the <span class='underline reset'>**reset**</span> again in case you need it.
   `
 }
-      `
-    },
-    {
-      id: 'thankyou',
-      style: {
-        margin: 'auto',
-        marginBottom,
-        width: sectionWidth,
-        padding: 0,
-      },
-      contentStyle: {
-        backgroundColor: 'rgb(81,173,223)',
-        color: '#fff',
-        textAlign: 'center',
-        padding: isMobile ? 10 : '40px 80px',
-        pointerEvents: 'auto',
-      },
-      position(data, selectedCharacters, selectedConversation, selectedThemes) {
-        return {};
-      },
-      text: `
-# Thank you 💖
-
-to LMM+team for the inspiration and brilliance that is Hamilton,
-
-to Matt+Polygraph for letting me work on this labor of love,
-
-to Taia, my ultimate Hamilton expert, for all the feedback and encouragement,
-
-and **to Alex, my Eliza, who teaches me to *look around* and reminds me of *what would be enough***.
-
-
-
       `
     },
   ];
