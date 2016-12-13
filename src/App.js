@@ -27,9 +27,9 @@ var images = _.reduce(charList, (obj, character, id) => {
 var isMobilePhone = isMobile.phone;
 var padding = isMobilePhone ? 10 : 20;
 var width = isMobilePhone ? window.innerWidth - 2 * padding : 1200;
-var height = isMobilePhone ? 18000 : 15000;
+var height = isMobilePhone ? 17000 : 15000;
 var vizWidth = isMobilePhone ? width : 710;
-var vizHeight = isMobilePhone ? 18000 : 16350;
+var vizHeight = isMobilePhone ? 17000 : 16350;
 var sectionWidth = isMobilePhone ? width : width - vizWidth;
 var characterWidth = sectionWidth - 5 * padding;
 var themeWidth = characterWidth;
@@ -162,7 +162,7 @@ var App = React.createClass({
     positions.useForce = true;
     positions.prevTop = this.state.top;
     positions.hovered = null;
-    if (this.state.section.id === 'filter_tool') {
+    if (!isMobilePhone && this.state.section.id === 'filter_tool') {
       // only update the height of a section if it's the final filter tool
       positions.section = PositionGraph.updateSectionWithHeight(this.state.section, positions.linePositions);
       height = positions.section.top + positions.section.style.height;
@@ -248,7 +248,7 @@ var App = React.createClass({
       }
       positions.top = (section.consecutive ? 0 : section.top) + (positions.top || 0);
 
-      if (section.id === 'filter_tool') {
+      if (!isMobilePhone && section.id === 'filter_tool') {
         // only update the height of a section if it's the final filter tool
         positions.section = PositionGraph.updateSectionWithHeight(section, positions.linePositions);
         height = positions.section.top + positions.section.style.height;

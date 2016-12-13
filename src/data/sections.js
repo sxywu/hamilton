@@ -617,7 +617,7 @@ co-occur with the filtered themes.
         paddingTop,
         paddingBottom: isMobile ? window.innerHeight / 2 : padding,
         height: isMobile ? 'auto' : 400,
-        marginBottom: isMobile ? 0 : marginBottom + 250,
+        marginBottom: isMobile ? 100 : marginBottom + 250,
       },
       contentStyle: {
         padding: 10,
@@ -649,8 +649,7 @@ co-occur with the filtered themes.
       id: 'filter_tool',
       style: {
         paddingTop: (isMobile ? 0.5 : 2) * paddingTop,
-        height: isMobile ? 675 : 1300,
-        background: isMobile ? 'no-repeat center url(' + filterImage + ')' : '',
+        height: isMobile ? 'auto' : 1300,
       },
       contentStyle: {
         padding: 10,
