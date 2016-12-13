@@ -142,14 +142,13 @@ var Section = React.createClass({
   render() {
     var padding = 20;
     var style = Object.assign({
-      width: this.props.sectionWidth - 3 * padding,
+      width: this.props.sectionWidth - 2 * padding,
       lineHeight: 2,
       pointerEvents: 'none',
       color: this.props.fontColor,
       padding,
     }, this.props.style);
     var contentStyle = Object.assign({
-      // backgroundColor: 'rgba(255, 255, 255, 0.85)',
       paddingBottom: padding,
     }, this.props.contentStyle);
     var rawMarkup = { __html: md.render(this.props.text)};

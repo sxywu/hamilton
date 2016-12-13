@@ -202,7 +202,7 @@ When I started to explore the data and filter down by sets of characters - Alexa
       style: {
         paddingTop,
         textAlign: 'center',
-        height: isMobile ? window.innerHeight : 800,
+        paddingBottom: isMobile ? window.innerHeight : padding,
       },
       filter: isMobile ? '' : 'characters',
       position(data, selectedCharacters, selectedConversation) {
@@ -245,6 +245,11 @@ ${isMobile ? '' :
       highlightedSong: '26',
       style: {
         paddingTop,
+        paddingBottom: isMobile ? window.innerHeight : padding,
+      },
+      contentStyle: {
+        padding: 10,
+        backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.9)' : '',
       },
       clips: [
         ['/music/andthereyouare.mp3', ['8/26:23-27', '2/26:23-27']],
