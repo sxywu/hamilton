@@ -25,10 +25,10 @@ var images = _.reduce(charList, (obj, character, id) => {
 }, {});
 
 var isMobilePhone = isMobile.phone;
-var width = isMobilePhone ? window.innerWidth : 1200;
+var padding = isMobilePhone ? 10 : 20;
+var width = isMobilePhone ? window.innerWidth - 2 * padding : 1200;
 var height = 16300;
 var vizWidth = isMobilePhone ? width : 710;
-var padding = 20;
 var sectionWidth = isMobilePhone ? width : width - vizWidth;
 var characterWidth = sectionWidth - 5 * padding;
 var themeWidth = characterWidth;
@@ -286,7 +286,7 @@ var App = React.createClass({
     var style = {
       width,
       height,
-      margin: 'auto',
+      margin: isMobilePhone ? padding : 'auto',
       color: this.state.fontColor,
       position: 'relative',
     };

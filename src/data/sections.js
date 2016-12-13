@@ -38,7 +38,7 @@ function sections(width, vizWidth, sectionWidth, images, isMobile) {
       style: {
         paddingTop: (isMobile ? 1.5 : 2.5) * paddingTop,
         height: 500,
-        width: '60%',
+        width: isMobile ? '85%' : '60%',
         margin: 'auto',
         marginBottom,
       },
@@ -52,7 +52,7 @@ function sections(width, vizWidth, sectionWidth, images, isMobile) {
   <center>
     <h1 style='line-height: 1.25'>
       <span class='background'>
-        Interactive Visualization of<br />
+        An Interactive Visualization of<br />
         Every Line in Hamilton
       </span>
     </h1>
