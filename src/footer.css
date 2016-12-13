@@ -1,3 +1,26 @@
+.thankyou {
+  max-width: 40rem;
+  margin: 0 auto;
+  text-align: center;
+  padding: 1em 0 1.5em 0;
+  font-family: 'Libre Baskerville';
+  color: #222;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.thankyou a, .thankyou a:visited, .thankyou a:link, .thankyou .underline {
+  text-decoration: none;
+  border-bottom: 1px solid;
+  pointer-events: auto;
+  color: inherit;
+  cursor: pointer;
+}
+
+.thankyou a:hover, .thankyou .underline:hover {
+  border-bottom: 1px dashed;
+}
+
 footer {
     background: #efefef;
     margin-top: 2em;
@@ -64,7 +87,7 @@ footer {
 
 .recirc__article {
     margin: 1em 0;
-    padding: 1em;
+    /*padding: 1em;*/
     display: block;
     text-align: center;
     text-decoration: none;
