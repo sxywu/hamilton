@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 import FilterGraph from '../FilterGraph';
 import PositionGraph from '../PositionGraph';
-import filterImage from '../images/filter.png';
 
 var padding = 20;
 var paddingTop = 100;
