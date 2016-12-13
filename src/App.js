@@ -27,8 +27,9 @@ var images = _.reduce(charList, (obj, character, id) => {
 var isMobilePhone = isMobile.phone;
 var padding = isMobilePhone ? 10 : 20;
 var width = isMobilePhone ? window.innerWidth - 2 * padding : 1200;
-var height = isMobilePhone ? 18000 : 16300;
+var height = isMobilePhone ? 18000 : 15000;
 var vizWidth = isMobilePhone ? width : 710;
+var vizHeight = isMobilePhone ? 18000 : 16350;
 var sectionWidth = isMobilePhone ? width : width - vizWidth;
 var characterWidth = sectionWidth - 5 * padding;
 var themeWidth = characterWidth;
@@ -164,6 +165,7 @@ var App = React.createClass({
     if (this.state.section.id === 'filter_tool') {
       // only update the height of a section if it's the final filter tool
       positions.section = PositionGraph.updateSectionWithHeight(this.state.section, positions.linePositions);
+      height = positions.section.top + positions.section.style.height;
     }
   },
 
@@ -246,6 +248,12 @@ var App = React.createClass({
       }
       positions.top = (section.consecutive ? 0 : section.top) + (positions.top || 0);
 
+      if (section.id === 'filter_tool') {
+        // only update the height of a section if it's the final filter tool
+        positions.section = PositionGraph.updateSectionWithHeight(section, positions.linePositions);
+        height = positions.section.top + positions.section.style.height;
+      }
+
      } else if (section && section.consecutive && section !== currentSection) {
       // if we just entered a consecutive section for the first time
       // don't pass in any filters, only want filters at the beginning
@@ -289,6 +297,7 @@ var App = React.createClass({
       margin: isMobilePhone ? padding : 'auto',
       color: this.state.fontColor,
       position: 'relative',
+      overflow: 'hidden',
     };
     var sectionStyle = {
       top: 0,
@@ -307,6 +316,7 @@ var App = React.createClass({
       sectionWidth,
       width,
       height,
+      vizHeight,
       characterWidth,
       characterHeight,
       themeWidth,

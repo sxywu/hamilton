@@ -94,7 +94,7 @@ var Visualization = React.createClass({
 
     music.append('rect')
       .attr('width', props.width)
-      .attr('height', props.height)
+      .attr('height', props.vizHeight)
       .attr('fill', '#fff')
       .attr('opacity', 0.75)
       .style('pointer-events', 'none');
@@ -147,9 +147,9 @@ var Visualization = React.createClass({
 
   crispyCanvas(canvas, sf) {
     canvas.width = this.props.width * sf;
-    canvas.height = this.props.height * sf;
+    canvas.height = this.props.vizHeight * sf;
     canvas.style.width = this.props.width + 'px';
-    canvas.style.height = this.props.height + 'px';
+    canvas.style.height = this.props.vizHeight + 'px';
   },
 
   forceTick() {
@@ -157,13 +157,13 @@ var Visualization = React.createClass({
     var top = this.interpolateTop(Math.max(0, interpolate));
 
 
-    this.ctx.clearRect(0, 0, this.props.width, this.props.height);
+    this.ctx.clearRect(0, 0, this.props.width, this.props.vizHeight);
     Lines.drawCircles(this.ctx, this.props.linePositions, top);
   },
 
   forceEnd() {
     var t = d3.timer((elapsed) => {
-      this.ctx.clearRect(0, 0, this.props.width, this.props.height);
+      this.ctx.clearRect(0, 0, this.props.width, this.props.vizHeight);
 
       var interpolate = Math.min(elapsed / duration, 1);
       Diamonds.drawCurves(this.ctx, this.props.diamondPositions, interpolate, this.props);
@@ -171,7 +171,7 @@ var Visualization = React.createClass({
       Lines.drawPaths(this.ctx, this.props.linePositions, interpolate, this.props);
       Songs.highlightSong(this.ctx, this.props.songPositions, this.props.top, interpolate);
       if (elapsed > duration) {
-        this.hiddenCtx.clearRect(0, 0, this.props.width, this.props.height);
+        this.hiddenCtx.clearRect(0, 0, this.props.width, this.props.vizHeight);
         Lines.drawHover(this.hiddenCtx, this.props.linePositions, this.props.top);
         this.updating = false;
         t.stop();
@@ -181,7 +181,7 @@ var Visualization = React.createClass({
 
   positionNoForce() {
     var t = d3.timer((elapsed) => {
-      this.ctx.clearRect(0, 0, this.props.width, this.props.height);
+      this.ctx.clearRect(0, 0, this.props.width, this.props.vizHeight);
 
       var interpolate = Math.min(elapsed / duration, 1);
       var top = this.interpolateTop(interpolate);
@@ -191,7 +191,7 @@ var Visualization = React.createClass({
       Lines.movePaths(this.ctx, this.props.linePositions, top, this.props);
       Songs.highlightSong(this.ctx, this.props.songPositions, top, interpolate);
       if (elapsed > duration) {
-        this.hiddenCtx.clearRect(0, 0, this.props.width, this.props.height);
+        this.hiddenCtx.clearRect(0, 0, this.props.width, this.props.vizHeight);
         Lines.drawHover(this.hiddenCtx, this.props.linePositions, this.props.top);
         this.updating = false;
         t.stop();
@@ -226,7 +226,7 @@ var Visualization = React.createClass({
       top: 0,
       left: 0,
       width: this.props.width,
-      height: this.props.height,
+      height: this.props.vizHeight,
       pointerEvents: 'none',
     };
 
