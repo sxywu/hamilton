@@ -89,6 +89,13 @@ var App = React.createClass({
     window.addEventListener('scroll', _.throttle(this.onScroll, 100));
   },
 
+  componentDidUpdate() {
+    if (this.state.update) {
+      // if we've updated the graphs, update section positions also
+      this.updateSectionPositions();
+    }
+  },
+
   filterByCharacter(character) {
     // if we're not in a section, or if the seciton we're in isn't a filter section
     // then don't do anything and just return

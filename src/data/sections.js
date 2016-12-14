@@ -368,7 +368,7 @@ As you filter, **characters or conversations will disappear** because they are n
         height: 150,
         paddingTop,
         paddingBottom: isMobile ? window.innerHeight / 2 : padding,
-        marginBottom: marginBottom + 250,
+        marginBottom: marginBottom + 200,
       },
       contentStyle: {
         padding: 10,
@@ -669,12 +669,12 @@ The songs are filtered by two recurring phrases of Contentment: "that would be e
         if (selectedCharacters.length || selectedConversation.length || selectedThemes.length) {
           var {linePositions, songPositions, diamondPositions} =
             PositionGraph.positionForAll(linePositions, diamondPositions, songPositions,
-              vizWidth, sectionWidth, 3 * paddingTop);
+              vizWidth, sectionWidth, 2 * paddingTop);
 
           return {linePositions, songPositions, diamondPositions, groupedThemes,
             characterNodes, characterLinks, selectedCharacters, selectedConversation, selectedThemes};
         } else {
-          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, 3 * paddingTop);
+          var {linePositions} = PositionGraph.positionLinesBySong(data.lines, sectionWidth - 75, 2 * paddingTop);
           return {linePositions, songPositions: [], diamondPositions: [], groupedThemes,
             characterNodes, characterLinks, selectedCharacters, selectedConversation, selectedThemes};
         }
