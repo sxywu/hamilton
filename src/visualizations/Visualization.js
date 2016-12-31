@@ -125,11 +125,11 @@ var Visualization = React.createClass({
       position: this.props.section && this.props.section.consecutive ? 'fixed' : 'relative',
     };
     var hiddenCanvasStyle = {
-      display: 'none',
-      // position: 'absolute',
-      // top: 0,
-      // left: 0,
-      // zIndex: -1,
+      // display: 'none',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      zIndex: -1,
     };
 
     return (
