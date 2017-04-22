@@ -27,7 +27,7 @@ var images = _.reduce(charList, (obj, character, id) => {
 var isMobilePhone = isMobile.phone;
 var padding = isMobilePhone ? 10 : 20;
 var width = isMobilePhone ? window.innerWidth - 2 * padding : 1200;
-var height = isMobilePhone ? 17000 : 15000;
+var height = 1000;
 var vizWidth = isMobilePhone ? width : 710;
 var vizHeight = isMobilePhone ? 17000 : 16350;
 var sectionWidth = isMobilePhone ? width : width - vizWidth;
@@ -86,7 +86,7 @@ var App = React.createClass({
   componentDidMount() {
     this.updateSectionPositions();
     this.onScroll();
-    window.addEventListener('scroll', _.throttle(this.onScroll, 100));
+    // window.addEventListener('scroll', _.throttle(this.onScroll, 100));
   },
 
   componentDidUpdate() {
@@ -344,6 +344,7 @@ var App = React.createClass({
     var sectionsEl = _.map(sections, section => {
       return (<Section {...this.state} {...styleProps} {...eventProps} {...section} />);
     });
+
 
     return (
       <div ref='app' style={style}>
