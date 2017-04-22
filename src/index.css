@@ -1,19 +1,15 @@
-body {
-  margin: 0;
-}
-
-#root {
+#hamilton-filter-root {
   font-family: 'Libre Baskerville', serif;
   color: #222;
   font-size: 14px;
 }
 
-#root h1, #root h2, #root h3, #root h4, #root .header {
+#hamilton-filter-root h1, #hamilton-filter-root h2, #hamilton-filter-root h3, #hamilton-filter-root h4, #hamilton-filter-root .header {
   font-family: 'Open Sans', sans-serif;
   font-weight: 700;
 }
 
-#root a, #root a:visited, #root a:link, #root .underline {
+#hamilton-filter-root a, #hamilton-filter-root a:visited, #hamilton-filter-root a:link, #hamilton-filter-root .underline {
   text-decoration: none;
   border-bottom: 1px solid;
   pointer-events: auto;
@@ -21,19 +17,19 @@ body {
   cursor: pointer;
 }
 
-#root a:hover, #root .underline:hover {
+#hamilton-filter-root a:hover, #hamilton-filter-root .underline:hover {
   border-bottom: 1px dashed;
 }
 
-#root svg {
+#hamilton-filter-root svg {
   pointer-events: auto;
 }
 
-#root text {
+#hamilton-filter-root text {
   fill: #666;
 }
 
-#root .music {
+#hamilton-filter-root .music {
   padding: 3px 0;
   font-weight: 400;
   line-height: 1.8;
@@ -41,7 +37,7 @@ body {
   pointer-events: auto;
 }
 
-#root .background {
+#hamilton-filter-root .background {
   background: rgba(255, 255, 255, 1);
   padding: 2px 10px;
   line-height: 1.8;

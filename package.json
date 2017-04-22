@@ -16,7 +16,6 @@
     "remarkable": "^1.7.1",
     "textures": "^1.0.4"
   },
-  "homepage": "http://sxywu.github.io/hamilton",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

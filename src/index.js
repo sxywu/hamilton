@@ -6,5 +6,5 @@ import './footer.css';
 
 ReactDOM.render(
   <App />,
-  document.getElementById('root')
+  document.getElementById('hamilton-filter-root')
 );
