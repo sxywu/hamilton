@@ -240,11 +240,20 @@ var App = React.createClass({
         selectedConversation = positions.selectedConversation = [];
         selectedThemes = positions.selectedThemes = [];
       }
+
       positions = Object.assign(positions,
         section.position(this.state, selectedCharacters, selectedConversation, selectedThemes));
       positions.random = positions.random || false;
       positions.section = section;
       positions.useForce = true;
+
+      if (section && currentSection && section !== currentSection) {
+        // if jumped immediately into new section, fake the null section
+        positions.prevTop = section.consecutive ? (positions.top || 0) : scrollTop;
+      } else {
+        positions.prevTop = section.consecutive ? (positions.top || 0) : this.state.top || scrollTop;
+      }
+      positions.top = (section.consecutive ? 0 : section.top) + (positions.top || 0);
 
       if (!isMobilePhone && section.id === 'filter_tool') {
         // only update the height of a section if it's the final filter tool
@@ -256,12 +265,16 @@ var App = React.createClass({
       // if we just entered a consecutive section for the first time
       // don't pass in any filters, only want filters at the beginning
       positions = section.position(this.state, [], [], [], section.consecutive);
+      positions.prevTop = this.state.top;
       positions.section = section;
       positions.useForce = false;
     } else if (!section && random) {
       // if there's no section, but there was previously a section
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
       positions.random = random;
+      positions.prevTop = currentSection && currentSection.consecutive ?
+        scrollTop : (this.state.top || scrollTop);
+      positions.top = scrollTop;
       positions.section = null;
       positions.useForce = true;
     }
@@ -279,8 +292,6 @@ var App = React.createClass({
 
       positions.hovered = null;
       positions.update = true;
-      positions.prevTop = 0;
-      positions.top = 0;
 
       this.setState(positions);
     }
