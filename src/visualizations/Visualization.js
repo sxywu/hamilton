@@ -18,9 +18,19 @@ var simulation = d3.forceSimulation()
 var Visualization = React.createClass({
 
   shouldComponentUpdate(nextProps) {
+    // update is true when we've entered a new section or interacted with the filter
+    // so if update is false, it must be something that doesn't trigger visual change
     if (!nextProps.update) {
       this.playMusic(nextProps);
       this.showHover(nextProps);
+
+      // we're scrolling through the same section
+      this.ctx.clearRect(0, 0, nextProps.width, nextProps.vizHeight);
+      Diamonds.drawCurves(this.ctx, nextProps.diamondPositions, 1, nextProps);
+      Songs.drawLines(this.ctx, nextProps.songPositions, 1, nextProps);
+      Lines.drawPaths(this.ctx, nextProps.linePositions, 1, nextProps);
+      Songs.highlightSong(this.ctx, nextProps.songPositions, nextProps.top, 1);
+      Lines.drawHover(this.hiddenCtx, nextProps.linePositions, nextProps.top);
     }
 
     return nextProps.update;
