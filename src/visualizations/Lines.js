@@ -6,11 +6,10 @@ var Lines = {
 
   // draw the lines as circles when force tick is still running
   drawCircles(ctx, lines, top) {
-    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     _.each(lines, line => {
       ctx.beginPath();
       // arc(x, y, radius, startAngle, endAngle, anticlockwise)
-      ctx.arc(line.x, line.y + top - scrollTop, line.fullRadius, 0, 2 * Math.PI, false);
+      ctx.arc(line.x, line.y + top, line.fullRadius, 0, 2 * Math.PI, false);
       ctx.fillStyle = line.fill;
       ctx.fill();
     });
@@ -47,13 +46,9 @@ var Lines = {
 
   // draw the lines as either circles or long rectangles when force has ended
   drawPaths(ctx, lines, interpolate, props) {
-    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     _.each(lines, line => {
       var {x1, y1, x2, y2, radius} = this.calculatePositions(line, interpolate, props.top);
       var opacity = d3.interpolateNumber(1, line.selected ? 1 : 0.15)(interpolate);
-
-      y1 -= scrollTop;
-      y2 -= scrollTop;
 
       ctx.beginPath();
       ctx.moveTo(x1, y1);
@@ -93,13 +88,12 @@ var Lines = {
   },
 
   drawHover(ctx, lines, top) {
-    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     _.each(lines, line => {
       ctx.beginPath();
       var i = 0;
       _.each(line.hoverPolygon, (pos) => {
         var [x, y] = pos;
-        y += top - scrollTop;
+        y += top;
         // idk why there are some null values
         if (!pos) return;
         if (i === 0) {

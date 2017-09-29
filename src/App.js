@@ -86,7 +86,7 @@ var App = React.createClass({
   componentDidMount() {
     this.updateSectionPositions();
     this.onScroll();
-    window.addEventListener('scroll', this.onScroll);
+    window.addEventListener('scroll', _.throttle(this.onScroll, 100));
   },
 
   componentDidUpdate() {
@@ -224,13 +224,7 @@ var App = React.createClass({
 
     // if it's the final thank you section, do nothing
     if (section && section.id === 'thankyou') return;
-    // if we're scrolling through a non-consecutive section
-    // then update the dot positions to fake the feeling of scrolling past the visualization
-    if (section && !section.consecutive && section === currentSection) {
-      this.setState({update: false});
-      return;
-    }
-
+    
     var positions = {};
     var selectedCharacters = this.state.selectedCharacters;
     var selectedConversation = this.state.selectedConversation;
@@ -298,7 +292,6 @@ var App = React.createClass({
 
       positions.hovered = null;
       positions.update = true;
-      positions.scrollTop = scrollTop;
 
       this.setState(positions);
     }

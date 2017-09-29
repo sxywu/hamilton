@@ -5,8 +5,6 @@ import _ from 'lodash';
 var fontSize = 9;
 var Diamonds = {
   drawCurves(ctx, themes, interpolate, props) {
-    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-
     ctx.fillStyle = props.fontColor;
     ctx.strokeStyle = props.fontColor;
     ctx.textAlign = 'center';
@@ -14,7 +12,7 @@ var Diamonds = {
     _.each(themes, theme => {
       var name = theme.themeType[0].toLowerCase() + theme.groupId;
       var x = d3.interpolateNumber(theme.x1, theme.x2 - fontSize)(interpolate);
-      var y = theme.y1 + props.top - scrollTop - 1;
+      var y = theme.y1 + props.top - 1;
 
       // first clear the background for the theme to avoid overlap
       ctx.clearRect(x - fontSize / 2, y - fontSize, fontSize, fontSize);

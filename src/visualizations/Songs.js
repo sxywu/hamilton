@@ -5,7 +5,6 @@ import _ from 'lodash';
 var fontSize = 12;
 var Songs = {
   drawLines(ctx, songs, interpolate, props) {
-    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     var fill = d3.interpolateRgb('#fff', props.fontColor)(interpolate);
     ctx.fillStyle = fill;
     ctx.strokeStyle = fill;
@@ -14,7 +13,7 @@ var Songs = {
       // first write text
       ctx.font = fontSize + 'px ' + props.bodyFont;
       ctx.textAlign = 'left';
-      ctx.fillText(song.name, song.x + 5, song.y + props.top - scrollTop - 2);
+      ctx.fillText(song.name, song.x + 5, song.y + props.top - 2);
 
       // this.drawRows(ctx, song, song.rows, props.top);
       // this.drawColumns(ctx, song, song.columns, props.top);
