@@ -4,11 +4,13 @@ import _ from 'lodash';
 
 var Lines = {
 
+  // draw the lines as circles when force tick is still running
   drawCircles(ctx, lines, top) {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     _.each(lines, line => {
       ctx.beginPath();
       // arc(x, y, radius, startAngle, endAngle, anticlockwise)
-      ctx.arc(line.x, line.y + top, line.fullRadius, 0, 2 * Math.PI, false);
+      ctx.arc(line.x, line.y + top - scrollTop, line.fullRadius, 0, 2 * Math.PI, false);
       ctx.fillStyle = line.fill;
       ctx.fill();
     });
@@ -43,10 +45,15 @@ var Lines = {
     return {x1, y1, x2, y2, radius};
   },
 
+  // draw the lines as either circles or long rectangles when force has ended
   drawPaths(ctx, lines, interpolate, props) {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     _.each(lines, line => {
       var {x1, y1, x2, y2, radius} = this.calculatePositions(line, interpolate, props.top);
       var opacity = d3.interpolateNumber(1, line.selected ? 1 : 0.15)(interpolate);
+
+      y1 -= scrollTop;
+      y2 -= scrollTop;
 
       ctx.beginPath();
       ctx.moveTo(x1, y1);
@@ -60,6 +67,9 @@ var Lines = {
     });
   },
 
+  // draw the paths when in the consecutive analysis sections
+  // it's called movePaths bc the only motion is the visual moving up and down
+  // depending on which song is highlighted
   movePaths(ctx, lines, top, props) {
     _.each(lines, line => {
       // line.x and line.y are center, so x1 won't change
@@ -83,18 +93,21 @@ var Lines = {
   },
 
   drawHover(ctx, lines, top) {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
     _.each(lines, line => {
       ctx.beginPath();
       var i = 0;
       _.each(line.hoverPolygon, (pos) => {
+        var [x, y] = pos;
+        y += top - scrollTop;
         // idk why there are some null values
         if (!pos) return;
         if (i === 0) {
           // if it's first point, moveTo
-          ctx.moveTo(pos[0], top + pos[1]);
+          ctx.moveTo(x, y);
         } else {
           // for the rest, draw lines
-          ctx.lineTo(pos[0], top + pos[1]);
+          ctx.lineTo(x, y);
         }
         i += 1;
       });
