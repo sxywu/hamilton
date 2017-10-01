@@ -224,7 +224,7 @@ var App = React.createClass({
 
     // if it's the final thank you section, do nothing
     if (section && section.id === 'thankyou') return;
-    
+
     var positions = {};
     var selectedCharacters = this.state.selectedCharacters;
     var selectedConversation = this.state.selectedConversation;
@@ -248,12 +248,14 @@ var App = React.createClass({
       positions.useForce = true;
 
       if (section && currentSection && section !== currentSection) {
-        // if jumped immediately into new section, fake the null section
-        positions.prevTop = section.consecutive ? (positions.top || 0) : scrollTop;
+        // if jumped immediately into new section from another section, fake the null section
+        positions.prevTop = section.consecutive ? (positions.top || 0) : (currentSection.top - section.top);
       } else {
-        positions.prevTop = section.consecutive ? (positions.top || 0) : this.state.top || scrollTop;
+        // else jumped into new section from null section so should just be the difference
+        // between previous scrollTop and this section
+        positions.prevTop = section.consecutive ? (positions.top || 0) : (this.state.scrollTop - section.top);
       }
-      positions.top = (section.consecutive ? 0 : section.top) + (positions.top || 0);
+      positions.top = positions.top || 0;
 
       if (!isMobilePhone && section.id === 'filter_tool') {
         // only update the height of a section if it's the final filter tool
@@ -272,9 +274,11 @@ var App = React.createClass({
       // if there's no section, but there was previously a section
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
       positions.random = random;
+      // if previous current section is consecutive, that means we just finished
+      // a series of consecutive sections so previous top should be scroll top?
       positions.prevTop = currentSection && currentSection.consecutive ?
         scrollTop : (this.state.top || scrollTop);
-      positions.top = scrollTop;
+      positions.top = 0;
       positions.section = null;
       positions.useForce = true;
     }
@@ -292,6 +296,7 @@ var App = React.createClass({
 
       positions.hovered = null;
       positions.update = true;
+      positions.scrollTop = scrollTop;
 
       this.setState(positions);
     }
