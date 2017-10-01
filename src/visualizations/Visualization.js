@@ -214,7 +214,11 @@ var Visualization = React.createClass({
   render() {
     var style = {
       // border: '1px solid',
-      position: 'fixed',
+      position: this.props.section && this.props.section.consecutive ? 'fixed' : 'relative',
+      // if it's a consecutive section then use the calculated top (that vertically centers the lines)
+      // else use that section's top that we're currently in
+      top: this.props.section ?
+        (this.props.section.consecutive ? this.props.top : this.props.section.top) : this.props.scrollTop,
     };
     var hiddenCanvasStyle = {
       display: 'none',
