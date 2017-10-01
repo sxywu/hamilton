@@ -249,11 +249,12 @@ var App = React.createClass({
 
       if (section && currentSection && section !== currentSection) {
         // if jumped immediately into new section from another section, fake the null section
+        // subtract previous section top and this section top
         positions.prevTop = section.consecutive ? (positions.top || 0) : (currentSection.top - section.top);
       } else {
         // else jumped into new section from null section so should just be the difference
         // between previous scrollTop and this section
-        positions.prevTop = section.consecutive ? (positions.top || 0) : (this.state.scrollTop - section.top);
+        positions.prevTop = section.consecutive ? (positions.top || 0) : (this.state.scrollTop || 0) - section.top;
       }
       positions.top = positions.top || 0;
 
@@ -275,9 +276,11 @@ var App = React.createClass({
       positions = PositionGraph.positionLinesRandomly(this.state.lines, width);
       positions.random = random;
       // if previous current section is consecutive, that means we just finished
-      // a series of consecutive sections so previous top should be scroll top?
-      positions.prevTop = currentSection && currentSection.consecutive ?
-        scrollTop : (this.state.top || scrollTop);
+      // a series of consecutive sections so previous top should be 0 for ease
+      positions.prevTop = currentSection && currentSection.consecutive ? 0 :
+        // if there was a previous section then use that section top
+        // else use the previous scroll top (this.state.scrollTop)
+        (currentSection ? currentSection.top : this.state.scrollTop) - scrollTop;
       positions.top = 0;
       positions.section = null;
       positions.useForce = true;
