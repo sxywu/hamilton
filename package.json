@@ -16,7 +16,7 @@
     "remarkable": "^1.7.1",
     "textures": "^1.0.4"
   },
-  "homepage": "http://sxywu.github.io/hamilton",
+  "homepage": "https://pudding.cool/2017/03/hamilton",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
