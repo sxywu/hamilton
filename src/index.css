@@ -1,3 +1,16 @@
+header a.logo {
+  display: block;
+  border: none;
+  max-width: 9rem;
+  margin: 1rem auto;
+}
+
+header a.logo svg {
+    fill: #2a2a2a;
+    display: block;
+    width: 100%;
+}
+
 body {
   margin: 0;
 }
