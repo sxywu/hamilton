@@ -24,17 +24,24 @@ var Visualization = React.createClass({
       this.playMusic(nextProps);
       this.showHover(nextProps);
     }
+    // also if vizHeight has changed
+    if (nextProps.update && nextProps.vizHeight !== this.props.vizHeight) {
+      this.crispyCanvas(this.refs.canvas, nextProps, sf);
+      this.crispyCanvas(this.refs.hiddenCanvas, nextProps, sf);
+      this.ctx.scale(sf, sf);
+      this.hiddenCtx.scale(sf, sf);
+    }
 
     return nextProps.update;
   },
 
   componentDidMount() {
     // make canvas crispy
-    this.crispyCanvas(this.refs.canvas, sf);
+    this.crispyCanvas(this.refs.canvas, this.props, sf);
     this.ctx = this.refs.canvas.getContext('2d');
     this.ctx.scale(sf, sf);
     // and hidden canvas
-    this.crispyCanvas(this.refs.hiddenCanvas, sf);
+    this.crispyCanvas(this.refs.hiddenCanvas, this.props, sf);
     this.hiddenCtx = this.refs.hiddenCanvas.getContext('2d');
     this.hiddenCtx.scale(sf, sf);
     // and svg
@@ -147,11 +154,11 @@ var Visualization = React.createClass({
       .style('pointer-events', 'none');
   },
 
-  crispyCanvas(canvas, sf) {
-    canvas.width = this.props.width * sf;
-    canvas.height = this.props.vizHeight * sf;
-    canvas.style.width = this.props.width + 'px';
-    canvas.style.height = this.props.vizHeight + 'px';
+  crispyCanvas(canvas, props, sf) {
+    canvas.width = props.width * sf;
+    canvas.height = props.vizHeight * sf;
+    canvas.style.width = props.width + 'px';
+    canvas.style.height = props.vizHeight + 'px';
   },
 
   forceTick() {

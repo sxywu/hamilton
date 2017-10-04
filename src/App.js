@@ -29,7 +29,7 @@ var padding = isMobilePhone ? 10 : 20;
 var width = isMobilePhone ? window.innerWidth - 2 * padding : 1200;
 var height = isMobilePhone ? 17000 : 15000;
 var vizWidth = isMobilePhone ? width : 710;
-var vizHeight = 3 * window.innerHeight;
+var vizHeight = 2 * window.innerHeight;
 var sectionWidth = isMobilePhone ? width : width - vizWidth;
 var characterWidth = sectionWidth - 3 * padding;
 var themeWidth = characterWidth;
@@ -173,6 +173,7 @@ var App = React.createClass({
       // only update the height of a section if it's the final filter tool
       positions.section = PositionGraph.updateSectionWithHeight(this.state.section, positions.linePositions);
       height = positions.section.top + positions.section.style.height;
+      vizHeight = Math.max(vizHeight, 1.5 * (positions.section.style.height + positions.section.style.paddingTop));
     }
   },
 
@@ -201,8 +202,11 @@ var App = React.createClass({
       var top = Math.max(0, sectionRect.top - bodyRect.top);
       var bottom = top + sectionRect.height;
 
-      Object.assign(section, {top, bottom});
+      Object.assign(section, {top, bottom, height: sectionRect.height});
     });
+
+    // vizHeight should be max of window height or max section height
+    vizHeight = Math.max(1.5 * window.innerHeight, 1.5 * d3.max(sections, section => section.height));
   },
 
   onScroll() {
