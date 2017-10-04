@@ -106,8 +106,8 @@ var LineHover = React.createClass({
     if (this.props.section && this.props.section.consecutive) {
       // if it's in the consecutive sections
       scrollTop = this.props.top;
-    } else {
-      scrollTop = this.props.top - scrollTop;
+    } else if (this.props.section) {
+      scrollTop = this.props.section.top - scrollTop;
     }
 
     // find the center of the line then subtract the width
