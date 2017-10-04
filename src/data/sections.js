@@ -113,7 +113,7 @@ function sections(width, vizWidth, sectionWidth, images, isMobile) {
 
 When I first heard of Hamilton, I was doubtful ("a *hip-hop* musical?").  But from the moment I sat down to listen the whole way through, I was done for.
 
-I was obsessed.  I had the soundtrack on repeat for months, it was all I listened to in my waking hours.  I listened so much I had favorite lines and favorite songs.  I analyzed the lyrics; I reveled in the layers of complexity, the double entredres, the clever word plays.
+I was obsessed.  I had the cast recording on repeat for months, it was all I listened to in my waking hours.  I listened so much I had favorite lines and favorite songs.  I analyzed the lyrics; I reveled in the layers of complexity, the double entendres, the clever word plays.
 
 Then my obsession hit a peak; I kept wondering, *what would a visualization of Hamilton look like?*  I couldn't stop thinking about it.
 
@@ -414,7 +414,7 @@ As you filter, **characters or conversations will disappear** because they are n
   <img src=${images['7']} width='60' />
 </center>
 
-When I first heard the soundtrack, I didn't care much for Eliza; she was shy and reserved and completely overshadowed by her sister.  But as I listened and dug more into her story, I was blown away by her quiet grace and by how much she grew throughout the story.  To me, she is the real star of the show.
+When I first heard the cast recording, I didn't care much for Eliza; she was shy and reserved and completely overshadowed by her sister.  But as I listened and dug more into her story, I was blown away by her quiet grace and by how much she grew throughout the story.  To me, she is the real star of the show.
       `
     },
     {
