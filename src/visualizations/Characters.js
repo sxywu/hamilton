@@ -18,7 +18,6 @@ var Characters = React.createClass({
   componentDidMount() {
     this.container = d3.select(this.refs.images).attr('transform', 'translate(' +
       [this.props.characterWidth / 2, this.props.characterHeight / 2] + ')');
-    this.defineFilters();
 
     this.updateLinks();
     this.updateImages();
@@ -63,7 +62,8 @@ var Characters = React.createClass({
       .attr('x', (d) => -d.radius)
       .attr('y', (d) => -d.radius)
       .attr('xlink:href', (d) => this.props.images[d.id])
-      .attr('filter', (d) => !d.selected && !d.filtered ? 'url(#gray)' : '')
+      .attr('filter', (d) => !d.selected && !d.filtered ? 'url(#gray)' : 'url(#blurCharacter)')
+      .attr('clip-path', 'url(#clipCharacter)')
       .attr('opacity', (d) => {
         if (d.selected) return 1;
         if (d.filtered) return .5;
@@ -138,14 +138,6 @@ var Characters = React.createClass({
     return 'M' + [x1, y1] + ' C' + [cx1, cy1] + ' ' + [cx2, cy2] + ' ' + [x2, y2];
   },
 
-  defineFilters() {
-    var defs = this.container.append('defs');
-    var gray = defs.append('filter').attr('id','gray');
-    gray.append('feColorMatrix')
-      .attr('type','matrix')
-      .attr('values','1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 1 0');
-  },
-
   mouseoverCharacter(character) {
     if ((character && this.state.hovered && character.id === this.state.hovered.id) ||
       (!character && !this.state.hovered)) return;
@@ -189,6 +181,19 @@ var Characters = React.createClass({
     return (
       <div style={style}>
         <svg ref='container' width={this.props.characterWidth} height={this.props.characterHeight}>
+          <defs>
+            <filter id='blurCharacter'>
+              <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
+            </filter>
+            <filter id='gray'>
+              <feColorMatrix in="SourceGraphic" result='grayed' type='matrix'
+                values='1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 1 0' />
+              <feGaussianBlur in="grayed" stdDeviation="5" />
+            </filter>
+            <clipPath id='clipCharacter'>
+              <circle r='20' />
+            </clipPath>
+          </defs>
           <g ref='images' className='images' />
         </svg>
         <Hover {...this.props} {...this.state} />
